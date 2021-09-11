@@ -1,0 +1,191 @@
+/////////////////////////////////////*** 底栏元素 ***//////////////////////////////
+
+.Footer {  
+  position: fixed;
+  bottom: 0px;
+  z-index: index($zIndex, fixedFrame);  // 不是必须要设置本z-index，也不会被Body下滚时覆盖掉，因为HTML里Body定义在Footer前面吧。 */
+  width: 100%;  // 用了position: fixed后，本元素从普通流布局中脱离，不受限于其上级的宽度，必须再次定义其宽度等于浏览器窗口/上级Space的宽度。可用Page统一覆盖。 */
+  height: $HEIGHT_FOOTER_PHONE;
+  line-height: 100%;
+  background-color: $COLOR_BG;
+  box-shadow: #{$SHADOW_LINE_PHONE};
+  @include _PC { 
+    height: $HEIGHT_FOOTER_PC; 
+    box-shadow: #{$SHADOW_LINE_PC}; 
+  }
+
+  .StageMenu {
+    height: 100%;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 4*$WIDTH_PAGE_MAX/3; // 暂时忍耐一下，等备案好了就换回来。
+  }
+
+  .FootTab{
+    @include _FONT_TAG;
+    position: relative; // FootPace必须要relative，才能正确放置箭头。
+    cursor: pointer;
+    float: left;
+    text-align: center;
+    width: 20%;
+    height: 100%;
+    line-height: $HEIGHT_FOOTER_PHONE/2;
+    @include _PC {
+      line-height: $HEIGHT_FOOTER_PC/2; 
+    }
+    &:hover{
+      opacity: $OPACITY_HOVER;
+      color:$COLOR_MAIN;
+    }
+    &.Active{
+      color: $COLOR_MAIN;
+      cursor:auto;
+      &:hover{
+        opacity:unset;
+      }
+    }
+    &.Center{
+      padding: 0px; 
+      cursor:unset; 
+      opacity:unset;
+    }
+    i, svg{
+      font-size: 20px;
+      display: block;
+      margin: 0 auto;
+      height: $HEIGHT_FOOTER_PHONE/2;
+      position:relative;
+      top:2px;
+      @include _PC {
+        font-size: 28px;
+        top:4px;
+        height: $HEIGHT_FOOTER_PC/2;
+        line-height: $HEIGHT_FOOTER_PC/2; 
+      }
+    }
+  }
+
+  .MainButton {
+    @include _FONT_TAG;
+    position:relative;
+    border-radius: 100%;
+//    border: 1px solid $COLOR_BORDER_DARK;
+    box-shadow: 0 -1px 1px 0px rgba($COLOR_MAIN,0.5);
+    top: - $HEIGHT_FOOTER_PHONE * 0.2; 
+    bottom:0;
+    height: $HEIGHT_FOOTER_PHONE * 1.2; // 130%; // 不知为何，设高度130% 不等于 $HEIGHT_FOOTER_PHONE * 1.3
+    width: $HEIGHT_FOOTER_PHONE * 1.2; // 57px; // $HEIGHT_FOOTER_PHONE * 1.3 ; 
+    cursor: pointer;
+    background-color:white;
+    @include _PC{
+      top: - $HEIGHT_FOOTER_PC * 0.2;
+      height: $HEIGHT_FOOTER_PC * 1.2; // 130%; // 不知为何，设高度130% 不等于 $HEIGHT_FOOTER_PC * 1.3
+      width: $HEIGHT_FOOTER_PC * 1.2;  
+    }
+    &:hover{
+      background-color:$COLOR_MAIN;
+      border-color:$COLOR_MAIN;
+      color:white;
+      opacity:$OPACITY_HOVER;
+    }
+    &.Active{
+      color: white;
+      background-color:$COLOR_MAIN;
+      border-color: $COLOR_MAIN;
+      cursor:unset;
+      &:hover{
+        opacity:unset;
+      }
+    }
+    >svg, i{
+      height:$HEIGHT_FOOTER_PHONE * 0.6;
+      line-height: $HEIGHT_FOOTER_PHONE * 0.6;
+      position: relative;
+      top:- $HEIGHT_FOOTER_PHONE * 0.05;
+      @include _PC{
+        height:$HEIGHT_FOOTER_PC * 0.6;
+        line-height: $HEIGHT_FOOTER_PC * 0.6;
+        top: - $HEIGHT_FOOTER_PC * 0.05;
+      }
+    }
+  }
+
+  .FootPace{
+    @include _FONT_TAG;
+    position: relative; // FootPace必须要relative，才能正确放置箭头。
+    cursor: pointer;
+    float: left;
+    text-align: center;
+    width: 20%;
+    height: 100%;
+    line-height: $HEIGHT_FOOTER_PHONE/2 - $SIZE_UNIT_PHONE/2;
+//    padding-top: $HEIGHT_FOOTER_PHONE/2;
+//    border-top: $SIZE_UNIT_PHONE/2 solid transparent;
+    @include _PC { 
+      line-height: $HEIGHT_FOOTER_PC/2 - $SIZE_UNIT_PC/2;
+//      padding-top: $HEIGHT_FOOTER_PC/2;
+//      border-top: $SIZE_UNIT_PC/2 solid transparent; 
+    }
+    &.Doing{
+      cursor:unset;
+    }
+    &.Done, &.Doing {
+      color: $COLOR_MAIN;
+    }
+    &.Doing>.Left, &.Doing>.Middle{
+      background-color:$COLOR_MAIN;
+    }
+    &.Done>span{
+      background-color:$COLOR_MAIN;
+    }
+
+    >.Left, >.Right{
+      position: absolute;
+      top: 10px;
+      width: 50%;
+      height: $SIZE_UNIT_PHONE/8;
+      background-color: $COLOR_TEXT_NORMAL;
+      @include _PC {
+        top: 20px;
+        height: $SIZE_UNIT_PC/8;
+      }
+    }
+    >.Left{
+      left: 0;
+    }
+    >.Right{
+      right: 0;
+    }
+    >.Middle{
+      z-index: 1;
+      position: absolute;
+      top: 7px;
+      left: 50%;
+      margin-left:-4px;
+      width: 8px;
+      height: 8px;
+      transform: rotate(45deg);
+      background-color: $COLOR_TEXT_NORMAL;
+      @include _PC {
+        top: 16px;
+        width: 10px;
+        height: 10px;
+        margin-left:-4px;
+      }
+    }
+    &:hover>.Middle{
+      transform:rotate(135deg);
+      background-color:$COLOR_MAIN;
+    }
+    &.Doing:hover>.Middle{
+      transform:rotate(45deg);
+    }
+  }
+  .StageMenu.Sleep>.FootPace{
+    color: $COLOR_TEXT_NORMAL;
+  }
+  .StageMenu.Sleep>.FootPace>span{
+    background-color: $COLOR_TEXT_NORMAL;
+  }
+
+}

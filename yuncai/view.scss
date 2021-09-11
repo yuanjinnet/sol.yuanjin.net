@@ -1,0 +1,3468 @@
+@charset "utf-8";
+
+// @import '../_sow/css/sow.scss';
+// @import '../_sow/css/sow.Math.scss';
+
+///////////////////////////// SCSS variables //////////////////////////////////
+
+@mixin _WATCH {  @media screen and (min-width: 0px) and (max-width: 479px) {    @content;  } }
+@mixin _PHONE {  @media screen and (min-width: 480px) and (max-width: 720px) {    @content;  } }
+@mixin _PAD {  @media screen and (min-width: 721px) and (max-width: 1024px) {    @content;  } }
+@mixin _PC {  @media screen and (min-width: 721px) {    @content;  } }
+
+///* 层次 */
+$zIndex: activeView, fixedFrame, popupDialog;
+
+///* 颜色 */
+// 常规色
+$COLOR_WHITE: #FFF; // 纯白。
+$COLOR_PALE: #F8F8F8; // 白。
+$COLOR_BORDER_LIGHT: #EEE; // 浅灰边框
+$COLOR_BORDER_DARK: #CCC; // 深灰边框
+$COLOR_TEXT_LIGHT: #999; // 灰黑脚本备注
+$COLOR_TEXT_NORMAL: #666; // 浅黑文字。图标配字、提示标签。
+$COLOR_TEXT_DARK: #333; // 深黑文字。正文。
+$COLOR_BLACK_LIKE: #111; // 黑
+$COLOR_BLACK: #000; // 纯黑
+/// 彩色
+$COLOR_MAIN: #F5B090; // 前景主色。原来是更深红一点的FF6E6E. F77277
+$COLOR_BG: unset;
+$COLOR_LINK: lighten($COLOR_MAIN,10%);
+
+$OPACITY_ITEM: 0.1;
+$OPACITY_FROZEN: 0.2;
+$OPACITY_SLEEP: 0.7;
+$OPACITY_HOVER: 0.5;
+$OPACITY_ACTIVE: 1.0;
+
+///* 尺寸 */
+// 页宽
+$WIDTH_PAGE_VAR: 96%;             $WIDTH_PAGE_MAX: 960px; 
+
+// 基本网格单位
+$SIZE_UNIT_PHONE: 8px;            $SIZE_UNIT_PC: 12px;
+
+$WIDTH_ITC_SELECT_PHONE: 48px;    $WIDTH_ITC_SELECT_PC: 52px;
+$WIDTH_LABEL_PHONE:44px;          $WIDTH_LABEL_PC:56px; // 或者 50px, 64px
+
+$HEIGHT_TEXTAREA_PHONE: 80px;     $HEIGHT_TEXTAREA_PC: 94px;
+
+$HEIGHT_HEADER_PHONE: 48px;       $HEIGHT_HEADER_PC: 80px; // 96
+$HEIGHT_FLYER_PHONE: 240px;       $HEIGHT_FLYER_PC: 360px;
+$HEIGHT_FOOTER_PHONE: 48px;       $HEIGHT_FOOTER_PC: 80px; // 80
+
+$HEIGHT_LINE_L_PHONE: 40px;       $HEIGHT_LINE_L_PC: 64px;
+$HEIGHT_LINE_M_PHONE: 36px;       $HEIGHT_LINE_M_PC: 40px;
+$HEIGHT_LINE_S_PHONE: 28px;       $HEIGHT_LINE_S_PC: 32px;
+$HEIGHT_LINE_DEFAULT: 1.8;
+
+$SIZE_ICON_L_PHONE: 64px;         $SIZE_ICON_L_PC: 80px; // 
+$SIZE_ICON_M_PHONE: 44px;         $SIZE_ICON_M_PC: 52px; // 用于讨论的头像。
+$SIZE_ICON_S_PHONE: 32px;         $SIZE_ICON_S_PC: 40px; // 用于回复的头像。是Footer总高的一半。
+
+// 原来PHONE系列为 14 13 12 11
+$SIZE_FONT_XL_PHONE: 16px;        $SIZE_FONT_XL_PC: 20px;  // 标语口号
+$SIZE_FONT_L_PHONE: 14px;         $SIZE_FONT_L_PC: 16px; // 标题、大按钮
+$SIZE_FONT_M_PHONE: 13px;         $SIZE_FONT_M_PC: 14px; // 正文
+$SIZE_FONT_S_PHONE: 12px;         $SIZE_FONT_S_PC: 13px; // 脚本、提示、小按钮
+
+$BORDER_RADIUS_PHONE: 2px;        $BORDER_RADIUS_PC: 4px;
+
+///* 其他 */
+$FONT_FAMILY_DEFAULT: "Arial","Microsoft YaHei"; 
+
+$SHADOW_NORMALBOX: "1px 1px 1px 1px rgba(0,0,0, 0.05)";
+$SHADOW_ACTIVEBOX: "1px 1px 2px 1px rgba(0,0,0, 0.1)"; 
+$SHADOW_LINE_PHONE: "0 0 1px 0 rgba(0,0,0, 0.1)"; $SHADOW_LINE_PC: "0 0 2px 0 rgba(0,0,0, 0.1)"; 
+
+
+///////////////////////////// SCSS mixins /////////////////////////////////////
+///////////////  lyt, size, shape, color, font, act ///////////////////////////
+
+@mixin _CARD_WIDTH{
+  width:96%;
+  margin:2%;
+  @include _PC{
+    width:46%;
+    margin:2%;
+  }
+}
+
+@mixin _LAYOUT_CENTER_SELF { // 适用于高度确定（px 或 %)的元素自身。
+  position:absolute;
+  margin:auto;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  text-align: center;
+}
+@mixin _LAYOUT_CENTER_TABLE {  // 配合 div 使用，只能左右居中。配合 table 使用，能够左右+上下居中，适用于含有高度未知子元素的容器。
+  height:100%;
+  width:100%;
+}
+@mixin _TEXT_ELLIPSIS{
+  overflow:hidden;
+  text-overflow:ellipsis;
+//  white-space:nowrap; // 不知为何，这造成该文本超出上级div宽度。
+}
+
+@mixin _FONT_SLOGAN{ // 短句口号
+  font-weight:bold;
+  font-size:$SIZE_FONT_XL_PHONE;
+  font-family: $FONT_FAMILY_DEFAULT;
+  color:$COLOR_TEXT_DARK;
+  @include _PC{
+    font-size:$SIZE_FONT_XL_PC;
+  }
+}
+@mixin _FONT_TITLE{  // 标题
+  font-size:$SIZE_FONT_L_PHONE;
+  font-family: $FONT_FAMILY_DEFAULT;
+  color:$COLOR_TEXT_DARK;
+  @include _PC{
+    font-size:$SIZE_FONT_L_PC;
+  }
+}
+@mixin _FONT_TAG{ // 底栏按钮，大按钮（提交按钮等）
+  font-size:$SIZE_FONT_L_PHONE;
+  font-family:$FONT_FAMILY_DEFAULT;
+  color:$COLOR_TEXT_NORMAL;
+  @include _PC{
+    font-size:$SIZE_FONT_L_PC;
+  }
+}
+@mixin _FONT_CONTENT{ // 正文
+  font-size:$SIZE_FONT_M_PHONE;
+  font-family: $FONT_FAMILY_DEFAULT;
+  color:$COLOR_TEXT_DARK;
+  @include _PC{
+    font-size:$SIZE_FONT_M_PC;
+  }
+}
+@mixin _FONT_KEY{ // 提示标签，小按钮（tecon）
+  font-size: $SIZE_FONT_S_PHONE;
+  font-family: $FONT_FAMILY_DEFAULT;
+  color: $COLOR_TEXT_NORMAL;
+  @include _PC{
+    font-size: $SIZE_FONT_S_PC;
+  }
+}
+@mixin _FONT_LABEL{ // 备注，脚本（日期地点等），分组legend
+  font-size: $SIZE_FONT_S_PHONE;
+  font-family: $FONT_FAMILY_DEFAULT;
+  color: $COLOR_TEXT_LIGHT;
+  @include _PC{
+    font-size:$SIZE_FONT_S_PC;
+  }
+}
+
+@mixin _BG_FULL {  /* 让背景图不按比例的缩放到恰巧容器尺寸 */
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+  background-clip: padding-box; 
+}
+@mixin _BG_COVER {  /* 背景图按原比例缩放到恰巧覆盖容器 */
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-clip: padding-box; 
+}
+@mixin _BG_CONTAIN {  /* 背景图案按比例缩放到恰巧包含在容器内。background: no-repeat scroll center center / contain content-box; */
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  background-clip: padding-box;  
+}
+@mixin _BG_REPEAT {  /* 背景图案按比例缩放到恰巧包含在容器内并重复。background: repeat scroll center center / contain content-box; */
+  background-repeat: repeat;
+  background-position: center center;
+  background-size: contain;
+  background-clip: padding-box;  
+}
+
+@mixin _transitional($time:0.5s) {
+  transition: all $time ease-in-out 0s;
+  -webkit-transition: all $time ease-in-out 0s; 
+  -moz-transition: all $time ease-in-out 0s; 
+  -ms-transition: all $time ease-in-out 0s; 
+  -o-transition: all $time ease-in-out 0s;
+}
+
+@mixin _expandBlock($name,$top,$right,$bottom,$left){
+  #{$name} {
+    position: relative;
+    padding: $top $right $bottom $left;
+  }
+  #{$name}>.Left{
+    position: absolute;
+    left:0;
+    top:0;
+    width: $left;
+    height: 100%;
+  }
+  #{$name}>.Right{
+    position: absolute;
+    right:0;
+    top:0;
+    width: $right;
+    height: 100%;
+  }
+  #{$name}>.Top{
+    position: absolute;
+    left:0;
+    top:0;
+    padding: 0 $right 0 $left;
+    width: 100%;
+    height: $top;
+    line-height: $top;
+  }
+  #{$name}>.Bottom{
+    position: absolute;
+    left:0;
+    bottom:0;
+    padding: 0 $right 0 $left;
+    width: 100%;
+    height: $bottom;
+    line-height: $bottom;
+  }
+  #{$name}>.Middel{
+    position:relative; 
+    width:100%; 
+    height:100%;
+  }
+}
+// 用法： @include _expandBlock('#Stone',15px,20px,30px,5px);
+
+///////////////////////////// SCSS image data /////////////////////////////////
+//@import 'image/_image2data.scss';
+
+$ACTION_HATE_png:'image/ACTION_HATE.png';
+$ACTION_HATE_ACTIVE_png:'image/ACTION_HATE_ACTIVE.png';
+$ACTION_LIKE_png:'image/ACTION_LIKE.png';
+$ACTION_LIKE_ACTIVE_png:'image/ACTION_LIKE_ACTIVE.png';
+$ACTION_PHOTO_png:'image/ACTION_PHOTO.png';
+$ACTION_PHOTO_ACTIVE_png:'image/ACTION_PHOTO_ACTIVE.png';
+$ACTION_SOUND_png:'image/ACTION_SOUND.png';
+$ACTION_SOUND_ACTIVE_png:'image/ACTION_SOUND_ACTIVE.png';
+$ACTION_SOUND_DELETE_png:'image/ACTION_SOUND_DELETE.png';
+$ACTION_SOUND_EMPTY_png:'image/ACTION_SOUND_EMPTY.png';
+$ACTION_VIDEO_png:'image/ACTION_VIDEO.png';
+$ACTION_VIDEO_ACTIVE_png:'image/ACTION_VIDEO_ACTIVE.png';
+$DrawColor_png:'image/DrawColor.png';
+$favicon_114_png:'image/favicon_114.png';
+$favicon_120_png:'image/favicon_120.png';
+$favicon_144_png:'image/favicon_144.png';
+$favicon_152_png:'image/favicon_152.png';
+$favicon_180_png:'image/favicon_180.png';
+$favicon_57_png:'image/favicon_57.png';
+$favicon_72_png:'image/favicon_72.png';
+$favicon_76_png:'image/favicon_76.png';
+$Header_png:'image/Header.png';
+$IconAddress_png:'image/IconAddress.png';
+$IconCalendar_png:'image/IconCalendar.png';
+$IconCare_png:'image/IconCare.png';
+$IconCare_Active_png:'image/IconCare_Active.png';
+$IconChangePass_png:'image/IconChangePass.png';
+$IconClose_png:'image/IconClose.png';
+$IconCloseGrey_png:'image/IconCloseGrey.png';
+$IconClose_Active_png:'image/IconClose_Active.png';
+$IconComplain_png:'image/IconComplain.png';
+$IconComplain_Active_png:'image/IconComplain_Active.png';
+$IconCreate_png:'image/IconCreate.png';
+$IconDeleteGrey_png:'image/IconDeleteGrey.png';
+$IconDeleteRed_png:'image/IconDeleteRed.png';
+$IconDraw_png:'image/IconDraw.png';
+$IconForward_png:'image/IconForward.png';
+$IconForward_Active_png:'image/IconForward_Active.png';
+$IconImage_png:'image/IconImage.png';
+$IconJoin_png:'image/IconJoin.png';
+$IconLength_png:'image/IconLength.png';
+$IconLogoutGrey_png:'image/IconLogoutGrey.png';
+$IconLogoutRed_png:'image/IconLogoutRed.png';
+$IconOrder_png:'image/IconOrder.png';
+$IconPhoto_png:'image/IconPhoto.png';
+$IconPlus_Grey_png:'image/IconPlus_Grey.png';
+$IconPlus_Red_png:'image/IconPlus_Red.png';
+$IconPublish_png:'image/IconPublish.png';
+$IconPublish_Active_png:'image/IconPublish_Active.png';
+$IconReply_png:'image/IconReply.png';
+$IconReturn_png:'image/IconReturn.png';
+$IconSave_png:'image/IconSave.png';
+$IconSearch_png:'image/IconSearch.png';
+$IconSound_png:'image/IconSound.png';
+$IconSupport_png:'image/IconSupport.png';
+$IconText_png:'image/IconText.png';
+$IconVideo_png:'image/IconVideo.png';
+$IconVoteGood_png:'image/IconVoteGood.png';
+$LocationPresent_png:'image/LocationPresent.png';
+$LocationTarget_png:'image/LocationTarget.png';
+$LoginAccount_png:'image/LoginAccount.png';
+$LoginPasscode_png:'image/LoginPasscode.png';
+$LoginPassword_png:'image/LoginPassword.png';
+$Logo_png:'image/Logo.png';
+$LogoActive_png:'image/LogoActive.png';
+$PayChannel_alipay_png:'image/PayChannel_alipay.png';
+$PayChannel_wxpay_png:'image/PayChannel_wxpay.png';
+$QRC_Android_png:'image/QRC_Android.png';
+$QRC_Apple_png:'image/QRC_Apple.png';
+$QRC_Logo_png:'image/QRC_Logo.png';
+$QRC_QQ_png:'image/QRC_QQ.png';
+$QRC_Web_png:'image/QRC_Web.png';
+$QRC_Wechat_png:'image/QRC_Wechat.png';
+$SelectArrow_png:'image/SelectArrow.png';
+$SpaceLogin_png:'image/SpaceLogin.png';
+$SpaceLoginActive_png:'image/SpaceLoginActive.png';
+$Splash_png:'image/Splash.png';
+$Splash_1280x1280_png:'image/Splash_1280x1280.png';
+$StageAbout_png:'image/StageAbout.png';
+$StageAboutActive_png:'image/StageAboutActive.png';
+$StageBlog_png:'image/StageBlog.png';
+$StageBlogActive_png:'image/StageBlogActive.png';
+$StageChat_png:'image/StageChat.png';
+$StageChat2_png:'image/StageChat2.png';
+$StageChatActive_png:'image/StageChatActive.png';
+$StageChatActiveWhite_png:'image/StageChatActiveWhite.png';
+$StageChatActiveWhite1_png:'image/StageChatActiveWhite1.png';
+$StageChatActiveWhiteAll_png:'image/StageChatActiveWhiteAll.png';
+$StageChatAll_png:'image/StageChatAll.png';
+$StageNews_png:'image/StageNews.png';
+$StageNewsActiveWhite_png:'image/StageNewsActiveWhite.png';
+$StagePeople_png:'image/StagePeople.png';
+$StagePeopleActive_png:'image/StagePeopleActive.png';
+$StagePlog_png:'image/StagePlog.png';
+$StagePlogActive_png:'image/StagePlogActive.png';
+$StageProset_png:'image/StageProset.png';
+$StageProsetActive_png:'image/StageProsetActive.png';
+$StageProsetAll_png:'image/StageProsetAll.png';
+$StageProsetAllActive_png:'image/StageProsetAllActive.png';
+$StageTask_png:'image/StageTask.png';
+$StageTaskActive_png:'image/StageTaskActive.png';
+$StageTice_png:'image/StageTice.png';
+$StageTiceActive_png:'image/StageTiceActive.png';
+$ST_PERSON_png:'image/ST_PERSON.png';
+$zCreator_png:'image/zCreator.png';
+$zCreator_Active_png:'image/zCreator_Active.png';
+
+///////////////////////////// CSS tag reset ///////////////////////////////////
+
+/**  重置标签样式/CSS Reset：清除各浏览器对标签的不同的默认样式  **/
+* { box-sizing:border-box; @include _transitional(0.5s); }
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section { display: block; } /* 兼容 HTML5 */
+body,p,h1,h2,h3,h4,h5,h6,dd,dl,dt,form,th,td,ul,ol,fieldset,img,table,pre { margin: 0; padding: 0; border: 0;}
+input,textarea,button,select { margin: 0; border: 0; padding: 0; resize: none; background-color: transparent; border-radius:0;
+  -webkit-appearance: none; // 在 iPhone 的 safari 上，输入框有阴影，且无法用box-shadow，所以用这条来去除。
+}
+table { border-collapse: collapse; border-spacing: 0; }
+ul,ol,li { list-style-type: none; }
+a { 
+  text-decoration: none; 
+  color: $COLOR_MAIN; // $COLOR_LINK
+  cursor: pointer; // 即使 <a data-bind="..."></a>，也能鼠标变形。否则，就要加 href="#" 才能鼠标自动变形。
+  &:hover{
+    color: lighten($COLOR_MAIN, 15%);
+  }
+}
+pre{
+  white-space: pre-wrap; // 使得pre元素的内容，即使一行字非常长，也能自动分行。
+  word-break: break-all; // 能使英文超长字符串也断开，例如超链接。
+  font-family: $FONT_FAMILY_DEFAULT; // firefox 给pre自动定义了 -moz-fixed 字体，不知什么鬼，覆盖掉它。
+}
+///////////////////////////// Site tags ///////////////////////////////
+
+body {
+  @include _FONT_CONTENT;
+/*  overflow-y: scroll;   /* 一直显示滚动条，以免第一次打开页面时，瀑布流的左边起点是按照无滚动条来计算的，而实际上却有滚动条时，导致左边起点向右偏移，再次调整页面时才恢复正常。另外，设为一直有滚动条也可保证在不同标签(有的需要滚动，有的不需要）间切换时，页面方位不会变化。但不知在手机上会表现如何。 */
+  background-color: transparent;
+}
+select{  /* http://jsbin.com/hiwazipune/edit?html,css,output */
+  appearance: none;  -moz-appearance: none;  -webkit-appearance: none; /* 取消右侧箭头区域 */
+  &::-ms-expand{
+    display:none;  /*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+  }
+  cursor:pointer;
+//  text-decoration: underline wavy $COLOR_TEXT_LIGHT; // 用下划波浪线来代替下拉箭头
+//  padding-right: 16px;
+//  background: transparent url($SelectArrow_png) no-repeat scroll right center / 16px 16px;
+}
+input,textarea,select{
+  border: 1px solid $COLOR_BORDER_DARK;
+}
+button{
+  border: 1px solid transparent;
+  border-radius: $BORDER_RADIUS_PHONE;
+  @include _PC {
+    border-radius: $BORDER_RADIUS_PC;
+  }
+  &:hover{
+    cursor:pointer;
+    opacity: $OPACITY_HOVER;
+    border-color: $COLOR_MAIN;
+  }
+}
+textarea{
+  min-height: $HEIGHT_TEXTAREA_PHONE; //$HEIGHT_LINE_M_PHONE; minimal size is 52px.
+  @include _PC {
+    min-height: $HEIGHT_TEXTAREA_PC; //$HEIGHT_LINE_M_PC; textarea minimal default internal size is 62px，plus padding and border, the min-height must be higher so that the size when initialized don't change after shrinking.
+  }
+}
+input:hover, input:focus,
+textarea:hover, textarea:focus,
+select:hover, select:focus{
+  border-color: $COLOR_MAIN;
+}
+
+///////////////////////////// Site classes //////////////////////////////
+////////////////////// experience, area, io, text, img ////////////////////////////////////
+
+//*** 体验类 ***/
+
+.Clearfix{ // 在一些没有自动计算高度的元素下面，强行明确布局位置。最妙的可能是 <br style="clear:both;" /> 
+//  visibility: hidden;
+  clear: both;
+  display:block;
+}
+
+.Image.Adaptive { 
+  margin: 0 auto;
+  height: auto; 
+  max-height: 100%;
+  width: auto; // 100%; 
+  max-width: 100%; 
+  display: block; // 为了不让图片下缘出现一条白边（因为作为行内元素，img也有行高，在浏览器standards模式下，其baseline为img下缘，baseline下还有一点空间留给g/f等字母底下部分）。其他解决方案还有，设img为vertical-align: middle, 或设上级div为font-size: 0 或者 line-height: 0
+}
+
+.Hidden { display: none; }
+.Visible { display: block; }
+.FadeIn {  opacity: 1;  z-index: index($zIndex, activeView);  }
+.FadeOut {  opacity: 0;  z-index: 0;  }
+
+.Skew { transform: skew(0deg, 180deg) scale(-1, 1); }
+
+.Clickable { cursor: pointer; }
+.Editable {width: 100%;height: auto;}
+.Editable:hover { opacity: $OPACITY_HOVER; }
+
+//*** 框架容器 ***/
+
+/* 直接实现在HTML里，避免加载CSS前的一段空白期。在HTML里，用background-color也不会导致快闪页的颜色发生数次快速变化了。
+.Splash {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+//  z-index: index($zIndex, splash);
+  background-color: $COLOR_BLACK_LIKE;
+  background-image: url($Splash_png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-clip: border-box;
+}
+*/
+
+.Space {
+  position: fixed; // 或者设为relative，有备无患。子元素如果是 position: absolute 的，那么需要上级容器是 relative 的。 */
+  margin: 0px auto;
+  height: 100%; // 需要在JavaScript里动态设置该高度，使得Body很短时，Header和Footer之间也被白色背景所填充。 */
+  width: 100%; // 默认为 浏览器窗口的100%。可用Page统一覆盖。 */
+}
+
+.Stage {
+  position: fixed;
+  top: $HEIGHT_HEADER_PHONE;
+  left: 0px;
+  bottom: $HEIGHT_FOOTER_PHONE;
+  width: 100%;
+  height: auto;
+//  border-left: 0px solid transparent;
+//  border-right: 0px solid transparent;
+  @include _PC { 
+  	top: $HEIGHT_HEADER_PC;
+    bottom: $HEIGHT_FOOTER_PC; 
+  }
+}
+.Scene {
+//  box-sizing: border-box; // 不能省略，否则瀑布流页面的滚动条会显示在右侧隔壁页面上，更加不自然。
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto; // 当内容高度超过scene时，允许滚动。
+  color: $COLOR_TEXT_DARK;
+}
+.ViewWindow {
+  width: 100%;
+  height: 100%;
+}
+.ViewWindowScroll { // 左右到边，上下自动。
+  margin:0 auto;
+  padding: $SIZE_UNIT_PHONE;
+  width:100%;
+  max-width: $WIDTH_PAGE_MAX;
+  @include _PC { 
+    padding: $SIZE_UNIT_PC 0;
+    width: $WIDTH_PAGE_VAR;
+  }
+}
+.ViewPage { // 左右限定，上下到边
+  position: relative; // 为了让里面的position: absolute的LoginLineAction能够以SceneLogin为容器，否则方位不对。
+  margin: 0 auto; // 置中
+  width: $WIDTH_PAGE_VAR;
+  max-width: $WIDTH_PAGE_MAX;
+  overflow: hidden;
+  height: 100%; // ViewText/ViewProfile 内部子元素是absolute的，需要确定上级高度以让下级继承。因为有这句，当内部元素总高度高于本容器时，需要给最后一个元素添加margin-bottom，否则滚动到底部时，最后一个元素会紧贴着footer，没有留白。
+  padding: $SIZE_UNIT_PHONE 0;
+  @include _PC{
+    padding: $SIZE_UNIT_PC 0;
+  }
+}
+.ViewPageScroll{
+  position: relative; // 为了让里面的position: absolute的LoginLineAction能够以SceneLogin为容器，否则方位不对。
+  margin: 0 auto; // 置中
+  width: $WIDTH_PAGE_VAR;
+  max-width: $WIDTH_PAGE_MAX;
+  height: auto; 
+  padding: $SIZE_UNIT_PHONE 0;
+  @include _PC{
+    padding: $SIZE_UNIT_PC 0;
+  }
+  &.HasReplyEditor{
+    height:100%;
+    overflow-y:auto; // 让reply editor之上的viewpagescroll具有 height:100%; overflow-y; 滚动条就不会覆盖reply editor! 
+    padding-bottom:0;
+    border-bottom: $HEIGHT_LINE_M_PHONE+$SIZE_UNIT_PHONE*5 solid transparent;
+    @include _PC{
+      border-bottom: $HEIGHT_LINE_M_PC+$SIZE_UNIT_PC*5 solid transparent;
+    }
+  }
+  &.HasBottomButton{
+    height:100%;
+    overflow-y:auto;
+    padding-bottom:0;
+    border-bottom: $HEIGHT_LINE_M_PHONE+$SIZE_UNIT_PHONE*4 solid transparent;
+    @include _PC{
+      border-bottom: $HEIGHT_LINE_M_PC+$SIZE_UNIT_PC*4 solid transparent;
+    }
+  }
+}
+
+
+.Waterfall {
+  position: relative; /* 瀑布流的容器必须为relative布局。*/
+  margin: $SIZE_UNIT_PHONE auto;
+  @include _PC{
+    margin: $SIZE_UNIT_PC auto;
+  }
+//  width: 100%;
+//  @include _PC { padding: 0 1%; } // 让手机上左右两侧边有足够空白，和卡片之间空隙对称。不知为何，电脑上测试，经常还是只显示1列。定义在Scene Impression上效果比在Waterfall上定义要好。
+}
+.Waterfall>* {
+  position: absolute; /* 瀑布流容器的直接子元素必须为absolute布局。 */
+}
+
+.Dialog{
+  @include _LAYOUT_CENTER_TABLE;
+  position:fixed;
+  opacity: 0;
+  width: 100%; height: 100%;
+  background-color: rgba($COLOR_BLACK, 0.8);
+
+  &.Active{
+    opacity: 1;
+    z-index: index($zIndex, popupDialog); // 确保压在header, footer上。
+  }
+
+  .Content{
+    position: relative;
+    margin: 0 auto;
+    width: 80%; min-width: 280px; max-width: 500px; // firefox最小能缩到280px宽
+//    overflow: hidden; // 注释掉，为了不遮挡可能放在外面的关闭按钮。
+    background-color: $COLOR_WHITE;
+    border-radius:$SIZE_UNIT_PHONE;
+    @include _PC{
+      border-radius:$SIZE_UNIT_PC;
+    }
+  }
+  .Title{
+    @include _FONT_TITLE; 
+    position: relative;
+    padding: 32px 16px 16px;
+    width: auto;
+    text-align: center;
+    line-height:$HEIGHT_LINE_M_PHONE;
+    @include _PC {
+      line-height:$HEIGHT_LINE_M_PC;
+    }
+  }
+  .Button.Close{
+    position: absolute; 
+    right: 0px; left: 0px; 
+    bottom: -48px;
+    margin: auto;
+    width: 40px;
+    height: 40px; 
+    border: 0px none; 
+    opacity: $OPACITY_SLEEP;
+    color:white; 
+    font-size: 24px;
+    background-size: 24px 24px; 
+    background-position: center bottom; 
+    background-repeat: no-repeat; 
+//    background-image: url($IconClose_png);
+    @include _PC{
+      bottom: -60px;
+      background-size: 32px 32px;
+      font-size:32px;
+    }
+    &:hover{
+      opacity:$OPACITY_HOVER;
+    }
+  }
+
+  .AgreementBlock{
+    background-color:$COLOR_WHITE;
+    position: absolute; 
+    top: 0px; 
+    left: 0px; 
+    width: 100%; 
+    height: 100%; 
+    display:none;
+    padding: $HEIGHT_LINE_M_PHONE $SIZE_UNIT_PHONE ($HEIGHT_LINE_M_PHONE + $SIZE_UNIT_PHONE*4);
+    border-radius:$SIZE_UNIT_PHONE;
+    @include _PC{
+      padding: $HEIGHT_LINE_M_PC $SIZE_UNIT_PC ($HEIGHT_LINE_M_PC + $SIZE_UNIT_PC*4);
+      border-radius:$SIZE_UNIT_PC;
+    }
+
+    &.Active{
+      display:block;
+    }
+
+    .Heading{
+      @include _FONT_TITLE;
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      text-align:center;
+      line-height:$HEIGHT_LINE_M_PHONE;
+      @include _PC{
+        line-height:$HEIGHT_LINE_M_PC;
+      }
+    }
+
+    .Body{
+      @include _FONT_CONTENT;
+      overflow-y: scroll; 
+      width: 100%; 
+      height: 100%;
+    }
+  }
+
+  &#commonDialog{
+    button{
+      @include _FONT_TAG;
+      height:100%;
+      border: 1px solid $COLOR_BORDER_DARK;
+      text-align: center;
+      cursor: pointer;
+      background-color: $COLOR_WHITE;
+      &.Default{
+        color: $COLOR_WHITE;
+        background-color: $COLOR_MAIN;
+        border-color: $COLOR_MAIN;
+      }
+    }
+
+    .Row.Control2{
+      margin-bottom:32px;
+      margin-top:0;
+      .Button{
+        width:30%;
+        position:absolute;
+        &:nth-child(1){
+          left:15%;
+          .DotLoader>div{
+            background-color:$COLOR_WHITE;
+          }
+        }
+        &:nth-child(2){
+          right:15%;
+        }
+      }
+    }
+    .Row.Control1{
+      margin-bottom:32px;
+      .Button{
+        margin: 0 15%;
+        width:70%;
+      }
+    }
+
+    .QRCode{
+      position: relative;
+      width:140px;
+      height:140px;
+      margin:0 auto 32px;
+      >.LogoIcon{
+        background-image: url($LogoActive_png);
+        background-size: 32px 32px;
+        background-position: center center;
+        width: 40px;height: 40px;
+        position: absolute;
+        background-repeat: no-repeat;
+        top: 50px;
+        left: 50px;
+        background-color: #FFF;
+        border-radius: 100%;
+      }
+    }
+
+  }
+
+  &#payDialog .Content{
+    max-width: 240px;
+    min-width: 200px;
+    @include _PC{
+      max-width: 320px;
+      min-width: 240px;    
+    }
+    
+    .PayAmount{
+      background-color:$COLOR_MAIN;
+      border-radius:$SIZE_UNIT_PHONE $SIZE_UNIT_PHONE 0 0; // 为了不要覆盖掉 上级Content 的border-radius
+      @include _PC{
+        border-radius:$SIZE_UNIT_PC $SIZE_UNIT_PC 0 0;
+      } 
+      .Block.Text{
+        color:#fff;
+        line-height:$HEIGHT_LINE_DEFAULT;
+        text-align:center;
+        padding:2*$SIZE_UNIT_PHONE $SIZE_UNIT_PHONE;
+        @include _PC{
+          padding:2*$SIZE_UNIT_PC $SIZE_UNIT_PC;
+        }
+      }
+      .Row.Money{
+        color:#fff;
+        text-align:center;
+        font-size:24px;
+        margin:0 auto 24px;
+        @include _PC{
+          font-size:36px;
+          margin: 0 auto 32px;
+        }
+        input{
+          height:100%;background-color: #fff;
+          border: 0 none;
+          border-radius: $SIZE_UNIT_PHONE;
+          height: 100%;
+          width:114px;
+          vertical-align: top;
+          padding:0 16px;
+          font-size:24px;
+          color:darken($COLOR_MAIN,10%);
+          text-align: center;
+          @include _PC{
+            width:168px;
+            padding:0 24px;
+            font-size:36px;
+            border-radius:$SIZE_UNIT_PC;
+          }
+        }
+      }
+    }
+
+    .PayChannelSet{
+      text-align: center;
+      .Row.Text{
+        margin:2*$SIZE_UNIT_PHONE auto 0;
+        @include _PC{
+          margin: 2*$SIZE_UNIT_PC auto 0;
+        }
+      }
+      .Button.PayChannel{
+        @include _TEXT_ELLIPSIS;
+        white-space: nowrap;
+        background-position: center top;
+        background-repeat: no-repeat;
+        background-size: contain;
+        border: 0 none;
+        height: 80px;
+        margin: 2*$SIZE_UNIT_PC;
+        padding-top: 48px;
+        width: 48px;
+        @include _PC{
+          height:96px;
+          width:64px;
+          padding-top: 64px;
+          margin: 2*$SIZE_UNIT_PC;
+        }
+        &.alipay{
+          background-image:url($PayChannel_alipay_png);
+        }
+        &.wxpay{
+          background-image:url($PayChannel_wxpay_png);
+        }
+      }
+    }
+
+    a.Row.Text.Policy{
+      font-size: $SIZE_FONT_S_PHONE;
+      text-align: center;
+      border-radius:0 0 $SIZE_UNIT_PHONE $SIZE_UNIT_PHONE;
+      background-color:$COLOR_PALE;
+      margin:0;
+      overflow:hidden;
+      @include _PC{
+        font-size: $SIZE_FONT_S_PC;
+        border-radius: 0 0 $SIZE_UNIT_PC $SIZE_UNIT_PC;
+      }
+    }
+  }
+}
+@import '../_sow/css/loginDialog.scss';
+
+.Cover {
+  @include _LAYOUT_CENTER_TABLE;
+  @include _FONT_TITLE;
+  text-align:center;
+  vertical-align: middle;
+  line-height:$HEIGHT_LINE_M_PHONE;
+  clear:both;
+  @include _PC{
+    line-height:$HEIGHT_LINE_M_PC;
+  }
+
+  &.Center{
+    @include _LAYOUT_CENTER_SELF;
+    position: fixed;
+    z-index:-1; // 防止压在可能有的按钮（例如：我要发言）上。如果.Cover.Center本身含有超链接，就需要z-index:auto;
+/*    top: - $HEIGHT_HEADER_PHONE;
+    @include _PC{
+      top: - $HEIGHT_HEADER_PC;
+    } */
+  }
+//  &.Head{ // 如果抬头的文字会有多行，那么应当控制一下行高。
+//    line-height:$HEIGHT_LINE_DEFAULT;
+//  }
+
+  @at-root #allSpaceAbout &{
+    line-height: $HEIGHT_LINE_DEFAULT;
+  }
+
+}
+
+//////////////////////////////*** 顶栏元素 ***/////////////////////////////////////
+
+.Reminder{
+//  @include _FONT_CONTENT;
+  position:fixed;
+  top:0;
+  left:0;
+  height:$SIZE_UNIT_PHONE/4;
+  line-height: $HEIGHT_HEADER_PHONE;
+  width:100%;
+  text-align:center;
+  background-color:$COLOR_MAIN;
+  color: transparent;
+  @include _PC{
+    height: $SIZE_UNIT_PC/4;
+    line-height: $HEIGHT_HEADER_PC;
+  }
+  img{
+    height:90%;
+    vertical-align: middle;
+    opacity:0;
+  }
+  &.Active{
+    z-index:index($zIndex, popupDialog)+1; // 即使在dialog页面，也能显示提醒。
+    color:$COLOR_WHITE;
+    height: $HEIGHT_FOOTER_PHONE;
+    @include _PC{
+      height: $HEIGHT_FOOTER_PC;
+    }
+    img{
+      opacity:1;
+    }
+  }
+}
+
+@import '../_sow/css/Header.scss';
+@import '../_sow/css/Footer.scss';
+
+//*** 主区元素 ***/
+.SceneHeader{
+  @include _BG_COVER;
+  @include _FONT_TITLE;
+  @include _TEXT_ELLIPSIS;
+  color: $COLOR_WHITE;
+  white-space: nowrap;
+  position: relative;
+  height: $HEIGHT_FLYER_PHONE;
+  width: 100%;
+  padding: $HEIGHT_FLYER_PHONE - $HEIGHT_LINE_M_PHONE - $SIZE_UNIT_PHONE 5% $SIZE_UNIT_PHONE; // 留给文字
+  overflow: hidden;
+  text-align: center;
+  background-image: url($Header_png);
+  @include _PC { 
+    height: $HEIGHT_FLYER_PC;
+    padding: $HEIGHT_FLYER_PC - $HEIGHT_LINE_M_PC - $SIZE_UNIT_PC 5% $SIZE_UNIT_PC;
+  }
+
+  @at-root #myHomeAbout &{
+    cursor:pointer;
+  }
+
+  >.Text.Remind{ // 给文字多一个选择，优点是可以设置背景色。
+    @include _FONT_TITLE;
+    @include _TEXT_ELLIPSIS;
+    position: absolute;
+    left:0;
+    right:0;
+    bottom: $SIZE_ICON_L_PHONE/2 + $SIZE_UNIT_PHONE;
+    margin: auto;
+    width: $WIDTH_PAGE_VAR;
+    max-width: $WIDTH_PAGE_MAX;
+    height: $HEIGHT_LINE_M_PHONE;
+    line-height: $HEIGHT_LINE_M_PHONE;
+    text-align: center;
+    background-color: rgba($COLOR_WHITE,$OPACITY_SLEEP);
+    color: $COLOR_MAIN;
+    border-radius: $BORDER_RADIUS_PHONE;
+    padding: 0 $SIZE_UNIT_PHONE;
+    cursor: pointer;
+    @include _PC{
+      bottom: $SIZE_ICON_L_PC/2 + $SIZE_UNIT_PC;
+      height: $HEIGHT_LINE_M_PC;
+      line-height: $HEIGHT_LINE_M_PC;
+      border-radius: $BORDER_RADIUS_PC;
+      padding: 0 $SIZE_UNIT_PC;
+    }
+    &:hover{
+      opacity:$OPACITY_HOVER;
+//      background-color: rgba($COLOR_BLACK_LIKE, $OPACITY_HOVER); // $COLOR_WHITE;
+    }
+  }
+}
+.Card {
+  @include _CARD_WIDTH;
+  height: auto; // 标准height应当等于宽度 */
+  background-color: $COLOR_PALE; // rgba($COLOR_MAIN, $OPACITY_ITEM);
+  box-shadow: #{$SHADOW_NORMALBOX};
+  text-align: center; // 为了让里面的图片，在太长而被缩小时，宽度小于卡片，放置在卡片中间。
+  cursor: pointer;
+  overflow:hidden;
+
+  &:hover {
+    opacity: $OPACITY_HOVER;
+    background-color: rgba($COLOR_MAIN,$OPACITY_ITEM/$OPACITY_HOVER); 
+//    box-shadow: #{$SHADOW_ACTIVEBOX};
+  }
+
+  .CardBlock {
+    width: 100%; 
+  //  max-height: 48px;
+    margin: $SIZE_UNIT_PHONE 0;
+    padding: 0 5%;
+    overflow: hidden;
+    text-align: left;
+    @include _PC {
+      margin: $SIZE_UNIT_PC 0; 
+    }
+    &.Subject{
+      @include _FONT_CONTENT;
+    }
+    &.Script{
+        @include _FONT_LABEL;
+        line-height: 100%;
+        
+        .Text.Script{
+//          @include _TEXT_ELLIPSIS;
+//          width:50%;
+          &.Place{
+            float:left;
+          }
+          &.Date{
+            float:right;
+            text-align:right;
+          }
+        }
+    }
+    &.Stats>.Tecon{
+      margin-right:0;
+      margin-left:2*$SIZE_UNIT_PHONE;
+      float:right;
+      @include _PC{
+        margin-left:2*$SIZE_UNIT_PC;
+      }
+    }
+  }
+
+}
+
+.BlockQrc{
+  border:0 none transparent;
+  padding:0;
+  display:inline-block; // 上级容器设置 text-align:center 是让里面的内联元素居中，那就只要把里面的元素变成内联。
+  .Url.QRC{
+    @include _FONT_KEY;
+    float:left;
+    box-sizing:border-box;
+    margin:$SIZE_UNIT_PHONE;
+    width:96px; // 80px 最适合 iPhone 6sp。
+    height:96px + 24px;
+    padding-top: 96px;
+    line-height: 24px;
+    background-position:left top;
+    background-repeat:no-repeat;
+    background-size:contain;
+  //  background-color:$COLOR_MAIN;
+    // white-space: nowrap; // 使用一个就够了。
+    word-break:keep-all;
+    @include _PC {
+      margin:$SIZE_UNIT_PC;
+      width:120px;
+      height:120px + 32px;
+      padding-top: 120px;
+      line-height:32px;
+    }
+    &:hover{
+      opacity: $OPACITY_HOVER;
+    }
+    &.Web{
+      background-image:url($QRC_Web_png);
+    }
+    &.Apple{
+      background-image:url($QRC_Apple_png);
+    }
+    &.Android{
+      background-image:url($QRC_Android_png);
+    }
+    &.Wechat{
+      background-image:url($QRC_Wechat_png);
+    }
+    &.QQ{
+      background-image:url($QRC_QQ_png);
+    }
+  }
+}
+
+.LoadButton{
+  @include _FONT_LABEL;
+  position:relative;
+  padding: $SIZE_UNIT_PHONE/2;
+  border: none;
+  width: 100%;
+//  height: $HEIGHT_LINE_M_PHONE/2;
+//  line-height: $HEIGHT_LINE_M_PHONE/2;
+  cursor: pointer;
+  background-color: transparent;
+  color: $COLOR_MAIN;
+  @include _PC{
+    padding: $SIZE_UNIT_PC/2;
+  }
+  &:hover{
+    background-color: rgba($COLOR_MAIN, $OPACITY_ITEM); // $COLOR_PALE;
+  }
+  .DotLoader{
+    position:unset;
+    >div{
+      background-color:$COLOR_MAIN;
+    }
+  }
+}
+
+.MapArea {
+  width: 100%;
+  height: 100%;
+/*  background-image: url($MocaTice_png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  background-clip: border-box;
+  */
+}
+.AddressArea{ // relative的子容器，专用于解决最大宽度受限的区域放在屏幕中央的问题。
+  position: relative;
+  margin: 0 auto;
+  max-width: $WIDTH_PAGE_MAX; 
+  width: 100%;
+  height: 100%;
+// 在手机上，默认让AddressPicker满屏。
+//  border-top: $HEIGHT_LINE_M_PHONE solid transparent;
+//  border-bottom: $HEIGHT_LINE_M_PHONE solid transparent;
+  @include _PC { 
+// 在桌面上，让AddressPicker周边留空。
+    width: 80%;
+    border-top: $HEIGHT_LINE_M_PC solid transparent;
+    border-bottom: $HEIGHT_LINE_M_PC solid transparent;
+  }
+}
+.AddressViewer {
+  position: relative;
+  border: 1px solid $COLOR_MAIN;
+  padding-left: $HEIGHT_LINE_M_PHONE;
+//  padding-right: 72px;
+  width: 100%;
+  height: $HEIGHT_LINE_M_PHONE;  // +1 能解决出现滚动条的问题。或者分两层：<div borderbox><input line-height>
+  opacity: 0.9;   filter: alpha(opacity=90);   -moz-opacity: 0.9;
+//  color: $COLOR_MAIN;
+  overflow: hidden;
+  background: $COLOR_WHITE url($IconAddress_png) no-repeat scroll left center;
+  background-size:($HEIGHT_LINE_M_PHONE - 2) ($HEIGHT_LINE_M_PHONE - 2); // 减去边框。
+//  z-index: index($zIndex, activeView); // 确保高于AddressPicker，否则如果在HTML里 Viewer写在Picker后面，会被挡住。
+  @include _PC { 
+    height: $HEIGHT_LINE_M_PC; 
+    padding-left: $HEIGHT_LINE_M_PC;
+    background-size:($HEIGHT_LINE_M_PC - 2) ($HEIGHT_LINE_M_PC - 2);
+  }
+}
+.AddressViewer.ReadOnly{
+  background-color: $COLOR_BORDER_LIGHT;
+}
+.AddressViewer > .AddressText{
+  position: absolute; // 使得本元素和AddressViewer之间没有空隙，否则在手机上会向下偏差一点点，可能因为Border
+  left: 0;
+  padding-left: $HEIGHT_LINE_M_PHONE;
+  padding-right: 72px; 
+  width: 100%; height: 100%;
+  background-color: transparent;
+  font-size: $SIZE_FONT_XL_PHONE;
+  color: $COLOR_MAIN;
+  line-height: $HEIGHT_LINE_M_PHONE;
+  @include _PC{
+    line-height: $HEIGHT_LINE_M_PC;
+    padding-left: $HEIGHT_LINE_M_PC;
+    font-size: $SIZE_FONT_XL_PC;
+  }
+}
+
+.AddressPicker {
+  position: absolute;
+  top: $HEIGHT_LINE_M_PHONE;
+  bottom: 0; 
+  height: auto;
+  width: 100%;
+  background-color: $COLOR_PALE;
+  opacity: 0.9;   filter: alpha(opacity=90);   -moz-opacity: 0.9;
+  padding: $SIZE_UNIT_PHONE; 
+  overflow: auto;
+//  z-index: $zIndex_activeView + 10; // 必须至少和当前活跃页面一样高，否则不能显示出来。但不能高于$zIndex_fixedFrame，否则会遮住底栏的submitTab突出的圆顶。
+  display: none; // 默认不显示，由用户点击来切换 $('#addressPicker').toggle();
+  @include _PC { 
+    top: $HEIGHT_LINE_M_PC;
+  }
+}
+.VideoPlayer{
+  width: 100%;
+  height: 100%;
+}
+.Card>.VideoPlayer{
+  height: auto;
+}
+.AudioPlayer{
+  display: block; // <audio>本身有某个隐藏属性，以至于无法居中。要特地设置block才能居中。
+  margin: $SIZE_UNIT_PHONE auto;
+  width: 96%;
+  max-width: $WIDTH_PAGE_MAX;
+//  height: 100%;
+  @include _PC{
+    margin: $SIZE_UNIT_PC auto;
+  }
+}
+.AudioProgressBar {
+  margin-top:($HEIGHT_LINE_M_PHONE - $SIZE_UNIT_PHONE )/2;
+  width: 0;
+  height: $SIZE_UNIT_PHONE; // 100%;
+  float: left;
+  background-color: $COLOR_MAIN;
+  @include _PC {
+    margin-top:($HEIGHT_LINE_M_PC - $SIZE_UNIT_PHONE)/2;
+  }
+}
+.AudioProgressBar.Active {
+  transition: width 10.0s linear; -webkit-transition: width 10.0s linear; -moz-transition: width 10.0s linear; -ms-transition: width 10.0s linear; -o-transition: width 10.0s linear;
+  width: 100%;
+}
+
+.DotLoader{
+  position:absolute; // 默认是放在按钮底部。
+  left:0;
+  right:0;
+  bottom:0;
+  line-height:10px;
+  >div{
+    background-color: $COLOR_MAIN;
+    border-radius: 100%;
+    display: inline-block;
+    margin: 3px;
+    height: 2px;
+    width: 2px;
+    animation-fill-mode: both;
+    @include _PC { 
+      margin: 4px;
+      height: 3px;
+      width: 3px;
+    }
+  }
+  &.Active>div{
+    &:nth-child(1){
+      animation: 1s cubic-bezier(0.2, 0.68, 0.18, 1.08) 0.25s normal none infinite running scaleDot;
+    }
+    &:nth-child(2){
+      animation: 1s cubic-bezier(0.2, 0.68, 0.18, 1.08) 0.5s normal none infinite running scaleDot;
+    }
+    &:nth-child(3){
+      animation: 1s cubic-bezier(0.2, 0.68, 0.18, 1.08) 0.75s normal none infinite running scaleDot;
+    }
+  }
+}
+  
+@keyframes scaleDot {
+  0% {  transform: scale(1);  -webkit-transform: scale(1); opacity: 1; } // 要不要添加 -webkit-transform ?
+  45% {  transform: scale(0.2); -webkit-transform: scale(0.2);  opacity: 0.7; }
+  80% {  transform: scale(1);  -webkit-transform: scale(1); opacity: 1; } 
+}
+
+.Row{
+  position: relative;
+  margin: $SIZE_UNIT_PHONE auto;
+  width: 100%;
+  height: $HEIGHT_LINE_M_PHONE;
+  line-height: $HEIGHT_LINE_M_PHONE;
+  clear: both;
+  float: left; // 使得相邻的margin不要合并。http://www.bkjia.com/Javascript/779964.html
+//  background-color: transparent; // 如果不透明，height=line-height导致底部边框被压住。
+  @include _PC{
+  	margin: $SIZE_UNIT_PC auto;
+    height: $HEIGHT_LINE_M_PC;
+    line-height: $HEIGHT_LINE_M_PC;
+  }
+  &.InList{
+    height:$HEIGHT_LINE_S_PHONE;
+    line-height: $HEIGHT_LINE_S_PHONE;
+    @include _PC{
+      height: $HEIGHT_LINE_S_PC;
+      line-height: $HEIGHT_LINE_S_PC;     
+    }
+  }
+}
+
+.Block{
+  position: relative;
+  margin: $SIZE_UNIT_PHONE auto;
+  width: 100%;
+  height: auto;
+  float: left; // 使得与上面元素之间的margin能累加
+  clear: both;
+  @include _PC{
+  	margin: $SIZE_UNIT_PC auto;
+  }
+}
+
+.Block.Reply.Editor{
+  position: absolute;
+  bottom: 0;
+  left:0;
+  right:0;
+  margin:auto;
+  box-sizing: unset;
+  padding: $SIZE_UNIT_PHONE*2 0;
+  width: $WIDTH_PAGE_VAR;
+  max-width: $WIDTH_PAGE_MAX;
+  background:$COLOR_WHITE;
+  @include _PC{
+    padding: $SIZE_UNIT_PC*2 0;
+// 以下的border设置，已不再需要，因为找到更好的方案：让reply editor之上的fieldset具有 height:100%; overflow-y; 滚动条就不会覆盖reply editor! 如果继续用以下设置，在某些尺寸下，还是会造成reply editor轻微的偏移。
+//    border-left:12px solid $COLOR_WHITE; // 在电脑浏览器上，本页面内容太长而出现滚动条时，内容被推向左侧，从而出现在回复框左侧。因此强制用边框盖住。设为12px是因为，小手机的屏幕320px宽，乘以 (1-$WIDTH_PAGE_VAR)/2=12px;
+//    border-right:12px solid transparent; // transparent不遮挡滚动条。
+  }
+
+  >textarea {
+    @include _FONT_CONTENT;
+    line-height:1.5;
+    width: 100%;
+    height: $HEIGHT_LINE_M_PHONE + $SIZE_UNIT_PHONE/4;
+    min-height: $HEIGHT_LINE_M_PHONE + $SIZE_UNIT_PHONE/4;
+    padding: $SIZE_UNIT_PHONE;
+    border-right:52px solid $COLOR_MAIN;
+    background-color: $COLOR_WHITE;
+    @include _PC{
+      height: $HEIGHT_LINE_M_PC + $SIZE_UNIT_PC/2;
+      min-height: $HEIGHT_LINE_M_PC + $SIZE_UNIT_PC/2;
+      padding: $SIZE_UNIT_PC; 
+      border-right:72px solid $COLOR_MAIN;
+    }
+  }
+
+  >.Button.Reply {
+    @include _FONT_TITLE;
+    position: absolute;
+    right:0;
+    top:0;
+    bottom:0;
+    margin:auto;
+    border: 0 solid transparent;
+    padding: 0 $SIZE_UNIT_PHONE/2;
+    width: 52px;
+    border-radius: 0;
+    height: $HEIGHT_LINE_M_PHONE - 4px; // + $SIZE_UNIT_PHONE - 2px; // 减去2，为了在 Safari/iOS 上回复按钮不掉下来一点点。
+    background-color: $COLOR_MAIN;
+//    background-image:url($IconPublish_png);
+//    background-repeat: no-repeat;
+//    background-position: center center;
+//    background-size: 14px 14px;
+    // background:url($IconPublish_png) no-repeat center center / 16px 16px
+    color: $COLOR_WHITE;
+    @include _PC {
+      padding: 0 $SIZE_UNIT_PC/2;
+//      bottom: $HEIGHT_LINE_S_PC;
+      width:72px;
+      height: $HEIGHT_LINE_M_PC - 4px; // + $SIZE_UNIT_PC - 2px;
+//      right: $SIZE_UNIT_PC;
+//      background-size:16px 16px;
+    }
+  }
+
+}
+.Block.List.ReplySet{
+  //  padding-left: ($SIZE_ICON_M_PHONE + $SIZE_UNIT_PHONE*2);
+    width: 100%;
+  //  @include _PC{
+  //    padding-left: ($SIZE_ICON_M_PC + $SIZE_UNIT_PC*2);
+  //  }
+  /** 默认的发言：靠右侧 **/
+  .ReplyItem{
+    clear: both;
+    position: relative;
+    border-bottom: 1px solid $COLOR_BORDER_LIGHT;
+    padding: $SIZE_UNIT_PHONE 0 $HEIGHT_LINE_S_PHONE ($SIZE_ICON_M_PHONE + $SIZE_UNIT_PHONE*2);
+    width: 100%;
+//    min-height: $SIZE_ICON_S_PHONE + $SIZE_UNIT_PHONE*2; // 头像高+上下margin
+//    text-align: right;
+    @include _PC {
+      padding: $SIZE_UNIT_PC 0 $HEIGHT_LINE_S_PC ($SIZE_ICON_M_PC + $SIZE_UNIT_PC*2); 
+//      min-height: $SIZE_ICON_S_PC + $SIZE_UNIT_PC*2;
+    }
+
+    /** 主人的发言：左侧，默认色 **/      /** 我的发言：左侧，主色 **/
+
+    >.Image.Portrait{
+      position: absolute;
+      left: $SIZE_ICON_M_PHONE/2 - $SIZE_ICON_S_PHONE/2;  // 让回复的头像，左侧对齐主题的头像的左侧。
+      top: 0;
+      margin: $SIZE_UNIT_PHONE;
+      width: $SIZE_ICON_S_PHONE;
+      height: $SIZE_ICON_S_PHONE;
+      border-radius: 100%;
+      background-size:cover;
+      background-position:center center;
+      background-repeat:no-repeat;
+      cursor:pointer;
+      &:hover{
+        opacity:$OPACITY_HOVER;
+      }
+      @include _PC {
+        left:$SIZE_ICON_M_PC/2 - $SIZE_ICON_S_PC/2;
+        margin: $SIZE_UNIT_PC; 
+        width: $SIZE_ICON_S_PC;
+        height: $SIZE_ICON_S_PC; 
+      }
+    }
+    >.Text.Nick{
+      @include _FONT_LABEL;
+      @include _TEXT_ELLIPSIS;
+      white-space:nowrap;
+      position:absolute;
+      left:0;
+      top:$SIZE_ICON_S_PHONE + 3*$SIZE_UNIT_PHONE/2;
+      width:$SIZE_ICON_M_PHONE + $SIZE_UNIT_PHONE*2;
+      text-align: center;
+      @include _PC{
+        top:$SIZE_ICON_S_PC + 3*$SIZE_UNIT_PC/2;
+        width:$SIZE_ICON_M_PC + $SIZE_UNIT_PC*2;
+      }
+    }
+    >.Bottom{
+      position: absolute;
+      bottom:0;
+      left:0;
+      padding: 0 ($SIZE_ICON_M_PHONE + $SIZE_UNIT_PHONE*2);
+      height: $HEIGHT_LINE_S_PHONE;
+      line-height: $HEIGHT_LINE_S_PHONE;
+      width: 100%;
+      @include _PC{
+        padding: 0 ($SIZE_ICON_M_PC + $SIZE_UNIT_PC*2);
+        height: $HEIGHT_LINE_S_PC;
+        line-height: $HEIGHT_LINE_S_PC;
+      }
+      .Text.Date{
+        @include _FONT_LABEL;
+        padding: 0 $SIZE_UNIT_PHONE;
+        position: absolute;
+        right:0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        @include _PC{
+          padding: 0 $SIZE_UNIT_PC;
+        }        
+      }
+    }
+  }
+}
+
+/*
+#allSpaceChat, #urHostChat, #myProjectChat, #urProjectChat {
+  .Scene{
+    overflow-y:hidden;
+  }
+  .ViewPage{
+    top:-240px;
+    border-top:240px solid transparent;
+  }
+}
+*/
+
+.ChatHeader{
+  position:absolute; 
+  width:100%;
+  overflow:hidden;
+  z-index:1; // 让 ChatHeader 压在 ChatWindow 上，否则无法点击 ChatHeader 里的按钮。
+}
+.ChatWindow{
+  position:absolute; 
+  top:0; 
+  width:100%;
+  height:100%; // 如果没有 SceneHeader，就用 height:100%
+  overflow-y: auto;
+  border-top:36px+$SIZE_UNIT_PHONE solid transparent; 
+  border-bottom: $HEIGHT_LINE_M_PHONE+$SIZE_UNIT_PHONE*5 solid transparent;
+  @include _PC{
+    border-top: 40px+$SIZE_UNIT_PC solid transparent;
+    border-bottom: $HEIGHT_LINE_M_PC+$SIZE_UNIT_PC*5 solid transparent;
+  }
+}
+.ChatItem{
+  clear: both;
+  position: relative;
+  padding: $SIZE_UNIT_PHONE 0 $HEIGHT_LINE_S_PHONE ($SIZE_ICON_M_PHONE + $SIZE_UNIT_PHONE*2);
+  width: 100%;
+  @include _PC {
+    padding: $SIZE_UNIT_PC 0 $HEIGHT_LINE_S_PC ($SIZE_ICON_M_PC + $SIZE_UNIT_PC*2); 
+  }
+
+  .Image.Portrait{
+    position: absolute;
+    left: $SIZE_ICON_M_PHONE/2 - $SIZE_ICON_S_PHONE/2;  // 让回复的头像，左侧对齐主题的头像的左侧。
+    top: 0;
+    margin: $SIZE_UNIT_PHONE;
+    width: $SIZE_ICON_S_PHONE;
+    height: $SIZE_ICON_S_PHONE;
+    border-radius: 100%;
+    background-size:cover;
+    background-position:center center;
+    background-repeat:no-repeat;
+    cursor:pointer;
+    &:hover{
+      opacity:$OPACITY_HOVER;
+    }
+    @include _PC {
+      left:$SIZE_ICON_M_PC/2 - $SIZE_ICON_S_PC/2;
+      margin: $SIZE_UNIT_PC; 
+      width: $SIZE_ICON_S_PC;
+      height: $SIZE_ICON_S_PC; 
+    }
+  }
+  .Text.Nick{
+    @include _FONT_LABEL;
+    @include _TEXT_ELLIPSIS;
+    white-space:nowrap;
+    position:absolute;
+    left:0;
+    top:$SIZE_ICON_S_PHONE + 3*$SIZE_UNIT_PHONE/2;
+    width:$SIZE_ICON_M_PHONE + $SIZE_UNIT_PHONE*2;
+    text-align: center;
+    @include _PC{
+      top:$SIZE_ICON_S_PC + 3*$SIZE_UNIT_PC/2;
+      width:$SIZE_ICON_M_PC + $SIZE_UNIT_PC*2;
+    }
+  }
+  .Message.Image{
+    display:block;
+    max-width:100%;
+    max-height:100%; // 貌似不起作用
+    padding:0 $SIZE_UNIT_PHONE;
+    @include _PC{
+      padding:0 $SIZE_UNIT_PC;
+    }
+  }
+  &.HostMsg, &.MyMsg{
+    padding: $SIZE_UNIT_PHONE ($SIZE_ICON_M_PHONE + $SIZE_UNIT_PHONE*2) $HEIGHT_LINE_S_PHONE 0;
+    text-align: right;
+    @include _PC{
+      padding: $SIZE_UNIT_PC ($SIZE_ICON_M_PC + $SIZE_UNIT_PC*2) $HEIGHT_LINE_S_PC 0;
+    }
+    .Image.Portrait{
+      left:unset;
+      right: $SIZE_ICON_M_PHONE/2 - $SIZE_ICON_S_PHONE/2;
+      @include _PC {
+        left:unset;
+        right:$SIZE_ICON_M_PC/2 - $SIZE_ICON_S_PC/2;
+      }
+    }
+    .Text.Nick{
+      left:unset; // 必须 left:unset，不然 right:0 不起作用
+      right:0;
+    }
+    .Message.Image{
+      float:right;
+    }
+  }
+
+  @at-root #myHomeChat &{
+//    padding-bottom: $SIZE_UNIT_PHONE;
+    padding: $SIZE_UNIT_PHONE ($SIZE_ICON_M_PHONE + $SIZE_UNIT_PHONE*2) $SIZE_UNIT_PHONE ($SIZE_ICON_M_PHONE + $SIZE_UNIT_PHONE*2);
+    height: $SIZE_UNIT_PHONE + $SIZE_ICON_S_PHONE + $HEIGHT_LINE_S_PHONE + 1px; // 整个ChatItem的 padding-top + 头像高度 + 昵称高度 + border-bottom
+    border-bottom: 1px solid $COLOR_BORDER_LIGHT;
+    @include _PC{
+//      padding-bottom: $SIZE_UNIT_PC;
+      padding: $SIZE_UNIT_PC ($SIZE_ICON_M_PC + $SIZE_UNIT_PC*2) $SIZE_UNIT_PC ($SIZE_ICON_M_PC + $SIZE_UNIT_PC*2);
+      height: $SIZE_UNIT_PC + $HEIGHT_LINE_S_PC + $SIZE_ICON_S_PC + 1px;
+    }
+    &:hover{
+      cursor:pointer;
+      background-color: rgba($COLOR_MAIN, $OPACITY_ITEM);
+    }
+    >.Text.Area{
+      height:100%; // 如果NewsItem定义了height，那么 text 就该限高；如果NewsItem定义了min-height，text就不需要限高了。
+      overflow:hidden;
+    }
+    >.Message.Image{
+      height:$SIZE_ICON_S_PHONE + $HEIGHT_LINE_S_PHONE - $SIZE_UNIT_PHONE; // 如果 NewsItem 定义了 min-height，那么image就该专门定义 height。如果NewsItem定义了 height, 那么image就不需要定义height。
+      @include _PC{
+        height:$SIZE_ICON_S_PC + $HEIGHT_LINE_S_PC - $SIZE_UNIT_PC;
+      }
+    }
+    .Image.Portrait:hover{
+      opacity:unset; // NewsItems里的头像不能单独被点击
+    }
+    .Image.Portrait.ToPerson{
+      left: $SIZE_ICON_M_PHONE/2 - $SIZE_ICON_S_PHONE/2;
+      right: unset;
+      @include _PC {
+        left: $SIZE_ICON_M_PC/2 - $SIZE_ICON_S_PC/2;
+        right: unset;
+      }
+    }
+    .Text.Nick.ToPerson{
+      left: 0;
+      right: unset;
+    }
+  }
+}
+
+#myHomeChat .LogItem .Image.Portrait{
+  background-image:url($Header_png); // 防止项目没有自设 bgimage
+}
+
+.LogItem, .BlogItem, .PlogItem{
+$top: $SIZE_UNIT_PHONE;
+$topPC: $SIZE_UNIT_PC;
+$left: $SIZE_ICON_M_PHONE+$SIZE_UNIT_PHONE*3;
+$leftPC: $SIZE_ICON_M_PC+$SIZE_UNIT_PC*3;
+$bottom: $HEIGHT_LINE_M_PHONE;
+$bottomPC: $HEIGHT_LINE_M_PC;
+$right: 0;
+$rightPC: 0;
+
+  position: relative;
+  border: 0;
+  border-bottom: 1px solid $COLOR_BORDER_LIGHT;
+  padding: $top $right $bottom $left;
+  width:100%;
+  @include _PC{
+    padding: $topPC $rightPC $bottomPC $leftPC;
+  }
+
+  &.Alone{ // in LOG_ONE pages.
+    border:0px none;
+    &:hover{
+      cursor:unset;
+      background-color:transparent;
+    }
+    &.Reader{
+      background-color: $COLOR_PALE; // 和Reader一样。
+    }
+  }
+  &:hover{
+    cursor:pointer;
+    background-color: rgba($COLOR_MAIN, $OPACITY_ITEM);
+  }
+
+  >.Left{
+    position: absolute;
+    left: 0; 
+    top: 0;
+    padding: $top 0 $top 0;
+    width: $left;
+    height: 100%;
+    text-align: center;
+    @include _PC{
+      padding: $topPC 0 $topPC 0;
+      width: $leftPC;
+    }
+    &.Clickable:hover{
+      opacity: $OPACITY_HOVER;
+    }
+    .Text.Date{
+      border: 1px solid $COLOR_BORDER_DARK;
+      padding: $SIZE_UNIT_PHONE/2 0;
+      width: 56px;
+      font-weight: bold;
+      font-size: $SIZE_FONT_XL_PHONE;
+      text-align: center;
+      line-height: 1.4;
+//      display:inline-block;
+      @include _PC{
+        padding: $SIZE_UNIT_PC/2 0;
+        width:72px;
+        font-size: $SIZE_FONT_XL_PC;
+        line-height: 1.3;
+      }
+
+      >div:nth-child(2){
+        color: $COLOR_MAIN;
+      };
+      >div:nth-child(3){
+        @include _FONT_LABEL;
+        position:relative;
+        top:2px;
+        @include _PC{
+          top:4px;
+        }
+      };
+    }
+    .Image.Portrait{
+      width: $SIZE_ICON_M_PHONE;
+      height: $SIZE_ICON_M_PHONE;
+      border-radius: 100%;
+      background-size:cover;
+      background-position:center center;
+      background-repeat:no-repeat;
+      display: inline-block;
+      @include _PC {
+        width: $SIZE_ICON_M_PC;
+        height: $SIZE_ICON_M_PC; 
+      }
+      &.Clickable:hover{
+        opacity: $OPACITY_HOVER;
+      }
+    }
+    .Text.Nick{
+      @include _FONT_LABEL;
+      @include _TEXT_ELLIPSIS;
+      white-space: nowrap;
+      text-align: center;
+    }
+  }
+  >.Top{
+    position: absolute;
+    top:0;
+    left:0;
+    padding:0 $right 0 $left;
+    width:100%;
+    height: $top;
+    line-height: $top;
+    @include _PC{
+      padding: 0 $rightPC 0 $leftPC;
+      height: $topPC;
+      line-height: $topPC;
+    }
+  }
+  >.Bottom{
+    position: absolute;
+    bottom:0;
+    left:0;
+    border-bottom: $SIZE_UNIT_PHONE solid transparent;
+    padding: 0 $right 0 $left;
+    width:100%;
+    height:$bottom;
+    line-height: $bottom - $SIZE_UNIT_PHONE;
+    @include _PC{
+      border-bottom: $SIZE_UNIT_PC solid transparent;
+      padding: 0 $rightPC 0 $leftPC;
+      height: $bottomPC;
+      line-height: $bottomPC - $SIZE_UNIT_PC;
+    }
+
+    >.Tecon{
+      margin-right:$SIZE_UNIT_PHONE;
+      @include _PC{
+        margin-right:$SIZE_UNIT_PC;
+      }
+    }
+
+    >.Text.DateTime{
+      @include _FONT_LABEL;
+      padding: 0 $SIZE_UNIT_PHONE;
+      position: absolute;
+      right:0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: right;
+      @include _PC{
+        padding: 0 $SIZE_UNIT_PC;
+      }
+    }
+  }
+  >.Middle{
+    position:relative; 
+    .Text.Line.Title{
+      @include _FONT_TITLE;
+      position: relative;
+      width:100%;
+      margin:0 0 $SIZE_UNIT_PHONE 0;
+      min-height:$HEIGHT_LINE_M_PHONE;
+      @include _PC{
+        margin:0 0 $SIZE_UNIT_PC 0;
+        min-height:$HEIGHT_LINE_M_PC;
+      }
+    }
+
+    >.Row{
+      margin-top:0;
+    }
+  }
+
+}
+
+.Tecon{
+  @include _FONT_KEY;
+  border:1px solid transparent; // 隐藏button的边框。
+  padding: 0 6px;
+//  padding-left: $HEIGHT_LINE_S_PHONE - 2px;
+  background-color: transparent;
+//  background-repeat: no-repeat;
+//  background-size: 14px 14px; // ($HEIGHT_LINE_S_PHONE - 2px - $SIZE_UNIT_PHONE) ($HEIGHT_LINE_S_PHONE - 2px - $SIZE_UNIT_PHONE);
+//  background-position: 6px center; // $SIZE_UNIT_PHONE/2 center;
+  height:$HEIGHT_LINE_S_PHONE;
+  line-height: $HEIGHT_LINE_S_PHONE - 2px; // 扣除 border
+  @include _PC{
+    height:$HEIGHT_LINE_S_PC;
+    line-height: $HEIGHT_LINE_S_PC - 2px;
+    padding: 0 7px; // $SIZE_UNIT_PC/2;
+//    padding-left: $HEIGHT_LINE_S_PC - 2px;
+//    background-size: 16px 16px; // ($HEIGHT_LINE_S_PC - 2px - $SIZE_UNIT_PC) ($HEIGHT_LINE_S_PC - 2px - $SIZE_UNIT_PC);
+//    background-position: 7px center; // $SIZE_UNIT_PC/2 center;
+  }
+
+  &.AtLeft { // 居左按钮
+    float:left;
+    margin:$SIZE_UNIT_PHONE auto;
+    @include _PC{
+      margin:$SIZE_UNIT_PC auto;
+    }
+  }
+  &.AtCenter{ // 居中按钮
+    position:absolute;
+    margin:$SIZE_UNIT_PHONE auto;
+    left:0;
+    right:0;
+    @include _PC{
+      margin:$SIZE_UNIT_PC auto;
+    }
+  }
+  &.Inside { // 居内按钮。在大的submit按钮内部。
+
+  }
+  &.Create, &.Return, &.Delete, &.Logout, &.Quit, &.AppendItem, &.Like{ // 右侧按钮
+    float:right;
+    margin:$SIZE_UNIT_PHONE 0 $SIZE_UNIT_PHONE $SIZE_UNIT_PHONE*2;
+//    line-height: inherit; // 对 button，高度继承即可。如果设定和高度相同，可能受到 border 影响而不齐。
+    @include _PC{
+      margin:$SIZE_UNIT_PC 0 $SIZE_UNIT_PC $SIZE_UNIT_PC*2;
+    }
+  }
+  &.Create, &.Return, &.Save { // 红按钮
+    background-color: $COLOR_MAIN;
+    color: $COLOR_WHITE;
+  }
+/*  &.Delete, &.Logout, &.Quit, &.AppendItem{ // 无色按钮
+    &:hover{
+      color:$COLOR_MAIN;
+    }
+  } */
+  &.AddText, &.AddImage{ // 状态栏按钮
+    margin:0 $SIZE_UNIT_PHONE;
+    @include _PC{
+      margin:0 $SIZE_UNIT_PC;
+    }
+  }
+
+  &.Length{ float:left; }
+  &.Reply{ float:left; }
+  &.Image{ float:left; }
+  &.Save{ background-image: url($IconSave_png); }
+  &.VoteGood{ background-image: url($IconVoteGood_png); }
+//  &.Create{ background-image: url($IconCreate_png);  }
+  &.Delete{    background-image: url($IconDeleteGrey_png); background-color:$COLOR_PALE;
+//    &:hover{      background-image: url($IconDeleteRed_png);    }
+  }
+//  &.Return{    background-image: url($IconReturn_png);  }
+  &.AddText, &.AddImage{   
+    &:hover{ 
+      background-color:$COLOR_MAIN; 
+      color: white;
+    }
+  }
+  &.Logout{    background-color:$COLOR_PALE;  
+    &:hover{ color:$COLOR_WHITE; background-color:$COLOR_MAIN; }
+  }
+  &.AppendItem{    background-color:$COLOR_PALE; }
+  &.Join{    background-image: url($IconJoin_png);  }
+//  &.Support{  background-image: url($IconSupport_png); }
+//  &.Care{ background-image: url($IconCare_png); }
+//  &.Publish{ background-image: url($IconPublish_png); }
+//  &.Order{ background-image: url($IconOrder_png); }
+  &.Project{ background-image: url($StageProset_png); }
+  &.Tice{ background-image: url($StageTice_png); }
+  &.Quit { background-color:$COLOR_PALE; 
+    &:hover{ color:white; background-color:$COLOR_MAIN; } 
+  }
+  &.Like { background-image: url($ACTION_LIKE_png); }
+}
+
+.Button.Submit{
+  @include _FONT_TAG;
+  position:relative;
+  float:left;
+  margin:2*$SIZE_UNIT_PHONE auto;
+  border: 1px solid transparent;
+  padding:0 $SIZE_UNIT_PHONE;
+  width: 100%;
+  color: $COLOR_WHITE;
+  height: $HEIGHT_LINE_M_PHONE;
+  line-height:$HEIGHT_LINE_M_PHONE - 2px;
+  background-color: $COLOR_MAIN;
+  cursor:pointer;
+  border-radius: $BORDER_RADIUS_PHONE;
+  @include _PC{
+    margin:2*$SIZE_UNIT_PC auto;
+    padding: 0 $SIZE_UNIT_PC;
+    height: $HEIGHT_LINE_M_PC;
+    line-height: $HEIGHT_LINE_M_PC - 2px;
+    border-radius: $BORDER_RADIUS_PC;
+  }
+@at-root .BottomRow{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    margin:auto;
+    width:$WIDTH_PAGE_VAR;
+    max-width:$WIDTH_PAGE_MAX;
+    background-color:#fff;
+  }
+  &:hover{
+    opacity:$OPACITY_HOVER;
+  }
+
+  .Tecon{
+    @include _FONT_CONTENT;
+    color: $COLOR_WHITE;
+    height:100%;
+    border:none;
+    white-space:nowrap;
+    display:inline-block; // 如果是block元素，那么图片会被放到最左侧。
+    line-height:inherit; // 不inherit，那么tecon的背景图就会按照tecon原有的line-height往下掉几个像素
+  }
+}
+
+.Text.Line{
+  @include _FONT_CONTENT;
+  @include _TEXT_ELLIPSIS;
+  padding: 0 $SIZE_UNIT_PHONE;
+  width: 100%;
+  height: 100%;
+  line-height:inherit; // to overwrite line-height in _FONT_CONTENT
+  @include _PC{
+  	padding: 0 $SIZE_UNIT_PC;
+  }
+}
+.Text.Area{
+  @include _FONT_CONTENT;
+  line-height:$HEIGHT_LINE_DEFAULT;
+  position: relative;
+  padding: $SIZE_UNIT_PHONE/2 $SIZE_UNIT_PHONE;
+  width: 100%;
+  float: left;
+  @include _PC {
+  	padding: $SIZE_UNIT_PC/2 $SIZE_UNIT_PC;
+  }
+}
+
+.Block.Story{
+  position: relative;
+//  float: right;
+  width: 100%;
+  height: auto;
+
+  &.Editor{
+    padding-bottom: $HEIGHT_LINE_M_PHONE;
+    border: 1px solid $COLOR_BORDER_DARK;
+    @include _PC{
+      padding-bottom: $HEIGHT_LINE_M_PC;
+    }
+
+    img{
+      cursor:pointer;
+      &:hover{
+        border:1px solid $COLOR_MAIN;
+      }
+    }
+    textarea.Text.Area{
+      border-color: transparent;
+      &:hover, &:focus{
+        border-color: $COLOR_MAIN;
+      }
+    }
+
+    .StoryItem{
+      position:relative;
+      &.Chosen2Move{
+        background-color:lighten($COLOR_MAIN,20%);
+      }
+      &.OnMoving{
+        background-color:lighten($COLOR_MAIN,20%);
+      }
+    }
+
+    .Icon.DeleteSection{
+      background-color:$COLOR_WHITE;
+      width:20px;
+      height:20px;
+      position:absolute;
+      right:0; // -10px;
+      top:0px;
+      cursor:pointer;
+      font:bold 16px Sans-Serif;
+      color:#5F9EDF;
+      text-align: center;
+      &:hover{
+        color:$COLOR_MAIN;
+      }
+      @include _PC{
+        width:24px;
+        height:24px;
+//        right:-12px;
+        font:bold 20px Sans-Serif;
+      }
+    }
+
+    .Text.Line.Feedback.Save{
+      @include _FONT_LABEL;
+      white-space:nowrap;
+      position: absolute;
+      color: $COLOR_MAIN;
+      width: 0; // 不然这会压在右侧按钮上，导致点击按钮无效。
+      overflow: visible;
+    }
+  }
+
+  &.Reader{
+    border-bottom: 1px solid $COLOR_BORDER_LIGHT;
+    background-color:$COLOR_PALE;
+    &.InLog{
+      margin-top:0;
+      padding-top:$SIZE_UNIT_PHONE;
+      @include _PC{
+        padding-top:$SIZE_UNIT_PC;
+      }
+    }
+  }
+
+  img, .Text.Area{ // 给拖拽图标留一点空间，不论Editor或Reader
+    padding: $SIZE_UNIT_PHONE/2 $SIZE_UNIT_PHONE*2 $SIZE_UNIT_PHONE/2 $SIZE_UNIT_PHONE;
+    @include _PC {
+      padding: $SIZE_UNIT_PC/2 $SIZE_UNIT_PC*2 $SIZE_UNIT_PC/2 $SIZE_UNIT_PC;
+    }   
+  }
+  img{
+    border:1px solid transparent;
+    width: auto;
+    max-width: 100%;
+    display:block; // 为了消除img元素作为inline元素而给字母g/f留的底下一条边。
+  }
+
+  .Toolbar{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: $HEIGHT_LINE_M_PHONE;
+    line-height: $HEIGHT_LINE_M_PHONE;
+    background-color: $COLOR_PALE;
+    clear: both;
+    @include _PC {
+      height: $HEIGHT_LINE_M_PC;
+      line-height: $HEIGHT_LINE_M_PC;
+    }
+    .Tecon{
+      float:right;
+      height:100%;
+    }
+  }
+
+}
+
+///////////////////////////// Space: #allSpace ////////////////////////////////
+
+///////////////////////////// Stage: #allSpaceProset //////////////////////////
+
+///////////////////////////// Stage: #allSpaceTice //////////////////////////
+
+///////////////////////////// Stage: #allSpaceLog ///////////////////////////
+
+///////////////////////////// Stage: #allSpaceAbout ///////////////////////////
+
+///////////////////////////// Space: #myHome //////////////////////////////////
+
+///////////////////////////// Stage: #myHomeProset ////////////////////////////
+
+///////////////////////////// Stage: #myHomeLog //////////////////////////////
+
+///////////////////////////// Stage: #myHomeTice //////////////////////////////
+#myHomeTice, #urHostTice, #allSpaceTice {
+
+  .Reader{
+    background-color:$COLOR_PALE;
+  }
+
+  .Block.Calendar{
+    .Row.Text.Date{
+      @include _FONT_CONTENT;
+      padding: 0 $SIZE_UNIT_PHONE;
+      text-align: center;
+      overflow:hidden;
+      position: absolute;
+      top:0;
+      left:0;
+      opacity:0;
+      display:none;
+      @include _PC{
+        padding: 0 $SIZE_UNIT_PC;
+      }
+      &.Input{
+        padding: 0 $HEIGHT_LINE_M_PHONE + $SIZE_UNIT_PHONE;
+        background-image: url($IconCalendar_png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: right center;
+        @include _PC{
+          padding-right: $HEIGHT_LINE_M_PC + $SIZE_UNIT_PC;
+        }
+      }
+    }
+    div.datedropper{
+      position:unset;
+      transform:unset;
+      z-index: unset;
+      &::before{
+        position:unset;
+      }
+      &.picker-focus{
+        display:block;
+      }
+      &.picker-lg{
+        width:100% !important;
+      }
+      .pick-btns{
+        display:none;
+      }
+      >.picker>ul.pick{
+        &.pick-y{
+          width:50%;
+          float:left;
+        }
+        &.pick-m{
+          width:50%;
+        }
+      }
+      .picker ul.pick.pick-l, .picker ul.pick.pick-m, .picker ul.pick.pick-y{
+        height: 48px;
+        line-height: 48px;
+      }
+    }
+
+    div.datedropper .picker ul.pick.pick-y, 
+    div.datedropper.primary .pick-lg-b .pick-sl::before, div.datedropper.primary .pick-m, div.datedropper.primary .pick-submit, div.datedropper.primary::before{
+      background-color: #f6a6c3; // 或 橘黄 #f5b090;
+    }
+
+/*    .Button.Close{
+      position: absolute; 
+      right: 0px; left: 0px; 
+      margin: auto;
+      width: 40px;
+      height: 40px; 
+      border: 0px none; 
+      opacity: $OPACITY_SLEEP; 
+      background-size: 24px 24px; 
+      background-position: center center; 
+      background-repeat: no-repeat; 
+      background-image: url($IconClose_Active_png);
+      @include _PC{
+        background-size: 32px 32px;
+      }
+      &:hover{
+        opacity:$OPACITY_HOVER;
+      }
+    } */
+  }
+
+  .Text.Label{
+    @include _FONT_LABEL;
+    position:absolute;
+    left:0;
+    top:0;
+    text-align: left;
+    width:$WIDTH_LABEL_PHONE;
+    padding:0 $SIZE_UNIT_PHONE;
+    @include _PC{
+      width:$WIDTH_LABEL_PC;
+      padding:0 $SIZE_UNIT_PC;
+    }
+  }
+
+  .Row.Title>.Text.Title{
+    @include _FONT_TITLE;
+    height:100%;
+    width:100%;
+    padding-left: $WIDTH_LABEL_PHONE;
+    padding-right:$SIZE_UNIT_PHONE;
+    overflow:hidden;
+    @include _PC{
+      padding-left: $WIDTH_LABEL_PC;
+      padding-right:$SIZE_UNIT_PC;
+    }
+  }
+  .Row.Duration{
+    >.Text.Duration{
+      @include _FONT_CONTENT;
+//      color:$COLOR_MAIN;
+//      font-weight: bold;
+      height:100%;
+      width:100%;
+      padding-left: $WIDTH_LABEL_PHONE;
+      padding-right: 36px+$SIZE_UNIT_PHONE;
+      @include _PC{
+        padding-left: $WIDTH_LABEL_PC;
+        padding-right: 40px+$SIZE_UNIT_PC;
+      }
+    }
+    >.TimeUnit{
+      @include _FONT_LABEL;
+//      color:$COLOR_MAIN;
+//      font-weight: bold;
+      position:absolute;
+      top:0;
+      right:0;
+      height:100%;
+      border:1px solid transparent;
+      &:hover{
+        border:1px solid $COLOR_MAIN;
+      };
+    }
+  }
+  .Row.Money{
+/*    >.Symbol.Currency{
+      @include _FONT_CONTENT;
+//      color:$COLOR_MAIN;
+      position:absolute;
+      top:0;
+      left:0;
+      height:100%;
+      width:$WIDTH_LABEL_PHONE + 12px;
+      padding-left:$WIDTH_LABEL_PHONE;
+      text-align:center;
+      @include _PC{
+        padding-left:$WIDTH_LABEL_PC;
+        width:$WIDTH_LABEL_PC + 16px;
+      }
+    } */
+/*    >.Text.Money{
+      @include _FONT_CONTENT;
+      padding-right: $SIZE_UNIT_PHONE;
+      padding-left:$WIDTH_LABEL_PHONE +12px;
+//      color:$COLOR_MAIN;
+      height:100%;
+      width:100%;
+      overflow:hidden;
+      @include _PC{
+        padding-right:$SIZE_UNIT_PC;
+        padding-left:$WIDTH_LABEL_PC +16px;
+      }
+    } */
+    >.Select.Currency{
+      @include _FONT_LABEL;
+      position:absolute;
+      top:0;right:0;
+      height:100%;
+      border:1px solid transparent;
+      &:hover{
+        border: 1px solid $COLOR_MAIN;
+      }
+      &.Disabled{
+        appearance:none; -moz-appearance:none; -webkit-appearance:none;
+        border-color:transparent;
+      }
+    }
+  }
+
+  .Block.PersonSet{
+    >.Row.Stats{
+      margin: 0 auto;
+      background-color:$COLOR_BORDER_LIGHT;
+      >.Text.Label{
+//        @include _FONT_CONTENT;
+        display: block;
+        padding: 0 $SIZE_UNIT_PHONE;
+        position: relative;
+        @include _PC{
+          padding: 0 $SIZE_UNIT_PC;
+        }
+      }
+      >.Text.Number{
+//        @include _FONT_CONTENT;
+        color: $COLOR_MAIN;
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+    }
+    .PersonTecon{
+      position: relative;
+      margin: $SIZE_UNIT_PHONE;
+      width:48px;
+      float:left;
+      @include _PC{
+        margin: $SIZE_UNIT_PC;
+        width:56px;
+      }
+      >.Image.Portrait{
+        width:100%;
+        height:48px;
+        border-radius:100%;
+        cursor:pointer;
+        @include _PC{
+          height:56px;
+        }
+        &:hover{
+          opacity: $OPACITY_HOVER;
+        }
+      }
+      >.Text.Nick{
+        @include _TEXT_ELLIPSIS;
+        @include _FONT_KEY;
+        height: $HEIGHT_LINE_S_PHONE;
+        line-height: $HEIGHT_LINE_S_PHONE;
+        text-align: center;
+        @include _PC{
+          height: $HEIGHT_LINE_S_PC;
+          line-height: $HEIGHT_LINE_S_PC;
+        }
+      }
+      >.Button.Approve{
+        @include _FONT_KEY;
+        background-color: $COLOR_MAIN;
+        color: $COLOR_WHITE;
+        height: $HEIGHT_LINE_S_PHONE;
+        width: 100%;
+        @include _PC{
+          height: $HEIGHT_LINE_S_PC;
+        }
+      }
+    }
+  }
+
+//$colorList: #f1674d, #ac94ea, #94c667, #55c1e7; // 淡色： #F8E3E0, #D9EFED, #E7EBEE, #FEF3EF, #FEFFEF, #F2F2F2;
+//@each $color in $colorList{
+//  .TiceItem:nth-child(#{length($colorList)}n+#{index($colorList, $color)}){
+  .TiceItem {
+$color: #fbd4e3; // 粉色 #f6a6c3; 橘黄 #f5b090;
+$colorFemale: #f6a6c3; // 粉色：f6a6c3;
+$colorMale: #b3e2e0; // 青色 b3e2e0; 浅蓝 55c1e7; 深蓝：77AEDE;
+
+    @include _CARD_WIDTH;
+    position:relative;
+    float:left;
+//    border: 2px solid $color;
+    background-color: lighten($color, 8%); // lighten(#f6a6c3, 15%)=#fdebf2;
+    border-radius: $SIZE_UNIT_PHONE/2;
+    cursor: pointer;
+    overflow:hidden;
+
+    @include _PC{
+      border-radius: $SIZE_UNIT_PC/2;
+    }
+
+    &:hover{
+      opacity: $OPACITY_HOVER;
+    }
+
+    .Row.Title{
+      margin:0;
+      background-color:$color;
+
+      .Text.Line{
+        @include _FONT_TITLE;
+        position: absolute;
+        white-space: nowrap;
+        width:80%; // 留一部分空间给 badge
+        font-weight: bold;
+        &.AllTice{
+          width:100%;
+          padding-left: $SIZE_ICON_M_PHONE+$SIZE_UNIT_PHONE;
+          @include _PC{
+            padding-left: $SIZE_ICON_M_PC+$SIZE_UNIT_PC;
+          }
+        }
+        &.UrTice{
+          width:100%;
+        }
+      }
+
+      .Text.Badge{
+        @include _FONT_KEY;
+        position:absolute;
+        right:$SIZE_UNIT_PHONE;
+        top:0;
+        width:20%;
+        text-align:right;
+        @include _PC{
+          right:$SIZE_UNIT_PC;
+        }
+        >span{
+          border-radius:100%; // 8px, 30%;
+          padding: 4px 8px;
+          background-color:$COLOR_WHITE; // darken($color,30%);
+          color:$color;
+        }
+      }
+    }
+
+    .Image.Portrait{
+      @include _BG_COVER;
+      margin:$SIZE_UNIT_PHONE/2;
+      width: $SIZE_ICON_M_PHONE; // $HEIGHT_LINE_M_PHONE + $HEIGHT_LINE_S_PHONE;
+      height: $SIZE_ICON_M_PHONE; // $HEIGHT_LINE_M_PHONE + $HEIGHT_LINE_S_PHONE;
+      border-radius: 100%;
+      position: absolute;
+      top:0;
+      left:0;
+      @include _PC{
+        margin:$SIZE_UNIT_PC/2;
+        width: $SIZE_ICON_M_PC; // $HEIGHT_LINE_M_PC + $HEIGHT_LINE_S_PC;
+        height: $SIZE_ICON_M_PC; // $HEIGHT_LINE_M_PC + $HEIGHT_LINE_S_PC;        
+      }
+    }
+
+    .Part{
+      position:relative;
+      float:left;
+      margin:0;
+      width:50%;
+      text-align:center;
+      overflow:hidden;
+      height:2*$HEIGHT_LINE_M_PHONE + $SIZE_UNIT_PHONE; // 80px
+      line-height: 2*$HEIGHT_LINE_M_PHONE + $SIZE_UNIT_PHONE;
+      @include _PC{
+        height:2*$HEIGHT_LINE_M_PC + $SIZE_UNIT_PC; // 104px
+        line-height: 2*$HEIGHT_LINE_M_PC + $SIZE_UNIT_PC;
+      }
+
+      .Text{
+        width:100%;
+        height:100%;
+        position:relative;
+        &.Duration{
+          @include _FONT_SLOGAN;
+          color:$COLOR_MAIN;
+          padding-left:0;
+          padding-right:0;
+          bottom:$SIZE_UNIT_PHONE;;
+          left:$SIZE_UNIT_PHONE;
+          @include _PC{
+            bottom:$SIZE_UNIT_PC;
+            left:$SIZE_UNIT_PC;
+          }
+        }
+        &.Money{
+          @include _FONT_TITLE;
+          color:$COLOR_MAIN;
+          top:$SIZE_UNIT_PHONE;;
+          right:$SIZE_UNIT_PHONE;
+          @include _PC{
+            top:$SIZE_UNIT_PC;
+            right:$SIZE_UNIT_PC;
+          }
+        }
+      }
+    }
+
+    .Seperator.Bar{
+      @include _LAYOUT_CENTER_SELF;
+      top:$HEIGHT_LINE_M_PHONE;
+      height:44px;
+      width:2px;
+      background-color:$color;
+      transform: rotate(20deg);
+      @include _PC{
+        top:$HEIGHT_LINE_M_PC;
+        height:50px;
+      }
+    }
+
+  } // endof TiceItem
+//} // endof color list
+
+} // endof myHomeTice/urHostTice
+
+///////////////////////////// Stage: #myHomeAbout /////////////////////////////
+
+#urHostProset, #urHostTask, #urHostTice, #urHostChat, #urHostLog,
+#myHomeAbout, #urHostAbout{
+ .Image.Portrait.OnCover{
+    @include _BG_COVER;
+    position:absolute;
+    top: -$SIZE_ICON_L_PHONE/2;
+    left:0;
+    width: $SIZE_ICON_L_PHONE;
+    height: $SIZE_ICON_L_PHONE;
+//    border: 1px solid transparent;
+    border-radius: 100%;
+    background-color:$COLOR_PALE; // 用于覆盖默认头像的透明背景。不用纯白，否则和封面下面的白底无法区分。
+    cursor: pointer;
+    font-size: $SIZE_ICON_L_PHONE*2/3;
+    color:$COLOR_TEXT_NORMAL;
+    @include _PC{
+      top: -$SIZE_ICON_L_PC/2;
+      width: $SIZE_ICON_L_PC;
+      height: $SIZE_ICON_L_PC;
+//      border: 2px solid transparent;
+      font-size: $SIZE_ICON_L_PC*2/3;
+    }
+    &:hover{
+      opacity:unset;
+    }
+    &.Required{
+      box-shadow: 0 0 0px 2px rgba($COLOR_MAIN,1);
+    }
+  }
+}
+
+@import '../_sow/css/PersonAbout.scss';
+
+///////////////////////////// Space: #urHost //////////////////////////////////
+
+///////////////////////////// Stage: #urHostProset ////////////////////////////
+
+///////////////////////////// Stage: #urHostLog //////////////////////////////
+
+///////////////////////////// Stage: #urHostAbout /////////////////////////////
+
+
+///////////////////////////// Space: #xxxProject ///////////////////////////////
+
+///////////////////////////// Stage: #xxxProjectDream //////////////////////////
+#myProjectDream, #urProjectDream{
+  .Text.Line.Subject{
+    @include _FONT_TITLE;
+    text-align: center;
+//    white-space: nowrap;
+    position:relative;
+    width:100%;
+    min-height:$HEIGHT_LINE_M_PHONE;
+    line-height:$HEIGHT_LINE_DEFAULT;  // 采用相对高度，为了万一标题太长分为几行时。
+    margin:$SIZE_UNIT_PHONE auto;
+    margin-top:$SIZE_ICON_M_PHONE/2 -$SIZE_UNIT_PHONE; // 为了给主持人头像留出位置。
+    @include _PC{
+      min-height:$HEIGHT_LINE_M_PC;
+      margin:$SIZE_UNIT_PC auto;
+      margin-top:$SIZE_ICON_M_PC/2 -$SIZE_UNIT_PC;
+    }
+  }
+  .Row{ // 让地点和日期两行更紧凑些。
+    margin:$SIZE_UNIT_PHONE/2 auto;
+    @include _PC{
+      margin:$SIZE_UNIT_PC/2 auto;
+    }
+  }
+  .Text.Line.Place{
+    @include _FONT_KEY;
+    text-align: center;
+    &.Input{
+//      text-align: left;
+      padding: 0 $HEIGHT_LINE_M_PHONE + $SIZE_UNIT_PHONE;
+      background-image: url($IconAddress_png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: right center;
+    }
+    @include _PC{
+      &.Input{
+        padding: 0 $HEIGHT_LINE_M_PC + $SIZE_UNIT_PC;
+      }
+    }
+  }
+  .Text.Line.Date{
+    @include _FONT_KEY;
+    position:absolute;
+    width:45%;
+    height:100%;
+    text-align: center;
+    &.Input{
+//      text-align: left;
+      padding: 0 $HEIGHT_LINE_M_PHONE + $SIZE_UNIT_PHONE 0 $SIZE_UNIT_PHONE;
+      background-image: url($IconCalendar_png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: right center;
+    }
+    @include _PC{
+      &.Input{
+        padding: 0 $HEIGHT_LINE_M_PC + $SIZE_UNIT_PC 0 $SIZE_UNIT_PC;
+      }
+    }
+
+    &.From{
+      left:0;
+    }
+    &.To{
+      right:0;
+    }
+  }
+  .Icon.FromTo{
+    @include _LAYOUT_CENTER_SELF;
+    @include _BG_CONTAIN;
+    padding: 12px; //$SIZE_UNIT_PHONE;
+    width:$HEIGHT_LINE_M_PHONE; // 12px+$SIZE_UNIT_PHONE*2;
+    height:$HEIGHT_LINE_M_PHONE; // 12px+$SIZE_UNIT_PHONE*2;
+    background-image: url($IconPlus_Grey_png);
+    background-clip: content-box;
+    cursor: pointer;
+    @include _PC{
+      padding:14px; //$SIZE_UNIT_PC;
+      width:$HEIGHT_LINE_M_PC; // 16px+$SIZE_UNIT_PC*2;
+      height:$HEIGHT_LINE_M_PC; // 16px+$SIZE_UNIT_PC*2;
+    }
+  }
+
+  .PlanList{
+    .Text.Label{
+      @include _FONT_KEY;
+      @include _TEXT_ELLIPSIS;
+      white-space: nowrap;
+      position: absolute;
+      left:0;
+      text-align: center;
+      float: left;
+      padding: 0 $SIZE_UNIT_PHONE;
+      width: 100px;
+      height: 100%;
+//    border-right:1px solid $COLOR_BORDER_LIGHT;
+      @include _PC{
+        width: 136px;
+        padding: 0 $SIZE_UNIT_PC;
+      }
+      &.Input{
+        border:1px solid transparent;
+        &:hover{
+          border-bottom-color: $COLOR_MAIN;
+        }
+      }
+    }
+
+    .Seperator.Bar{
+      background-color: $COLOR_BORDER_DARK;
+      position: absolute;
+      margin: auto;
+      top: 0;
+      bottom: 0;
+      height: 45%;
+      left: 100px;
+      width: 1px;
+      @include _PC{
+        left:136px;
+      }
+    }
+
+    .Text.Line{
+      border: 1px solid transparent;
+      border-bottom: 1px solid $COLOR_BORDER_LIGHT;
+      padding-left: 100px+2*$SIZE_UNIT_PHONE;
+      @include _PC{
+        padding-left:136px+2*$SIZE_UNIT_PC;
+      }
+      &.Input{
+        &:hover,&:focus{
+          border-bottom:1px solid $COLOR_MAIN;
+        }
+      }
+    }
+  }
+}
+
+#myProjectDream{
+  .Icon.FromTo{
+    &:hover{
+      background-image: url($IconPlus_Red_png);
+      transform:rotate(90deg) scale(1.2);
+    }
+  }
+}
+
+#urProjectDream{
+
+//  .Text.Line.Date{
+//    border-bottom: 1px solid $COLOR_BORDER_LIGHT;
+//  }
+
+  .Row{ // 在阅读模式，没有了边框，让地点和日期更紧凑些。
+    margin:0;
+  }
+/*  .Row.Date, .PlanList>.Row{ // 为了在 div 状态下，左右对齐下面没有了外框的正文。
+    border-left: $SIZE_UNIT_PHONE solid transparent;
+    border-right: $SIZE_UNIT_PHONE solid transparent;
+    @include _PC{
+      border-left: $SIZE_UNIT_PC solid transparent;
+      border-right: $SIZE_UNIT_PC solid transparent;
+    }
+  }
+*/
+  .Icon.FromTo{
+    background-image:none;
+    background-color: $COLOR_BORDER_DARK;
+    transform:rotate(45deg) scale(0.7);  // 旋转45度导致这个div的对角线变成了新的宽度和高度，变大了。为了保持视觉上大小不变，要把对角线变为原来的宽度高度。
+    cursor:default;
+  }
+
+}
+
+#urProject {
+  .Box.Owner{
+    position:absolute;
+    top:-$SIZE_ICON_M_PHONE/2;
+    left:0;
+//    width:$SIZE_ICON_M_PHONE;
+    height: $SIZE_ICON_M_PHONE; // +$HEIGHT_LINE_M_PHONE;
+    max-width:100%;
+    line-height: $SIZE_ICON_M_PHONE/2;
+    padding-left: $SIZE_ICON_M_PHONE;
+    @include _PC{
+      top:-$SIZE_ICON_M_PC/2;
+//      width:$SIZE_ICON_M_PC;
+      height:$SIZE_ICON_M_PC; // +$HEIGHT_LINE_M_PC;
+      line-height: $SIZE_ICON_M_PC/2;
+      padding-left: $SIZE_ICON_M_PC;
+    }
+    >.Image.Portrait{
+      @include _BG_COVER;
+      position:absolute;
+      top:0;
+      left:0;
+      width: $SIZE_ICON_M_PHONE;
+      height: $SIZE_ICON_M_PHONE;
+      border-radius: 100%;
+      background-color:$COLOR_PALE; // 用于覆盖默认头像的透明背景。不用纯白，否则和封面下面的白底无法区分。
+      @include _PC{
+        width: $SIZE_ICON_M_PC;
+        height: $SIZE_ICON_M_PC;
+      }
+      &:hover{
+        opacity:unset;
+      }
+    }
+    >.Text.Nick{
+      @include _TEXT_ELLIPSIS;
+      width:100%;
+//      height: $HEIGHT_LINE_M_PHONE;
+      padding: 0 $SIZE_UNIT_PHONE;
+      color:$COLOR_WHITE;
+      white-space: nowrap;
+      @include _PC{
+        padding: 0 $SIZE_UNIT_PC;
+      }
+      &:hover{
+        border-radius: $SIZE_UNIT_PHONE/2;
+        background-color:#FFF;
+        color: $COLOR_MAIN;
+        cursor:pointer;
+        @include _PC{
+          border-radius: $SIZE_UNIT_PC/2;
+        }
+      }
+    }
+  }
+}
+
+///////////////////////////// Stage: #myProjectTeam ///////////////////////////
+#myHomeTask, #urHostTask, #allSpaceTask {
+
+//$colorList: #F3A9C3, #BB8DB8, #F0919C, #F5B090, #77AEDE, #A2B39B;
+//@each $color in $colorList{
+//  .TaskItem:nth-child(#{length($colorList)}n+#{index($colorList, $color)}) {
+
+  .TaskItem{
+$color: #aee2f4; // 浅蓝 #55c1e7
+    @include _CARD_WIDTH;
+    position:relative;
+    float:left;
+    cursor: pointer;
+    overflow:hidden;
+    border-radius: $SIZE_UNIT_PHONE/2;
+    background-color: lighten($color, 15%); // 或 10%: #dbf2fa;
+    @include _PC{
+      border-radius: $SIZE_UNIT_PC/2;
+    }
+
+    &:hover{
+      opacity: $OPACITY_HOVER;
+    }
+
+    .Row.Title{
+      margin:0;
+      background-color:$color;
+
+      .Text.Line.Title{
+        @include _FONT_TITLE;
+        font-weight:bold;
+        position: absolute;
+        width:80%; // 腾出一定位置给Badge
+        white-space: nowrap;
+        padding:0 $SIZE_UNIT_PHONE; // 避免被 _ONE 页面上的label影响
+        @include _PC{
+          padding:0 $SIZE_UNIT_PC; // 避免被 _ONE 页面上的label影响
+        }
+        &.Full{
+          width:100%;
+        }
+      }
+      .Text.Badge{
+        @include _FONT_TITLE;
+        position:absolute;
+        right:0;
+        top:0;
+        padding-right: $SIZE_UNIT_PHONE;
+        @include _PC{
+          padding-right: $SIZE_UNIT_PC;
+        }
+        >span{
+          border-radius:100%; // 8px, 30%;
+          padding: 4px 8px;
+          background-color: $COLOR_WHITE; // darken($color,30%);
+          color: $color; // $COLOR_WHITE;
+        }
+      }
+    }
+
+    .Row.Progress{
+      margin:0;
+      height: $HEIGHT_LINE_S_PHONE;
+      line-height: $HEIGHT_LINE_S_PHONE;
+      @include _PC{
+        height: $HEIGHT_LINE_S_PC;
+        line-height: $HEIGHT_LINE_S_PC;
+      }
+
+      .Text.Progress{
+        @include _FONT_LABEL;
+//        position:absolute; bottom: 4px;
+        width:100%;
+        height:100%;
+        text-align: right;
+        padding:0 $SIZE_UNIT_PHONE;
+        @include _PC{
+          padding: 0 $SIZE_UNIT_PC;
+        }
+      }
+      .ProgressBar{
+        position: absolute;
+        bottom:0;
+        left:0;
+        height:4px;
+        width:0;
+        background-color: $color; // $COLOR_MAIN;
+        text-align: right;
+      }
+    }
+
+    .Row.Text.Money{
+      @include _FONT_SLOGAN;
+      color:$COLOR_MAIN;
+      text-align: center;
+      padding:0;
+      margin-bottom:0;
+    }
+    .Row.Info{
+      margin:0;
+      height: $HEIGHT_LINE_S_PHONE;
+      line-height: $HEIGHT_LINE_S_PHONE;
+      padding:0 $SIZE_UNIT_PHONE;
+      text-align:right;
+      @include _PC{
+        height: $HEIGHT_LINE_S_PC;
+        line-height: $HEIGHT_LINE_S_PC;
+        padding:0 $SIZE_UNIT_PC;
+      }
+      .Script{
+        @include _FONT_LABEL;
+        @include _TEXT_ELLIPSIS;
+        overflow:hidden;
+        &.Place{
+          width:45%;
+          text-align:left;
+          float:left;
+        }
+        &.Date{
+          width:55%;
+          text-align:right;
+          float:right;
+        }
+      }
+    }
+
+  } // endof TaskItem
+
+//} // endof color list
+
+.TaskItem{
+  &.Frozen{
+//      border-color:$COLOR_BORDER_DARK;
+    background-color:$COLOR_PALE;
+    .Row.Title{
+      background-color:$COLOR_BORDER_DARK;
+      .Text.Badge span{
+        background-color: #fff; //darken($COLOR_BORDER_DARK,30%);
+        color:$COLOR_BORDER_DARK; //#fff;
+      }       
+    }
+    .Row.Progress .ProgressBar{
+      background-color: $COLOR_BORDER_DARK;
+    }
+
+    // 给 task 的money用的：
+    .Row.Text.Money{
+      color:$COLOR_BORDER_DARK;
+    }
+    .Seperator.Bar{
+      background-color:$COLOR_BORDER_DARK;
+    }
+  }
+}
+
+@at-root #allSpaceTask .TaskItem {
+    .Image.Portrait{
+      @include _BG_COVER;
+      margin:$SIZE_UNIT_PHONE/2;
+      width: $SIZE_ICON_M_PHONE; // $HEIGHT_LINE_M_PHONE + $HEIGHT_LINE_S_PHONE;
+      height: $SIZE_ICON_M_PHONE; // $HEIGHT_LINE_M_PHONE + $HEIGHT_LINE_S_PHONE;
+      border-radius: 100%;
+      position: absolute;
+      @include _PC{
+        margin:$SIZE_UNIT_PC/2;
+        width: $SIZE_ICON_M_PC; // $HEIGHT_LINE_M_PC + $HEIGHT_LINE_S_PC;
+        height: $SIZE_ICON_M_PC; // $HEIGHT_LINE_M_PC + $HEIGHT_LINE_S_PC;        
+      }
+    }
+    .Row.Title{
+      .Text.Line.Title{
+        padding:0 $SIZE_UNIT_PHONE/2 0 $SIZE_ICON_M_PHONE+$SIZE_UNIT_PHONE; // 避免被 _ONE 页面上的label影响
+        @include _PC{
+          padding:0 $SIZE_UNIT_PC/2 0 $SIZE_ICON_M_PC+$SIZE_UNIT_PC; // 避免被 _ONE 页面上的label影响
+        }
+      }
+    }
+  }
+
+  .Reader{
+    background-color:$COLOR_PALE;
+  }
+
+  .Text.Label{
+    @include _FONT_LABEL;
+    position:absolute;
+    left:0;
+    top:0;
+    text-align: left;
+    width:$WIDTH_LABEL_PHONE;
+    padding:0 $SIZE_UNIT_PHONE;
+    @include _PC{
+      width:$WIDTH_LABEL_PC;
+      padding:0 $SIZE_UNIT_PC;
+    }
+  }
+  .Text.Title{
+    @include _FONT_TITLE;
+    height:100%;
+    width:100%;
+    padding-left: $WIDTH_LABEL_PHONE;
+    padding-right: $SIZE_UNIT_PHONE;
+    @include _PC{
+      padding-left: $WIDTH_LABEL_PC;
+      padding-right: $SIZE_UNIT_PC;
+    }
+  }
+  .Text.Salary{
+    @include _FONT_CONTENT;
+//    color:$COLOR_MAIN;
+    height:100%;
+    width:100%;
+    overflow:hidden;
+    padding-right: $SIZE_UNIT_PHONE;
+    padding-left:$WIDTH_LABEL_PHONE;
+    @include _PC{
+      padding-right:$SIZE_UNIT_PC;
+      padding-left:$WIDTH_LABEL_PC;
+    }
+  }
+
+  .Text.Number, .Text.Place{
+    @include _FONT_CONTENT;
+    height:100%;
+    width:100%;
+    padding-right: $SIZE_UNIT_PHONE;
+    padding-left: $WIDTH_LABEL_PHONE;
+    overflow:hidden;
+    @include _PC{
+      padding-right: $SIZE_UNIT_PC;
+      padding-left: $WIDTH_LABEL_PC;
+    }
+    &.Money{
+      color:$COLOR_MAIN;
+    }
+  }
+  .Select.Currency{
+    @include _FONT_LABEL;
+    position:absolute;
+    top:0;
+    right:0;
+    height:100%;
+    border:1px solid transparent;
+    &:hover{
+      border: 1px solid $COLOR_MAIN;
+    }
+    &.Disabled{
+      appearance: none;  -moz-appearance: none;  -webkit-appearance: none; /* 取消右侧箭头区域 */
+      border-color: transparent;
+    }
+  }
+  .Text.Date{
+    @include _FONT_CONTENT;
+    height:100%;
+    width:100%;
+    padding-right: $SIZE_UNIT_PHONE;
+    padding-left: $WIDTH_LABEL_PHONE;
+    overflow:hidden;
+    @include _PC{
+      padding-right: $SIZE_UNIT_PC;
+      padding-left: $WIDTH_LABEL_PC;
+    }
+    &.Input{
+      padding-right: $HEIGHT_LINE_M_PHONE + $SIZE_UNIT_PHONE;
+      background-image: url($IconCalendar_png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: right center;
+      @include _PC{
+        padding-right: $HEIGHT_LINE_M_PC + $SIZE_UNIT_PC;
+      }
+    }
+  }
+
+
+/* 如果采用 fieldset 的 legend：
+  .Block.Detail{
+    fieldset.Block{
+      position:relative;
+      border:1px solid $COLOR_BORDER_DARK;
+      &:hover{
+        border-color:$COLOR_MAIN;
+      };
+      legend{
+        @include _FONT_LABEL;
+        position:relative;
+        left:$SIZE_UNIT_PHONE;
+        @include _PC{
+          left:$SIZE_UNIT_PC;
+        }
+      }
+      textarea{
+        border-color: transparent;
+      }
+    }
+  }
+*/
+
+/* 如果采用单独的 label: 
+  .Block.Detail{
+    margin:0;
+    fieldset.Block{
+      position:relative;
+      label{
+        @include _FONT_LABEL;
+        position:absolute;
+        top:-8px;
+        left:$SIZE_UNIT_PHONE - 2px;
+        padding:0 2px;
+        background-color: #FFF;
+        @include _PC{
+          top:-10px;
+          left:$SIZE_UNIT_PC - 3px;
+          padding:0 3px;
+        }
+      }
+//      .Text.Area{
+//        border:1px solid $COLOR_BORDER_LIGHT;
+//      }
+      textarea.Text.Area{
+        border:1px solid $COLOR_BORDER_DARK;
+        &:hover, &:focus{
+          border-color:$COLOR_MAIN;
+        }
+      }
+    }
+  }
+*/
+
+  .Block.PersonSet{
+
+    >.Row.Stats{
+      margin: 0 auto;
+      background-color:$COLOR_BORDER_LIGHT;
+      >.Text.Label{
+//        @include _FONT_CONTENT;
+        display: block;
+        padding: 0 $SIZE_UNIT_PHONE;
+        position: relative;
+        @include _PC{
+          padding: 0 $SIZE_UNIT_PC;
+        }
+      }
+      >.Text.Number{
+//        @include _FONT_CONTENT;
+        color: $COLOR_MAIN;
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+    }
+    .PersonTecon{
+      position: relative;
+      margin: $SIZE_UNIT_PHONE;
+      width:48px;
+      float:left;
+      @include _PC{
+        margin: $SIZE_UNIT_PC;
+        width:56px;
+      }
+      >.Image.Portrait{
+        width:100%;
+        height:48px;
+        border-radius:100%;
+        cursor:pointer;
+        @include _PC{
+          height:56px;
+        }
+        &:hover{
+          opacity: $OPACITY_HOVER;
+        }
+      }
+      >.Text.Nick{
+        @include _TEXT_ELLIPSIS;
+        @include _FONT_KEY;
+        height: $HEIGHT_LINE_S_PHONE;
+        line-height: $HEIGHT_LINE_S_PHONE;
+        text-align: center;
+        @include _PC{
+          height: $HEIGHT_LINE_S_PC;
+          line-height: $HEIGHT_LINE_S_PC;
+        }
+      }
+      >.Button.Approve{
+        @include _FONT_KEY;
+        background-color: $COLOR_MAIN;
+        color: $COLOR_WHITE;
+        height: $HEIGHT_LINE_S_PHONE;
+        width: 100%;
+        @include _PC{
+          height: $HEIGHT_LINE_S_PC;
+        }
+      }
+    }
+  }
+
+  .Row.Quota, .Row.Stats{
+    .ProgressBar{
+      position: absolute; 
+      bottom: 0px; 
+      left: 0px; 
+      height: 4px; 
+      width: 0; 
+      background-color: $COLOR_MAIN; 
+    }
+    .Text.Progress{
+      @include _FONT_LABEL;
+      position:absolute;
+      right:0;
+      top:0;
+      padding-right: $SIZE_UNIT_PHONE;
+      @include _PC{
+        padding-right: $SIZE_UNIT_PC;
+      }
+    }
+  }
+
+}
+
+///////////////////////////// Stage: #myProjectLog ////////////////////////////
+
+///////////////////////////// Stage: #myProjectChip, #urProjectChip /////////////////////////
+#myProjectChip, #urProjectChip{
+  .Text.Label{
+    @include _FONT_LABEL;
+    position:absolute;
+    left:0;
+    top:0;
+    text-align: left;
+    width:$WIDTH_LABEL_PHONE;
+    padding:0 $SIZE_UNIT_PHONE;
+    @include _PC{
+      width:$WIDTH_LABEL_PC;
+      padding:0 $SIZE_UNIT_PC;
+    }
+  }
+
+  .Reader{
+    background-color:$COLOR_PALE;
+  }
+
+  .RadialIndicator{
+    position:absolute;
+    top:0;
+    right:0;
+    height:88px;
+    width:88px;
+    margin:$SIZE_UNIT_PHONE 0;
+    @include _PC{
+      height:104px;
+      width:104px;
+      margin:$SIZE_UNIT_PC 0;
+    }
+    >canvas{ // 如果容器比canvas大，就用这个设置，让canvas居中居上。
+      @include _LAYOUT_CENTER_SELF;
+//      bottom:unset;
+    }
+    >.Text.Label{
+//      position:unset;
+//      margin:0 auto;
+      text-align:center;
+      width:100%;
+      margin:2px auto; // 5px = radialIndicator 的 barWidth.
+    }
+  }
+
+  .Row.Goal, .Row.Date{
+    padding-right:104px;
+    @include _PC{
+      padding-right:128px;
+    }
+    >.Symbol.Currency{
+      @include _FONT_TITLE;
+//      color:$COLOR_MAIN;
+      font-weight: bold;
+    }
+    .Text.Money{
+      @include _FONT_TITLE;
+//      color:$COLOR_MAIN;
+//      font-weight: bold;
+    }
+    >.Select.Currency{
+      @include _FONT_LABEL;
+      position:absolute;
+      top:0;
+      right:104px;
+      height:100%;
+      border:1px solid transparent;
+      @include _PC{
+        right:128px;
+      }
+      &:hover{
+        border: 1px solid $COLOR_MAIN;
+      }
+      &.Disabled{
+        appearance: none;  -moz-appearance: none;  -webkit-appearance: none; /* 取消右侧箭头区域 */
+        border-color: transparent;
+      }
+    }
+
+    .Text.Date{
+      @include _FONT_CONTENT;
+      height:100%;
+      width:100%;
+      padding-right: $SIZE_UNIT_PHONE;
+      padding-left: $WIDTH_LABEL_PHONE;
+      overflow:hidden;
+      @include _PC{
+        padding-right: $SIZE_UNIT_PC;
+        padding-left: $WIDTH_LABEL_PC;
+      }
+      &.Input{
+        padding-right: $HEIGHT_LINE_M_PHONE + $SIZE_UNIT_PHONE;
+        background-image: url($IconCalendar_png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: right center;
+        @include _PC{
+          padding-right: $HEIGHT_LINE_M_PC + $SIZE_UNIT_PC;
+        }
+      }
+    }
+  }
+
+  .Row.Money{
+    >.Text.Money{
+      @include _FONT_TITLE;
+//      color:$COLOR_MAIN;
+//      font-weight: bold;
+    }
+    >.Symbol.Currency{
+      @include _FONT_TITLE;
+//      color:$COLOR_MAIN;
+//      font-weight: bold;
+    }
+    >.Select.Currency{
+      @include _FONT_LABEL;
+      position:absolute;
+      top:0;
+      right:0;
+      height:100%;
+      border:1px solid transparent;
+      &.Disabled{
+        appearance: none;  -moz-appearance: none;  -webkit-appearance: none; /* 取消右侧箭头区域 */
+      }
+    }
+  }
+  .Row.Quota>.Text.Number, .Row.Title>.Text.Title{
+    @include _FONT_CONTENT;
+    height:100%;
+    width:100%;
+    padding-left: $WIDTH_LABEL_PHONE;
+    padding-right:$SIZE_UNIT_PHONE;
+    overflow:hidden;
+    @include _PC{
+      padding-left: $WIDTH_LABEL_PC;
+      padding-right:$SIZE_UNIT_PC;
+    }
+  }
+  .Row.Quota{
+    .ProgressBar{
+      position: absolute; 
+      bottom: 0px; 
+      left: 0px; 
+      height: 4px; 
+      width: 0; 
+      background-color: $COLOR_MAIN; 
+    }
+    .Text.Progress{
+      @include _FONT_LABEL;
+      position:absolute;
+      right:0;
+      top:0;
+      padding-right: $SIZE_UNIT_PHONE;
+      @include _PC{
+        padding-right: $SIZE_UNIT_PC;
+      }
+    }
+  }
+
+//$colorList: #f1674d, #ac94ea, #94c667, #55c1e7;
+//@each $color in $colorList{
+//  .ChipItem:nth-child(#{length($colorList)}n+#{index($colorList, $color)}){
+  .ChipItem{
+$color: #fed48a; //#edba11; 橘黄 f5b090
+    @include _CARD_WIDTH;
+    position:relative;
+    float:left;
+//    border: 2px solid $color;
+    border-radius: $SIZE_UNIT_PHONE/2;
+    cursor: pointer;
+    overflow:hidden;
+    background-color:lighten($color,20%); // $COLOR_PALE;
+
+    @include _PC{
+      border-radius: $SIZE_UNIT_PC/2;
+    }
+
+    &:hover{
+      opacity: $OPACITY_HOVER;
+    }
+
+    .Row.Title{
+      margin:0;
+      background-color:$color;
+
+      .Text.Line{
+        @include _FONT_TITLE;
+        font-weight:bold;
+        position: absolute;
+        white-space: nowrap;
+//        width:80%; // 筹码不需要提示泡泡
+      }
+
+      .Text.Badge{
+        @include _FONT_KEY;
+        position:absolute;
+        right:$SIZE_UNIT_PHONE;
+        top:0;
+        width:20%;
+        text-align:right;
+        @include _PC{
+          right:$SIZE_UNIT_PC;
+        }
+        >span{
+          border-radius:100%; // 8px, 30%;
+          padding: 4px 8px;
+          background-color:$COLOR_WHITE; // darken($color,30%);
+          color:$color;
+        }
+      }
+    }
+
+    .Row.Text.Money{
+      @include _FONT_SLOGAN;
+      color:$COLOR_MAIN;
+      text-align: center;
+    }
+
+    .Row.Progress{
+      margin:0;
+      height: $HEIGHT_LINE_S_PHONE;
+      line-height: $HEIGHT_LINE_S_PHONE;
+      @include _PC{
+        height: $HEIGHT_LINE_S_PC;
+        line-height: $HEIGHT_LINE_S_PC;
+      }
+
+      .Text.Progress{
+        @include _FONT_LABEL;
+//        position:absolute; bottom: 4px;
+        width:100%;
+        height:100%;
+        text-align: right;
+        padding:0 $SIZE_UNIT_PHONE;
+        @include _PC{
+          padding: 0 $SIZE_UNIT_PC;
+        }
+      }
+      .ProgressBar{
+        position: absolute;
+        bottom:0;
+        left:0;
+        height:4px;
+        width:0;
+        background-color: $color; // $COLOR_MAIN;
+        text-align: right;
+      }
+    }
+
+    &.Frozen{
+      background-color:$COLOR_PALE;
+      .Text.Money{
+        color:$COLOR_BORDER_DARK;
+      }
+      .Row.Title{
+        background-color:$COLOR_BORDER_DARK;
+      }
+      .Row.Progress .ProgressBar{
+        background-color: $COLOR_BORDER_DARK;
+      }
+      .Row.Title .Text.Badge{
+        >span{
+          color:$color;
+        }
+      }
+    }
+  } // endof ChipItem
+//} // endof color list
+
+} // endof #myProjectChip, #urProjectChip
+
+
+.Symbol.Currency{
+  @include _FONT_CONTENT;
+//  color:$COLOR_MAIN;
+  position:absolute;
+  top:0;
+  left:0;
+  height:100%;
+  width:$WIDTH_LABEL_PHONE + 12px;
+  padding-left:$WIDTH_LABEL_PHONE;
+  text-align:center;
+  @include _PC{
+    padding-left:$WIDTH_LABEL_PC;
+    width:$WIDTH_LABEL_PC + 16px;
+  }
+}
+.Text.Money{
+  @include _FONT_CONTENT;
+//  color:$COLOR_MAIN;
+  height:100%;
+  width:100%;
+  overflow:hidden;
+  padding-right: $SIZE_UNIT_PHONE;
+  padding-left:$WIDTH_LABEL_PHONE +12px;
+  @include _PC{
+    padding-right:$SIZE_UNIT_PC;
+    padding-left:$WIDTH_LABEL_PC +16px;
+  }
+  &.InCard{
+    padding:0;
+  }
+}
+
+.FaronearSign{
+  position: relative;
+  height: 25px;
+  @include _PC{
+    height:29px;
+  }
+  .Line{
+    position:absolute;
+    top: 12px;
+    width: 100%;
+    height: 1px;
+    background-color: #6be;
+    @include _PC{
+      top:14px;
+    }
+  }
+  .Faronear{
+    height: 100%;
+//    border-color: #6be;
+    background-color: #fff;
+    position: relative;
+    color: #6be;
+    font-size: unset;
+    padding: 0px 8px;
+    &:hover{
+      border-color:transparent;
+      opacity: unset;
+      background-color:#6be;
+      color:#fff;
+    }
+  }
+}
+
+@import '../_sow/css/SelectBox.scss';

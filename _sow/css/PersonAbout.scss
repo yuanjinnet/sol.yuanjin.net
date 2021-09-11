@@ -1,0 +1,254 @@
+#myHomeAbout, #urHostAbout{
+$WIDTH_ABOUT_LABEL_PHONE: 84px;
+$WIDTH_ABOUT_LABEL_PC: 128px;
+
+  .ViewPageScroll{
+    padding-top: $SIZE_ICON_L_PHONE/2+$SIZE_UNIT_PHONE;
+    @include _PC{
+      padding-top: $SIZE_ICON_L_PC/2+$SIZE_UNIT_PC;
+    }
+  }
+
+  .Reader{
+    background-color:$COLOR_PALE;
+  }
+
+  .Image.Portrait.OnCover{
+    @include _BG_COVER;
+    position:absolute;
+    top: -$SIZE_ICON_L_PHONE/2;
+    left:0;
+    width: $SIZE_ICON_L_PHONE;
+    height: $SIZE_ICON_L_PHONE;
+//    border: 1px solid transparent;
+    border-radius: 100%;
+    background-color:$COLOR_PALE; // 用于覆盖默认头像的透明背景。不用纯白，否则和封面下面的白底无法区分。
+    @include _PC{
+      top: -$SIZE_ICON_L_PC/2;
+      width: $SIZE_ICON_L_PC;
+      height: $SIZE_ICON_L_PC;
+//      border: 2px solid transparent;
+    }
+    &:hover{
+      opacity:unset;
+    }
+    &.Required{
+      box-shadow: 0 0 0px 2px rgba($COLOR_MAIN,1);
+    }
+  }
+
+  .Text.Line.Nick{
+    @include _TEXT_ELLIPSIS;
+    position: absolute;
+    white-space: nowrap;
+    left: $SIZE_ICON_L_PHONE;
+    top: 0;
+//    margin-top:$SIZE_UNIT_PHONE;
+    border:1px solid transparent;
+    padding: 0 $SIZE_UNIT_PHONE;
+    width: 128px;
+    height: $SIZE_ICON_L_PHONE/2; // $HEIGHT_LINE_M_PHONE;
+    line-height: $SIZE_ICON_L_PHONE/2; // $HEIGHT_LINE_M_PHONE;
+    text-align: left;
+    @include _PC{
+//      margin-top:$SIZE_UNIT_PC;
+      left: $SIZE_ICON_L_PC;
+      width:160px;
+      padding: 0 $SIZE_UNIT_PC;
+      height: $SIZE_ICON_L_PC/2; // $HEIGHT_LINE_M_PC;
+      line-height: $SIZE_ICON_L_PC/2; // $HEIGHT_LINE_M_PC;
+    }
+    &.Input{
+      border-bottom: 1px solid $COLOR_BORDER_DARK;
+      &:hover,&:focus{
+        border-bottom:1px solid $COLOR_MAIN;
+      }
+    }
+  }
+
+  .Tecon.Refer{
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 4px auto;
+//    &:hover{
+//      color:$COLOR_MAIN;
+//    }
+  }
+
+  .Text.Area.Introduction{
+    margin: $SIZE_UNIT_PHONE 0;
+    @include _PC{
+      margin: $SIZE_UNIT_PC 0;
+    }
+  }
+
+  .Block.Namecard, .Block.Privacy, .Block.Confidential{
+    margin: $SIZE_UNIT_PHONE auto;
+    border: 1px solid $COLOR_BORDER_DARK;
+    padding: $SIZE_UNIT_PHONE;
+    width:100%;
+    float:left;
+    @include _PC{
+      margin: $SIZE_UNIT_PC auto;
+      padding: $SIZE_UNIT_PC;
+    }
+
+    @at-root #urHostAbout .Block.Namecard{
+      border: 1px solid transparent;
+      padding:0;
+    }
+
+    .Tecon.AppendItem{
+      margin:$SIZE_UNIT_PHONE/2 0;
+      @include _PC{
+        margin:$SIZE_UNIT_PC/2 0;
+      }
+    }
+
+    legend{
+      @include _FONT_LABEL;
+    }
+
+    .Row{
+      position:relative;
+      float:left;
+      width:100%;
+      height:auto;
+//      height: $HEIGHT_LINE_S_PHONE;
+      line-height: $HEIGHT_LINE_S_PHONE;
+      margin: $SIZE_UNIT_PHONE/2 auto;
+      @include _PC{
+//        height: $HEIGHT_LINE_S_PC;
+        line-height: $HEIGHT_LINE_S_PC;
+        margin: $SIZE_UNIT_PC/2 auto;
+      }
+    }
+
+    .Row.Phone{
+      input.Text.Line.CallNumber{
+        padding-left: $WIDTH_ABOUT_LABEL_PHONE + 2*$SIZE_UNIT_PHONE + $WIDTH_ITC_SELECT_PHONE;
+        @include _PC{
+          padding-left: $WIDTH_ABOUT_LABEL_PC + 2*$SIZE_UNIT_PC + $WIDTH_ITC_SELECT_PC;
+        }
+      }
+      select.Select.ITC{
+        @include _FONT_CONTENT;
+        appearance: none;  -moz-appearance: none;  -webkit-appearance: none; /* 取消右侧箭头区域 */
+        border-color: transparent;
+        position: absolute;
+        top:0;
+        left: $WIDTH_ABOUT_LABEL_PHONE+2*$SIZE_UNIT_PHONE;
+        width: $WIDTH_ITC_SELECT_PHONE;
+        height: 100%;
+        @include _PC { 
+          left: $WIDTH_ABOUT_LABEL_PC+2*$SIZE_UNIT_PC;
+          width: $WIDTH_ITC_SELECT_PC;
+        }
+        &:hover,&:focus{
+          border-bottom:1px solid $COLOR_MAIN;
+        }
+      }
+    }
+ 
+    .Text.Label{
+      @include _FONT_KEY; // 因为block的标签已经用了 _FONT_LABEL，所以row的标签就用深一点的颜色 _FONT_KEY
+      @include _TEXT_ELLIPSIS;
+      white-space: nowrap;
+      position: absolute;
+      left:0;
+      text-align: center;
+      float: left;
+      padding: 0 $SIZE_UNIT_PHONE;
+      width: $WIDTH_ABOUT_LABEL_PHONE;
+//      height: 100%;
+//    border-right:1px solid $COLOR_BORDER_LIGHT;
+      border:1px solid transparent;
+      line-height:inherit;
+      @include _PC{
+        width: $WIDTH_ABOUT_LABEL_PC;
+        padding: 0 $SIZE_UNIT_PC;
+      }
+      &.Input{
+        border:1px solid transparent;
+        &:hover{
+          border-bottom-color: $COLOR_MAIN;
+        }
+      }
+    }
+
+    .Seperator.Bar{
+      background-color: $COLOR_BORDER_DARK;
+      position: absolute;
+      margin: auto;
+      top: 0;
+      bottom: 0;
+      height: 45%;
+      left: $WIDTH_ABOUT_LABEL_PHONE;
+      width: 1px;
+      @include _PC{
+        left:$WIDTH_ABOUT_LABEL_PC;
+      }
+    }
+
+    .Text.Line{
+      height:auto;
+      border: 1px solid transparent;
+      padding-left: $WIDTH_ABOUT_LABEL_PHONE+2*$SIZE_UNIT_PHONE;
+      min-height:$HEIGHT_LINE_S_PHONE;
+      @include _PC{
+        min-height: $HEIGHT_LINE_S_PC;
+        padding-left:$WIDTH_ABOUT_LABEL_PC+2*$SIZE_UNIT_PC;
+      }
+      &.Input{
+        border-bottom-color: $COLOR_BORDER_LIGHT;
+        &:hover,&:focus{
+          border-bottom:1px solid $COLOR_MAIN;
+        }
+      }
+    }
+
+    .Block.Pass{
+      margin:0 auto;
+      padding-right:96px;
+      position: relative;
+      @include _PC{
+        padding-right:128px;
+      }
+    }
+
+    .Button.ChangePass{
+      @include _FONT_KEY;
+      position:absolute;
+      right:0; // $SIZE_UNIT_PHONE;
+      width:64px;
+      height:100%;
+//      border-color: $COLOR_BORDER_LIGHT;
+      background-color:$COLOR_PALE;
+      @include _PC{
+//        right:$SIZE_UNIT_PC;
+        width:88px;
+      }
+      &:hover{
+//        color:$COLOR_MAIN;
+//        border-color: $COLOR_MAIN;
+      }
+      i, svg{
+        font-size:16px;
+        padding-bottom:8px;
+        @include _PC{
+          font-size:20px;
+        }
+      }
+    }
+
+    .Text.Feedback{
+      @include _FONT_LABEL;
+      color:$COLOR_MAIN;
+      padding-left:$WIDTH_ABOUT_LABEL_PC+2*$SIZE_UNIT_PHONE;
+      @include _PC{
+        padding-left:$WIDTH_ABOUT_LABEL_PC+2*$SIZE_UNIT_PC;
+      }
+    }
+  }
+}

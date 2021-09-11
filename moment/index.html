@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="cn">
+
+<head>
+<!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7; IE=9" />-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" /> <!-- 打包成应用后，小米NoteLTE不支持 target-densitydpi=device-dpi -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+<link rel="shortcut icon" href="image/favicon.ico"/>
+<link rel="Bookmark" href="image/favicon.ico"/>
+<link rel="apple-touch-icon" sizes="180x180" href="image/favicon_180.png"><!-- For iPhone 6 Plus with @3× display: -->
+<link rel="apple-touch-icon" sizes="152x152" href="image/favicon_152.png"><!-- For iPad with @2× display running iOS ≥ 7: -->
+<link rel="apple-touch-icon" sizes="144x144" href="image/favicon_144.png"><!-- For iPad with @2× display running iOS ≤ 6: -->
+<link rel="apple-touch-icon" sizes="120x120" href="image/favicon_120.png"><!-- For iPhone with @2× display running iOS ≥ 7: -->
+<link rel="apple-touch-icon" sizes="114x114" href="image/favicon_114.png"><!-- For iPhone with @2× display running iOS ≤ 6: -->
+<link rel="apple-touch-icon" sizes="76x76" href="image/favicon_76.png"><!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+<link rel="apple-touch-icon" sizes="72x72" href="image/favicon_72.png"><!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+<link rel="apple-touch-icon" href="image/favicon_57.png"><!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+
+<meta name="keywords" content="速记,手绘,随笔,探索"/><!-- 要用英文逗号分隔 -->
+<meta name="description" content="想要收藏人生中珍贵的记忆，或者向世界分享、发现独特的体验？来轻时光，记录身边的光阴，分享到其他应用；跟随别人的脚步，去探索其他角落的奇妙；关注各种兴趣和服务，体验个人专属的时光。"/><!-- google 225Byte -->
+
+<base target="_blank">
+
+<title>轻时光：速记人生，遇见世界</title>
+
+</head>
+
+<body>
+
+  <div id="splash" style="transition: all 1.0s ease-in-out 0s;z-index:10;position:fixed;top:0;left:0;width:100%;height:100%;background:#4AC9B4 url(image/Splash.png) no-repeat scroll center center / contain border-box;">
+      <div style="display:none;opacity:0;z-index:-2;position:fixed;top:0;left:0;height:0;">
+        <h1>用手绘、拍照、留言来速记人生，遇见世界！</h1>
+      </div>
+  </div><!-- 直接在这里设置样式，使得一启动就有背景，避免加载css前的一段空白期 -->
+
+  <table class="LayoutCenterTable TextCover Dialog" data-bind="with:dialog, css:{ActiveDialog:dialog.visible()}"><tr><td><div class="DialogContent" data-bind="css: {Warn: scenario()==='WARN'||scenario()==='LOGOUT'}">
+      <!--div class="Loader"></div-->
+      <div class="DialogText" data-bind="html: text()"></div>
+
+      <div data-bind="visible:scenario()==='LOGOUT'">
+        <button class="DialogButton" style="width:44%" data-bind="click:confirmDialog">退出</button>
+        <button class="DialogButton" style="width:44%" data-bind="click:cancelDialog">取消</button>        
+      </div>
+      <div data-bind="visible:scenario()==='COMPLAIN'">
+        <button class="DialogButton" style="width:44%" data-bind="click:confirmDialog">投诉&nbsp;<span class="DotLoader" data-bind="if:busy()"><div></div><div></div><div></div></span></button>
+        <button class="DialogButton" style="width:44%" data-bind="click:cancelDialog">取消</button>        
+      </div>
+      <div data-bind="visible:scenario()==='ALERT'">
+        <button class="DialogButton" data-bind="click:cancelDialog">关闭</button>
+      </div>
+
+  </div></td></tr></table>
+
+  <div class="Space" data-bind="with:spaceShare.setProp('domel',$element), css:{ActiveView:starModel.where()==='SPACE_SHARE'}">
+
+      <div class="Header">
+        <div class="HeadIconLogo BgFull Clickable" data-bind="click: function() { starModel.targetPerson(sow.Const.PERSON_ALL); spaceAll.stageNow('STAGE_MOSET'); }"></div>
+        <div class="HeadIconUser BgCover" data-bind="css:{Clickable:stageNow()!=='STAGE_LOGIN', Active:stageNow()==='STAGE_LOGIN'}, 
+        style: {backgroundImage: (starModel.isOnline() && starModel.onlinePerson().icon) ? ('url('+SOFILE+starModel.onlinePerson().icon+')') : undefined}, 
+        click: function() { if (starModel.isOnline()) { starModel.targetPerson(starModel.onlinePerson()); } else { stageNow('STAGE_LOGIN'); } }"></div>
+        <div class="HeadIconMoca BgFull" data-bind="css:{Clickable: stageNow()!=='STAGE_MOCAST', Active:stageNow()==='STAGE_MOCAST'}, click:switch2Mocast"></div>
+      </div>
+
+      <div class="Stage" data-bind="css:{ActiveView:stageNow()==='STAGE_MOCAST'}">
+        <div class="Neckbar">
+          <div class="SceneMenu" id="mocastPager"></div>
+        </div>
+        <div class="SceneSet" data-bind="with: spaceShare.mocastSwiper = new Swiper($element, 
+        { effect:'slide', loop:true, grabCursor:true, keyboardControl:true, mousewheelControl:false, cube:{ slideShadows:false, shadow:false }, 
+          pagination: sow.Tool.getFirstChild(sow.Tool.getPrevSibling($element)), paginationClickable: true,
+          paginationBulletRender: function (index, className) {
+            switch (index) {
+              case 0: name='拍 摄';break;
+              case 1: name='定 位';break;
+              case 2: name='留 言';break;
+              case 3: name='设 置';break;
+            }
+            return '<span class=&quot;NeckTab ' + className + '&quot; style=&quot;margin:0 2.5%;width:20%&quot;>' + name +'</span>';
+          },
+          onSlideChangeStart: function(swiper){
+            switch (swiper.activeIndex){
+              case 0: sceneNow('SCENE_CONFIG'); break;
+              case space.SCENE_MEDIA_INDEX: sceneNow('SCENE_MEDIA'); break;
+              case space.SCENE_TICE_INDEX: sceneNow('SCENE_TICE'); break;
+              case space.SCENE_TEXT_INDEX: sceneNow('SCENE_TEXT'); break;
+              case space.SCENE_CONFIG_INDEX: sceneNow('SCENE_CONFIG');break;
+              case 5: sceneNow('SCENE_MEDIA'); break;
+            }
+          }
+        })">
+          <div class="swiper-wrapper" data-bind="with: spaceShare">
+
+            <div class="Scene swiper-slide">
+                <table class="LayoutCenterTable TextCover" data-bind="visible: !moment().content.image && !moment().content.video && !moment().content.sound"><tr><td>
+                  这光影<br>无论怎样记录<br>都独一无二<br><br>它所缺少的部分<br>也将被我<br>用想象的画笔填满
+                </td></tr></table>
+              <div class="ViewWindow BgContain" data-bind="visible: moment().content.image || moment().content.video || moment().content.sound, style : {backgroundImage : moment().content.image ? 'url('+SOFILE+moment().content.image+')' : ''}">
+                <video class="VideoPlayer" preload="meta" controls data-bind="visible:moment().content.video, attr:{src: moment().content.video ? SOFILE+moment().content.video : undefined}">您的系统不支持播放本视频</video>
+              </div>
+            </div>
+
+            <div class="Scene swiper-slide">
+              <div class="ViewWindow">
+                <div class="MapArea" data-bind="with:shareMap.setProp('domel',$element).showPresentLocation().followLocation(space.presentLocation, 'image/LocationPresent.png').disable('Dragging')">
+                  <table class="LayoutCenterTable TextCover"><tr><td>
+                    在时空的旷野里<br>就算只是一粒沙<br>也要努力地发光<br>因为我来过
+                  </td></tr></table>
+                </div>
+                <div class="AddressScene"><div class="AddressArea">
+                  <div class="AddressViewer ReadOnly">
+<!--                    <input class="AddressText swiper-no-swiping" type="text" data-bind="value:space.presentLocation.computedAddress"> -->
+                    <div class="AddressText" data-bind="text:space.presentLocation.computedAddress"></div>
+                    <button class="ActionButton" data-bind="click:function(){$('#shareMocaAddressPicker').toggle();}">选址</button>
+                  </div>
+                  <div id="shareMocaAddressPicker" class="AddressPicker swiper-no-swiping" data-bind="with:space.presentLocation">
+<!-- 发现select元素和swiper的cube效果冲突，放在swiper里，点击后的选项框会出现在页面之外。因此单独放在外面，此时则和slide效果冲突，无法显示。 -->
+<!--                    <select class="TextInput" data-bind="options:nationSet, optionsValue:'pode', optionsText:'name', value:nationPode, optionsCaption:'国家'"></select> -->
+                    <select class="TextInput" data-bind="options:provinceSet, optionsValue:'pode', optionsText:'name', value:provincePode, optionsCaption:'省份'"></select>
+                    <select class="TextInput" data-bind="options:citySet, optionsValue:'pode', optionsText:'name', value:cityPode, optionsCaption:'城市'"></select>
+                    <select class="TextInput" data-bind="options:districtSet, optionsValue:'pode', optionsText:'name', value:districtPode, optionsCaption:'区县'"></select>
+<!--                    <select class="TextInput" data-bind="options:townSet, optionsValue:'pode', optionsText:'name', value:townPode, optionsCaption:'乡镇、街道'"></select>
+                    <select class="TextInput" data-bind="options:villageSet, optionsValue:'pode', optionsText:'name', value:villagePode, optionsCaption:'村社'"></select> -->
+                    <input type="text" class="TextInput" placeholder="道路" data-bind="value: streetName" />
+                    <input type="text" class="TextInput" placeholder="门牌号" data-bind="value: blockNumber"/>
+                    <input type="text" class="TextInput" placeholder="楼房名" data-bind="value: blockName"/>
+                    <input type="text" class="TextInput" placeholder="房间" data-bind="value: roomNumber"/>
+                    <input type="text" class="TextInput" placeholder="其他" data-bind="value: extraName"/>
+                  </div>
+                </div></div>
+              </div>
+            </div>
+
+            <div class="Scene swiper-slide"><div class="ViewPage">
+                <textarea class="TextareaInput swiper-no-swiping" maxlength="1000" placeholder="说一句话，或者，静静飘过" data-bind="value: moment().content.text"></textarea>
+            </div></div>
+
+            <div class="Scene swiper-slide"><div class="ViewPage">
+              <div class="Title">更多设置正在赶来</div>
+              <div class="AboutLine">
+                <div class="AboutLineLabel">谁能看？</div>
+                <select data-bind="options:[{value:sow.Const.CID_SELF,name:'我自己'},{value:sow.Const.CID_FRIEND,name:'朋友圈'},{value:sow.Const.CID_PUBLIC,name:'所有人'}], optionsValue:'value',optionsText:'name',value:moment().cidRead" class="AboutLineInput swiper-no-swiping">
+                </select>
+              </div>
+            </div></div>
+
+          </div><!-- swiper-wrapper -->
+        </div><!-- SceneSet -->
+
+                <div class="DrawScene" data-bind="css:{Active:actionNow()==='ACTION_DRAW' && sceneNow()==='SCENE_MEDIA'}"><!-- 不得不放在外面，否则1.在canvas触摸滑动时，导致的是scene滑动，而不是手绘(这个问题还可以通过swiper提供的swiper-no-swiping来解决)。 2.放在SCENE_MEDIA里面时，canvas上不知为何，不能拷贝照片，不能手绘。 -->
+                  <canvas data-bind="with:drawScene.setProp('canvas',$element).initCanvas(), attr:{width:$($element).width(), height:$($element).height()}">您的系统不支持手绘画板</canvas><!-- 必须显性设置canvas元素的width/height属性。但是如果绑定到$($element).width/height()，只在启动时计算并设置一次，以后缩放窗口不会改变，从而导致图画变形。如果绑定到contentWidth()，会在缩放时，自动更新canvas尺寸，但注意，canvas尺寸调整会导致图画内容被自动清空。 -->
+                  <div class="DrawController">
+                    <div class="DrawInput DrawReset" data-bind="click:resetDraw"></div>
+                    <!-- 兼容性不高， IE 和 Safari 不支持 -->
+                    <select class="DrawInput DrawColor" data-bind="value:drawScene.strokeStyle" onChange="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor">
+                      <option value="black" style="background-color:black;">黑</option>
+                      <option value="white" style="background-color:white;">白</option>
+                      <option value="gray" style="background-color:gray">灰</option>
+                      <option value="red" style="background-color:red">红</option>
+                      <option value="orange" style="background-color:orange">橙</option>
+                      <option value="yellow" style="background-color:yellow">黄</option>
+                      <option value="green" style="background-color:green">绿</option>
+                      <option value="cyan" style="background-color:cyan">青</option>
+                      <option value="blue" style="background-color:blue">蓝</option>
+                      <option value="purple" style="background-color:purple">紫</option>
+                    </select>
+                    <select class="DrawInput" data-bind="value:drawScene.lineWidth, css:'DrawLine'+drawScene.lineWidth()">
+                      <option value="1" class="OptionLine DrawLine1">1</option>
+                      <option value="2" class="OptionLine DrawLine2">2</option>
+                      <option value="4" class="OptionLine DrawLine4">4</option>
+                      <option value="8" class="OptionLine DrawLine8">8</option>
+                      <option value="12" class="OptionLine DrawLine12">12</option>
+                      <option value="16" class="OptionLine DrawLine16">16</option>
+                    </select>
+                    <div class="DrawInput DrawSave" data-bind="click:uploadDraw"></div>
+                  </div>
+                </div>
+
+<!-- 从 SCENE_MEDIA 中迁移到外面，以确保压在手绘图上面 -->
+                <div class="Anklebar" data-bind="visible:sceneNow()==='SCENE_MEDIA'">
+                  <div class="SoundController" data-bind="visible:starModel.deviceReady()">
+                    <div class="SoundState" data-bind="css:{Delete:soundNow()==='ACTION_SOUND_DONE'}, click:deleteSound"></div>
+                    <div class="ProgressBar" data-bind="css:{Active:soundNow()==='ACTION_SOUND_BUSY'}"></div>
+                    <button class="ActionButton" data-bind="visible:soundNow()==='ACTION_SOUND_BUSY', click:stopSound">中止</button>
+                    <button class="ActionButton" data-bind="visible:soundNow()==='ACTION_SOUND_DONE', click:playSound">试听</button>
+                  </div>
+                  <audio class="AudioPlayer" preload="meta" controls data-bind="visible:!starModel.deviceReady() && sow.Tool.readPath('moment().content.sound',$data), attr:{src: sow.Tool.readPath('moment().content.sound',$data) ? SOFILE+sow.Tool.readPath('moment().content.sound',$data) : undefined }">您的系统不支持播放本音频</audio>
+                </div>
+
+      </div><!-- End of STAGE_MOCAST -->
+
+      <div class="Stage" data-bind="css:{ActiveView:stageNow()==='STAGE_LOGIN'}"><!-- Stage of 登录 -->
+        <div class="Scene"><div class="ViewPage" data-bind="with: accountModel">
+
+            <div class="LoginLine AccountLine">
+              <input class="LoginLineInput" type="text" placeholder="您的邮箱或手机号" maxlength="50" data-bind="value: loginPerson().uid, visible:uidType()=='uid'" pattern="[_\w\-\.]+@[\w\-]+(\.[\w\-]+)*\.[a-zA-Z]{2,4}|(\+\d{1,3}-)?\d{11}|\*\d{1,12}">
+<!-- 2015-10-15 又发现在手机上百度等浏览器上，不支持onkeyup，一旦写了就无法成功登陆，唉，干脆都删掉了。 onkeyup="value=value.replace(/[^_\-\w\d\+\.\*@]/g,'')"> -->
+<!-- 目前不需要选择国际电话区号，因此不支持选择账号类型。
+              <input class="LoginLineInput" type="email" placeholder="您的电子邮箱地址" maxlength="50" data-bind="value: loginPerson().email, visible: uidType()=='email'" pattern="[_\w\-\.]+@[\w\-]+(\.[\w\-]+)*\.[a-zA-Z]{2,4}">
+              <div class="LoginLineInput" data-bind="visible:uidType()=='phone'">
+                <select style="background-image:none;" data-bind="options: sow.Locale.NationSet, optionsValue:'itc', optionsText:function(item){return item.name+' '+item.itc;}, value: loginPerson().countryCode, optionsCaption:'国际电话区号'"></select>
+                <input type="tel" placeholder="手机号" data-bind="value: loginPerson().callNumber" pattern="\d{11}" maxlength='11'>
+              </div>
+              <input class="LoginLineInput" type="text" placeholder="您的远近号，以 * 开头" maxlength='13' data-bind="value: loginPerson().aiid, visible:uidType()=='aiid'" pattern="\*\d{1,12}">
+              <select class="LoginLineAction" data-bind="options: [{value:'uid',text:'无格式'},{value:'email',text:'电子邮箱'},{value:'phone',text:'手机号'}, {value:'aiid',text:'远近号'}], optionsValue:'value', optionsText:'text', value:uidType"></select> 
+-->
+            </div>
+            <div class="FeedbackLine" data-bind="text: Locale[starModel.userLang()].uidErrorFeedback[uidErrorType()]"></div>
+
+            <div class="LoginLine PasswordLine">
+              <input class="LoginLineInput" type="password" placeholder="您的密码" maxlength="50" data-bind="value: loginPerson().pwdUser, attr:{type: (pwdType()==='register' || pwdType()==='reset')?'text':'password'}" pattern="[^ ]{6,}">
+              <div class="LoginLineAction" data-bind="click:toggleReset, text:pwdType()=='reset'?'取消重设':'忘了密码？'"></div>
+            </div>
+            <div class="FeedbackLine" data-bind="text: Locale[starModel.userLang()].pwdErrorFeedback[pwdErrorType()]"></div>
+
+            <div class="LoginLine PasscodeLine" data-bind="visible: pwdType()=='reset'">
+              <input class="LoginLineInput" type="text" placeholder="您收到的验证码" maxlength="6" pattern="\d{6}" data-bind="value: loginPerson().pcdUser">
+              <div class="LoginLineAction" data-bind="click:sendConfirmTicket">重新发送</div>
+            </div>
+            <div class="FeedbackLine" data-bind="text: Locale[starModel.userLang()].pcdErrorFeedback[pcdErrorType()], visible: pwdType()=='reset'"></div>
+
+            <div class="LoginLine" style="border-left:0;padding-left:0;border:0" data-bind="visible: pwdType()!=='reset'">
+              <div style="position:absolute;bottom:8px;text-align:center;width:100%;">
+                <!--input class="LoginLineInput" type="checkbox" checked="checked"-->
+                点击登录，代表您已同意<a data-bind="click:space.loginAgreement.bind($data,true)">《用户协议》</a>
+              </div>
+            </div>
+
+            <button class="SubmitButton" data-bind="visible: pwdType()==='login', click: login">登 录</button>
+            <button class="SubmitButton" data-bind="visible: pwdType()==='reset', click: resetPwd">重 置</button>
+            <div class="FeedbackLine Submitted" data-bind="text: Locale[starModel.userLang()].loginFeedback[loginResultType()]"></div>
+
+            <div class="Title">每一棵蒲公英<br>都有起飞的时光<br>它要和世界相遇<br>别问它<br>将停在何方</div>
+
+<div class="AgreementBlock" data-bind="css:{Active:space.loginAgreement()}">
+  <div class="Heading">用户协议</div>
+        <div class="Body">
+重要须知：本协议是您（个人或单一实体）与本应用的开发者之间，关于开发者向您提供本应用所涉相关服务的法律协议。在此特别提醒，用户（您）欲使用相关服务，必须事先认真阅读本服务条款中各条款，包括免除或者限制开发者责任的免责条款及对用户的权利限制。本服务条款一旦发生变更, 将在网页上公布修改内容。修改后的服务条款一旦在网页上公布即有效代替原来的服务条款。您可随时登陆网页查阅最新版服务条款。您若不同意对服务条款的修改，您应不使用或主动取消相关服务。您的任何对本应用的登陆、查看等使用行为将被视为您对本协议和相关修改的理解和接受。<br>
+如果您选择接受本协议开通服务，即表示您同意接受协议各项条件的约束。如果您不同意本服务条款，则不能获得使用本服务的权利。您若有违反本条款的任何规定，开发者有权随时中止或终止您服务的使用资格并保留追究相关法律责任的权利<br>
+1. 本应用及服务由开发者开发，受中华人民共和国版权法及国际版权条约和其他知识产权法及条约的保护。<br>
+2.用户在遵守法律及本条款的前提下可依本协议使用应用及享受服务，但用户无权实施包括但不限于下列行为：<br>
+2.1 删除应用及其他副本上所有关于版权的信息、内容；<br>
+2.2 对应用进行反向工程、反向汇编、反向编译等；<br>
+2.3 对于应用中相关信息等，未经开发者书面同意，用户不得擅自实施包括但不限于下列行为：使用、复制、修改、链接、转载、汇编、发表、出版，建立镜像站点、擅自借助本应用发展与之有关的衍生产品、作品等。<br>
+2.4 发表、传送、传播、储存任何违反国家法律法规政策的内容。<br>
+2.5 发表、传送、传播、储存任何侮辱、诽谤、色情、暴力、侵害他人权益、引起他人不安的内容。<br>
+2.6 发表、传送、传播、储存侵害他人知识产权、商业机密权等合法权利的内容。<br>
+2.7 进行任何危害计算机网络安全的行为，包括但不限于：使用未经许可的数据或进入未经许可的服务器及帐户；未经允许进入公众计算机网络或者他人计算机系统并删除、修改、增加存储信息；未经许可，企图探查、扫描、测试本应用系统或网络的弱点或其它实施破坏网络安全的行为； 企图干涉、破坏本应用系统或网站的正常运行，故意传播恶意程序或病毒以及其他破坏干扰正常网络信息服务的行为；伪造 TCP/IP 数据包名称或部分名称。<br>
+3.  用户须明白，使用本服务产品涉及到互联网服务，可能会受到各个环节不稳定因素的影响。因此服务存在不可抗力、计算机病毒或黑客攻击、系统不稳定、用户所在位置、用户关机以及其他任何技术、互联网络、通信线路原因等造成的服务中断或不能满足用户要求的风险。<br>
+4.  用户须明白，在使用本服务产品存在有来自任何他人的包括威胁性的、诽谤性的、令人反感的或非法的内容或行为或对他人权利的侵犯（包括知识产权）的匿名或冒名的信息的风险，用户须和开发者共同承担以上风险，开发者对服务不作任何类型的担保，不论是明确的或隐含的，包括所有有关信息真实性、适商性、适于某一特定用途、所有权和非侵权性的默示担保和条件，对因此导致任何因用户不正当或非法使用服务产生的直接、间接、偶然、特殊及后续的损害，不承担任何责任。<br>
+5．使用本服务必须遵守国家有关法律和政策等，维护国家利益，保护国家安全，并遵守本条款，对于用户违法或违反本协议的使用(包括但不限于言论发表、传送等)而引起的一切责任，由用户负全部责任。<br>
+6．尊重用户个人隐私信息的私有性是本应用及服务的原则，开发者将会采取合理的措施保护用户的个人隐私信息，除法律或有法律赋予权限的政府部门要求或用户同意等原因外，未经用户同意不向第三方公开、透露用户个人隐私信息。<br>
+7.  特别提醒用户，使用互联网必须遵守国家有关的政策和法律，如刑法、国家安全法、保密法、计算机信息系统安全保护条例等，保护国家利益，保护国家安全，对于违法使用互联网络而引起的一切责任，由用户负全部责任。<br>
+7.1.  用户不得使用本应用及服务发送或传播任何妨碍社会治安或非法、虚假、骚扰性、侮辱性、恐吓性、伤害性、破坏性、挑衅性、淫秽色情性等内容的信息。<br>
+7.2.  用户不得使用本应用及服务发送或传播敏感信息和违反国家法律制度的信息。<br>
+7.3.  用户应当在发现非法或不良内容时，积极向开发者就此内容投诉，<br>
+7.4.  本应用及服务同大多数因特网产品一样，易受到各种安全问题的困扰，包括但不限于：<br>
+1）  透露详细个人资料，被不法分子利用，造成现实生活中的骚扰。<br>
+2）  哄骗、破译密码。<br>
+3）  下载安装的其它软件中含有“特洛伊木马”等病毒，威胁到计算设备上信息和数据的安全，继而威胁对本应用及服务的使用。<br>
+8.  请用户注意勿在使用本应用及服务中透露自己的各类财产帐户、银行卡、信用卡、及对应密码等重要资料，否则由此带来的任何损失由用户自行承担。<br>
+9.  用户应规范、合法地使用本应用及服务，如用户有在公共环境下捣乱、骚扰、欺骗其他用户等行为或者实施其他违反本协议的行为，一经发现，开发者有权停止服务。<br>
+10.用户须明白，开发者为了本应用整体运营的需要，开发者拥有随时修改或中断、中止或终止服务而不需通知您的权利，开发者行使前述权利不需对您或任何第三方负责或承担任何赔偿责任。<br>
+11.本服务条款的解释，效力及纠纷的解决，适用于中华人民共和国大陆法律。若发生任何纠纷或争议，应当友好协商解决，协商不成的，均应提交开发者所在城市人民法院解决。<br>
+            </div>
+            <button class="SubmitButton" data-bind="click:space.loginAgreement.bind($data,false)">我同意</button>
+          </div>
+
+        </div></div>
+       </div><!-- End of STAGE_LOGIN -->
+
+      <div class="Footer" data-bind="visible: stageNow()!='STAGE_LOGIN'">
+        <div class="StageMenu" data-bind="visible:sceneNow()==='SCENE_MEDIA'">
+          <nav class="FootTab TabPhoto" style="width:20%;" data-bind="click: addImage.bind($context,$element), css:{Active:actionNow()==='ACTION_PHOTO'}">拍 照</nav><input class="UploadButton" type="file" accept="image/*" data-bind="event: { change: uploadImage.bind($context,$element) }"/>
+          <nav class="FootTab TabDraw" style="width:20%;" data-bind="click: addDraw, css:{Active:actionNow()==='ACTION_DRAW'}">手 绘</nav>
+          <nav class="FootTab Blank" style="width:20%;"></nav>
+          <nav class="FootTab TabSound" style="width:20%;" data-bind="click: addSound.bind($context,$element), css:{Active:soundNow()==='ACTION_SOUND_BUSY'}">录 音</nav><input class="UploadButton" type="file" accept="audio/*" data-bind="event: {change: uploadSound.bind($context,$element) }"/>
+          <nav class="FootTab TabVideo" style="width:20%;" data-bind="click: addVideo.bind($context,$element), css:{Active:actionNow()==='ACTION_VIDEO'}">摄 像</nav><input class="UploadButton" type="file" accept="video/*" data-bind="event: { change: uploadVideo.bind($context,$element) }"/>
+        </div>
+        <div class="StageMenu" data-bind="visible:sceneNow()==='SCENE_TICE'">
+        </div>
+        <div class="StageMenu" data-bind="visible:sceneNow()==='SCENE_TEXT'">
+        </div>
+<!--        <div class="StageMenu" data-bind="visible:sceneNow()==='SCENE_CONFIG'">
+          <nav class="FootTab" style="width:33%;background-image:url(image/ACTION_.png)" data-bind="click: resetConfig">清 空</nav>
+          <nav class="FootTab Blank" style="width:34%;"></nav>
+          <nav class="FootTab" style="width:33%;background-image:url(image/ACTION_.png)" data-bind="click: setDefault">保 存</nav>
+        </div>-->
+        <div class="SubmitTab" data-bind="click: submitMoment">发 表<div class="RingLoader" data-bind="visible:busyUploading()"></div></div><!-- Shared by all STAGE_MOCAST menus -->
+      </div> <!-- End of Footer -->
+
+  </div>
+
+  <div class="Space" data-bind="with: spaceAll.setProp('domel',$element), css:{ActiveView:starModel.where()==='SPACE_ALL'}">
+      <div class="Header">
+        <div class="HeadIconLogo BgFull Active"></div>
+        <div class="HeadIconUser BgCover Clickable" data-bind="click: function() { if (!starModel.isOnline()) { starModel.targetPerson(sow.Const.PERSON_UNKNOWN); spaceShare.stageNow('STAGE_LOGIN'); } else { starModel.targetPerson(starModel.onlinePerson());} }, 
+          style: { backgroundImage: (starModel.isOnline() && starModel.onlinePerson().icon) ? 'url('+ SOFILE+starModel.onlinePerson().icon+')' : undefined}"></div>
+        <div class="HeadIconMoca BgFull Clickable" data-bind="click: switch2Mocast"></div>
+      </div>
+
+        <div class="Stage" data-bind="css:{ActiveView:stageNow()==='STAGE_MOSET'}"><!-- Stage_MOSET -->
+          <div class="Neckbar">
+            <div class="SceneMenu" id="allStageMosetPager"></div>
+          </div>
+          <div class="SceneSet" data-bind="with: spaceAll.allStageMosetSwiper = new Swiper($element, 
+            { effect: 'slide', loop:true, grabCursor: true, keyboardControl : true, mousewheelControl: false,
+              pagination: sow.Tool.getFirstChild(sow.Tool.getPrevSibling($element)), paginationClickable: true, 
+              paginationBulletRender: function (index, className) {
+                switch (index) {
+                  case 0: name='印 象';break;
+                  case 1: name='岁 月';break;
+                }
+                return '<span class=&quot;NeckTab  ' + className + '&quot; style=&quot;margin:0 5%;width:40%&quot;>' + name +'</span>';
+              },
+              onSlideChangeStart: function(swiper){
+                switch (swiper.activeIndex){
+                  case 0: sceneNow('SCENE_TIMELINE'); break;
+                  case 1: sceneNow('SCENE_IMPRESSION'); break;
+                  case 2: sceneNow('SCENE_TIMELINE'); break;
+                  case 3: sceneNow('SCENE_IMPRESSION'); break;
+                }
+              }
+            })">
+            <div class="swiper-wrapper" data-bind="with: spaceAll">
+
+              <div class="Scene swiper-slide">
+                <table class="LayoutCenterTable TextCover" data-bind="visible:momentSet4Impression().length==0"><tr><td>
+                  这个世界<br>一片空白 :( <br><br>现在开始<br>为世界记述时光
+                </td></tr></table>
+                <div class="ViewImpression" data-bind="visible:momentSet4Impression().length>0">
+                  <div class="Waterfall" data-bind="foreach: momentSet4Impression"><!-- momentSet().slice().sort(sort4Impression) --><!-- 也可以把 overflow:auto;height:100%;width:100% 设在这里，则同时还需要修改Waterfall算法不要计算总高度。-->
+                    <div class="Card" data-bind="click:$parent.showMocube">
+                      <img class="AdaptiveImage" data-bind="visible:content.image&&!content.video, attr: {src: sow.Tool.readPath('content.image',$data)?(SOFILE+content.image):undefined}, style:{maxHeight:$parent.bodyHeight()-32+'px'}" />
+                      <video class="VideoPlayer" preload="meta" data-bind="visible:content.video, attr:{src: content.video ? SOFILE+content.video : undefined}">您的系统不支持播放本视频</video>
+                      <audio class="AudioPlayer" preload="meta" data-bind="visible:content.sound && ! content.video, attr:{src: content.sound ? SOFILE+content.sound : undefined}">您的系统不支持播放本音频</audio>
+                      <div class="CardTitle" data-bind="visible:sow.Tool.readPath('content.text',$data),text:sow.Tool.readPath('content.text',$data).substr(0,100)"></div>
+                      <div class="CardInfo">
+                        <div class="CountTab"><div class="CountNumber" data-bind="text:voteGood?voteGood:0"></div><div class="CountIcon CountVote"></div></div>
+                        <div class="CountTab"><div class="CountNumber" data-bind="text:replyCount?replyCount:0"></div><div class="CountIcon CountReply"></div></div>
+                      </div>
+                    </div>
+                  </div>
+                  <button class="SubmitButton LoadMoreButton" data-bind="click:appendImpression">加载更多&nbsp;<span class="DotLoader" data-bind="css:{Transparent:!busyAppending()}"><div></div><div></div><div></div></span></button>
+                </div>
+              </div>
+
+<!--              <div class="Scene swiper-slide"><div class="ViewFootmap">
+                <div class="LayoutCenterTable TextCover" data-bind="style:{top:topBodyText($element)}">高级技能解锁中......</div>
+              </div></div>
+-->
+              <div class="Scene swiper-slide">
+
+                <table class="LayoutCenterTable TextCover" data-bind="visible:momentSet4Timeline().length==0"><tr><td>
+                  流逝的岁月<br>许是神的旨意<br><br>在四季的风里<br>卷起彼此的回忆
+                </td></tr></table>
+
+                <div class="ViewTimeline" data-bind="visible:momentSet4Timeline().length>0">
+                  <div data-bind="foreach: momentSet4Timeline"><!-- momentSet().slice().sort(sort4Timeline) -->
+                    <div class="TimeSegment">
+                      <div class="TimeText" data-bind="html:sow.Tool.readPath('whenInserted',$data).replace(/^(\d+)-(.+)\s+(.+):\d+$/, '$3<br>$2<br>$1')"></div>
+                      <div class="TimePane" data-bind="click: $parent.showMocube">
+                        <div class="TimeIcon"></div>
+                        <img class="AdaptiveImage" data-bind="visible:content.image&&!content.video, attr:{src: sow.Tool.readPath('content.image',$data)?(SOFILE+content.image):undefined}, style:{maxHeight:$parent.bodyHeight()-32+'px'}"/>
+                        <video class="VideoPlayer" preload="meta" data-bind="visible:content.video, attr:{src: content.video ? SOFILE+content.video : undefined}">您的系统不支持播放本视频</video>
+                        <audio class="AudioPlayer" preload="meta" data-bind="visible:content.sound && ! content.video, attr:{src: content.sound ? SOFILE+content.sound : undefined}">您的系统不支持播放本音频</audio>
+                        <div class="CardTitle" data-bind="visible:sow.Tool.readPath('content.text',$data),text:sow.Tool.readPath('content.text',$data).substr(0,100)"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <button class="SubmitButton LoadMoreButton" data-bind="click:appendTimeline">加载更多&nbsp;<span class="DotLoader" data-bind="css:{Transparent:!busyAppending()}"><div></div><div></div><div></div></span></button>
+                </div>
+              </div>
+
+            </div><!-- swiper-wrapper -->
+          </div><!-- SceneSet -->
+        </div><!-- STAGE -->
+
+<!--          <div class="Stage" data-bind="css:{ActiveView:stageNow()==='STAGE_HOBBY'}">
+            <div class="Neckbar"><div class="SceneMenu">
+              <span class="NeckTab" style="width:40%">群 组</span>
+              <span class="NeckTab" style="width:40%">交 流</span>
+            </div></div>
+            <div class="SceneSet">
+              <div class="Scene swiper-slide"><div class="LayoutCenterTable TextCover" data-bind="style:{top:topBodyText($element)}">听说，只要离别时<br>两个人都认真说了“再见”<br>不管相隔多么远<br>就一定会再见</div></div>
+              <div class="Scene swiper-slide"><div class="LayoutCenterTable TextCover" data-bind="style:{top:topBodyText($element)}">听说，只要离别时<br>两个人都认真说了“再见”<br>不管相隔多么远<br>就一定会再见</div></div>
+            </div>
+          </div>
+          <div class="Stage" data-bind="css:{ActiveView:stageNow()==='STAGE_SERVICE'}">
+            <div class="Neckbar"><div class="SceneMenu">
+              <span class="NeckTab" style="width:40%">店 家</span>
+              <span class="NeckTab" style="width:40%">传 单</span>
+            </div></div>
+            <div class="SceneSet">
+              <div class="Scene swiper-slide"><div class="LayoutCenterTable TextCover" data-bind="style:{top:topBodyText($element)}">神秘技能解锁中......</div></div>
+              <div class="Scene swiper-slide"><div class="LayoutCenterTable TextCover" data-bind="style:{top:topBodyText($element)}">神秘技能解锁中......</div></div>
+            </div>
+          </div>
+-->
+
+        <div class="Stage" data-bind="css:{ActiveView:stageNow()==='STAGE_ABOUT'}">
+
+          <div class="Neckbar">
+            <div class="SceneMenu" id="allStageAboutPager"></div>
+          </div>
+          <div class="SceneSet" data-bind="with: spaceAll.allStageAboutSwiper = new Swiper($element, 
+            { effect: 'slide', loop:true, grabCursor: true, keyboardControl : true, mousewheelControl: false,
+              pagination: sow.Tool.getFirstChild(sow.Tool.getPrevSibling($element)), paginationClickable: true, 
+              paginationBulletRender: function (index, className) {
+                switch (index) {
+                  case 0: name='介 绍';break;
+                  case 1: name='讨 论';break;
+                }
+                return '<span id=&quot;allAboutTab'+index+'&quot; class=&quot;NeckTab ' + className + '&quot; style=&quot;margin:0 5%;width:40%&quot;>' + name +'</span>';
+              }
+            })">
+              <div class="swiper-wrapper" data-bind="with: spaceAll">
+                
+                <div class="Scene swiper-slide"><div class="ViewPage">
+                  <div class="LayoutCenterTable TextCover">
+                  您想要，<br>
+                  收藏人生中珍贵的记忆，<br>
+                  或者向世界分享、发现独特的体验？<br>
+                  <br>
+                  在这里，<br>
+                  记录身边的光阴，分享到其他应用；<br>
+                  跟随别人的脚步，去探索其他角落的奇妙；<br>
+                  获取各种兴趣和服务，体验个人专属的时光。<br>
+<!--                  有更多想法？马上参加<a href="#" onclick="$('#allAboutTab1').click()">讨论</a>，我们热切地期待倾听！<br> -->
+                  <br>
+                  轻时光<br>
+                  速记人生，遇见世界<br>
+                  <a href="tel:00864001006327"> (+86) 400 100 6327</a><br>
+                  <a data-bind="attr:{href:'mai'+'lto:'+starModel.starEmail},text:' '+starModel.starEmail"></a><br>
+                  <fieldset class="Block Center">
+                    <a class="Url QRC" style="background-image:url(image/QRC_Web.png);" href="http://moment.faronear.com" title="访问网站"></a>
+                    <a class="Url QRC" style="background-image:url(image/QRC_Apple.png)" href="https://itunes.apple.com/app/id1117743257" title="下载iOS版"></a>
+                    <a class="Url QRC" style="background-image:url(image/QRC_Android.png)" href="http://moment.faronear.com/app/Moment.apk" data-bind="visible:sow.Tool.deviceInfo().appmode==='web'||sow.Tool.deviceInfo().software!=='ios'" title="下载安卓版"></a>
+                  </fieldset><br>
+            <div class="FaronearSign"><div class="Line"></div><button class="Faronear" data-bind="click:sow.Tool.openUrl.bind($data,'http://www.faronear.com')">Faronear Group</button></div>
+                  <br>
+                  </div>
+                </div></div>
+
+                <div class="Scene swiper-slide"><div class="ViewPage">
+                  <div class="ReplySetArea"><!-- 把所有Replies编组在一起，避免干扰下面的ReplyInputArea，否则滚动时会带动ReplyInputArea, 不能使ReplyInputArea静止在底部。 -->
+                    <div class="ReplyArea HostReply">
+                      <img class="LogoUser BgContain"><!-- 广场用户的默认头像 -->
+                      <div data-bind="text: '我们热切的期待倾听您的任何想法！'" ></div>
+                    </div>
+                    <div class="ReplySet" data-bind="foreach: commentSet">
+                    <div class="ReplyArea" data-bind="css:{ HostReply : starModel.targetPerson().aiid===sow.Tool.readPath('_data.owner.aiid',$data), MyReply: starModel.onlinePerson().aiid===sow.Tool.readPath('_data.owner.aiid',$data) }">
+                      <img data-bind="attr:{src:SOFILE+sow.Tool.readPath('_data.owner.icon',$data)}">
+                      <div data-bind="text:sow.Tool.readPath('content.text',$data)"></div>
+                    </div>
+                    </div>
+                  </div>
+                  <div class="ReplyInputArea"><div class="ReplyArea MyReply">
+                    <img data-bind="attr:{src:SOFILE+starModel.onlinePerson().icon}">
+                    <textarea class="swiper-no-swiping" rows="3" maxlength="100" placeholder="我有话要说" data-bind="value:comment().content.text"></textarea>
+                    <button class="ReplyInputButton" data-bind="click:addComment">发 言</button>
+                  </div></div>
+                </div></div>
+
+              </div>
+
+          </div><!-- SceneSet -->
+        </div><!-- STAGE_ABOUT -->
+
+    <div class="Footer">
+      <div class="StageMenu"><!-- data-bind="foreach: [{key:'STAGE_MOSET',value:'时 光'},{key:'STAGE_HOBBY',value:'兴 趣'},{key:'STAGE_SERVICE',value:'服 务'},{key:'STAGE_ABOUT',value:'关 于'}]">
+        <nav class="FootTab" style="width:25%" data-bind="style:{backgroundImage:'url(image/'+key+(($parent.stageNow()==key)?'_active':'')+'.png)'}, click: function(stage,event){$parent.stageNow(stage.key); }, css: {Active: $parent.stageNow()==key}, text:value"></nav> -->
+        <nav class="FootTab TabMoset" style="width:50%" data-bind="click: stageNow.bind($context,'STAGE_MOSET'), css: {Active: stageNow()==='STAGE_MOSET'}">时 光</nav>
+<!--        <nav class="FootTab TabHobby" style="width:25%" data-bind="click: stageNow.bind($context,'STAGE_HOBBY'), css: {Active: stageNow()==='STAGE_HOBBY'}">兴 趣</nav>
+        <nav class="FootTab TabService" style="width:25%" data-bind="click: stageNow.bind($context,'STAGE_SERVICE'), css: {Active: stageNow()==='STAGE_SERVICE'}">服 务</nav>
+-->
+        <nav class="FootTab TabAbout" style="width:50%" data-bind="click: stageNow.bind($context,'STAGE_ABOUT'), css: {Active: stageNow()==='STAGE_ABOUT'}">关 于</nav>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="Space" data-bind="with: spaceHome.setProp('domel',$element), css:{ActiveView:starModel.where()==='SPACE_HOME'}">
+      <div class="Header">
+        <div class="HeadIconLogo BgFull Clickable" data-bind="click: function() {starModel.targetPerson(sow.Const.PERSON_ALL); }"></div>
+        <div class="HeadIconUser BgCover Active" data-bind="css:{Clickable:stageNow()=='STAGE_MOCUBE'}, style:{backgroundImage: starModel.onlinePerson().icon?('url('+SOFILE+starModel.onlinePerson().icon+')'):undefined}, click: function() {if (stageNow()=='STAGE_MOCUBE') stageNow('STAGE_MOSET');}"></div>
+        <div class="HeadIconMoca BgFull Clickable" data-bind="click: switch2Mocast"></div>
+      </div>
+
+          <div class="Stage" data-bind="css:{ActiveView:stageNow()==='STAGE_MOSET'}"><!-- Stage_MOSET -->
+            <div class="Neckbar">
+              <div class="SceneMenu" id="homeStageMosetPager"></div>
+            </div>
+            <div class="SceneSet" data-bind="with: spaceHome.homeStageMosetSwiper = new Swiper($element, 
+            { effect: 'slide', loop:true, grabCursor: true, keyboardControl : true, mousewheelControl: false,
+              pagination: sow.Tool.getFirstChild(sow.Tool.getPrevSibling($element)), paginationClickable: true,
+              paginationBulletRender: function (index, className) {
+                switch (index) {
+                  case 0: name='印 象';break;
+                  case 1: name='岁 月';break;
+                }
+                return '<span class=&quot;NeckTab  ' + className + '&quot; style=&quot;margin:0 5%;width:40%&quot;>' + name +'</span>';
+              },
+              onSlideChangeStart: function(swiper){
+                switch (swiper.activeIndex){
+                  case 0: sceneNow('SCENE_TIMELINE'); break;
+                  case 1: sceneNow('SCENE_IMPRESSION'); break;
+                  case 2: sceneNow('SCENE_TIMELINE'); break;
+                  case 3: sceneNow('SCENE_IMPRESSION'); break;
+                }
+              }
+            })">
+            <div class="swiper-wrapper" data-bind="with:spaceHome">
+
+              <div class="Scene swiper-slide">
+                <table class="LayoutCenterTable TextCover" data-bind="visible:momentSet4Impression().length===0"><tr><td>
+                  我的世界<br>一片空白<br><br>别辜负了这世相遇<br>现在开始<br>记述我的时光！
+                </td></tr></table>
+                <div class="ViewImpression" data-bind="visible:momentSet4Impression().length>0">
+                  <div class="Waterfall" data-bind="foreach: momentSet4Impression">
+                    <div class="Card" data-bind="click: $parent.showMocube">
+                      <img class="AdaptiveImage" data-bind="visible:content.image&&!content.video, attr: {src: sow.Tool.readPath('content.image',$data)?(SOFILE+content.image):undefined}, style:{maxHeight:$parent.bodyHeight()-32+'px'}" />
+                      <video class="VideoPlayer" preload="meta" data-bind="visible:content.video, attr:{src: content.video ? SOFILE+content.video : undefined}">您的系统不支持播放本视频</video>
+                      <audio class="AudioPlayer" preload="meta" data-bind="visible:content.sound && ! content.video, attr:{src: content.sound ? SOFILE+content.sound : undefined}">您的系统不支持播放本音频</audio>
+                      <div class="CardTitle" data-bind="visible:sow.Tool.readPath('content.text',$data),text:sow.Tool.readPath('content.text',$data).substr(0,100)"></div>
+                      <div class="CardInfo">
+                        <div class="CountTab"><div class="CountNumber" data-bind="text:voteGood?voteGood:0"></div><div class="CountIcon CountVote"></div></div>
+                        <div class="CountTab"><div class="CountNumber" data-bind="text:replyCount?replyCount:0"></div><div class="CountIcon CountReply"></div></div>
+                      </div>
+                    </div>
+                  </div>
+                  <button class="SubmitButton LoadMoreButton" data-bind="click:appendImpression">加载更多&nbsp;<span class="DotLoader" data-bind="css:{Transparent:!busyAppending()}"><div></div><div></div><div></div></span></button>
+                </div>
+              </div>
+
+              <div class="Scene swiper-slide">
+                <table class="LayoutCenterTable TextCover" data-bind="visible:momentSet4Timeline().length==0"><tr><td>
+                  七岁那年我捉住一只蝉<br>以为捉住了整个夏天<br><br>十七岁那年我亲了谁的脸<br>以为那就是爱情到永远
+                </td></tr></table>
+              <div class="ViewTimeline" data-bind="visible:momentSet4Timeline().length>0">
+                  <div data-bind="foreach: momentSet4Timeline"><!-- momentSet().slice().sort(sort4Timeline) -->
+                    <div class="TimeSegment">
+                      <div class="TimeText" data-bind="html:sow.Tool.readPath('whenInserted',$data).replace(/^(\d+)-(.+)\s+(.+):\d+$/, '$3<br>$2<br>$1')"></div>
+                      <div class="TimePane" data-bind="click: $parent.showMocube">
+                        <div class="TimeIcon"></div>
+                        <img class="AdaptiveImage" data-bind="visible:content.image&&!content.video, attr:{src: sow.Tool.readPath('content.image',$data)?(SOFILE+content.image):undefined}, style:{maxHeight:$parent.bodyHeight()-32+'px'}"/>
+                        <video class="VideoPlayer" preload="meta" data-bind="visible:content.video, attr:{src: content.video ? SOFILE+content.video : undefined}">您的系统不支持播放本视频</video>
+                        <audio class="AudioPlayer" preload="meta" data-bind="visible:content.sound && ! content.video, attr:{src: content.sound ? SOFILE+content.sound : undefined}">您的系统不支持播放本音频</audio>
+                        <div class="CardTitle" data-bind="visible:sow.Tool.readPath('content.text',$data),text:sow.Tool.readPath('content.text',$data).substr(0,100)"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <button class="SubmitButton LoadMoreButton" data-bind="click:appendTimeline">加载更多&nbsp;<span class="DotLoader" data-bind="css:{Transparent:!busyAppending()}"><div></div><div></div><div></div></span></button>
+              </div></div>
+              
+<!--              <div class="Scene swiper-slide"><div class="ViewFootmap">
+                <div class="LayoutCenterTable TextCover" data-bind="style:{top:topBodyText($element)}">大地不曾留下痕迹<br>而我已走过<br><br>脚步在身后<br>悄悄编织了故事</div>
+              </div></div>
+-->
+
+            </div><!-- swiper-wrapper -->
+            </div><!-- SceneSet -->
+          </div><!-- STAGE -->
+          
+<!--
+          <div class="Stage" data-bind="css:{ActiveView:stageNow()==='STAGE_CIRCLE'}">
+            <div class="Neckbar"><div class="SceneMenu">
+              <span class="NeckTab" style="width:40%">名 单</span>
+              <span class="NeckTab" style="width:40%">音 讯</span>
+            </div></div>
+            <div class="SceneSet">
+              <div class="Scene swiper-slide"><div class="LayoutCenterTable TextCover" data-bind="style:{top:topBodyText($element)}">听说，只要离别时<br>两个人都认真说了“再见”<br>不管相隔多么远<br>就一定会再见</div></div>
+              <div class="Scene swiper-slide"><div class="LayoutCenterTable TextCover" data-bind="style:{top:topBodyText($element)}">听说，只要离别时<br>两个人都认真说了“再见”<br>不管相隔多么远<br>就一定会再见</div></div>
+            </div>
+          </div>
+
+          <div class="Stage" data-bind="css:{ActiveView:stageNow()==='STAGE_HOBBY'}">
+            <div class="Neckbar"><div class="SceneMenu">
+              <span class="NeckTab" style="width:40%">群 组</span>
+              <span class="NeckTab" style="width:40%">讨 论</span>
+            </div></div>
+            <div class="SceneSet">
+              <div class="Scene swiper-slide"><div class="LayoutCenterTable TextCover" data-bind="style:{top:topBodyText($element)}">听说，只要离别时<br>两个人都认真说了“再见”<br>不管相隔多么远<br>就一定会再见</div></div>
+              <div class="Scene swiper-slide"><div class="LayoutCenterTable TextCover" data-bind="style:{top:topBodyText($element)}">听说，只要离别时<br>两个人都认真说了“再见”<br>不管相隔多么远<br>就一定会再见</div></div>
+            </div>
+          </div>
+          
+          <div class="Stage" data-bind="css:{ActiveView:stageNow()==='STAGE_SERVICE'}">
+            <div class="Neckbar"><div class="SceneMenu">
+              <span class="NeckTab" style="width:40%">店 家</span>
+              <span class="NeckTab" style="width:40%">传 单</span>
+            </div></div>
+            <div class="SceneSet">
+              <div class="Scene swiper-slide"><div class="LayoutCenterTable TextCover" data-bind="style:{top:topBodyText($element)}">神秘技能解锁中......</div></div>
+              <div class="Scene swiper-slide"><div class="LayoutCenterTable TextCover" data-bind="style:{top:topBodyText($element)}">神秘技能解锁中......</div></div>
+            </div>
+          </div>
+-->
+
+          <div class="Stage" data-bind="css:{ActiveView:stageNow()==='STAGE_ABOUT'}"><!-- Stage of 关于 -->
+            <div class="Neckbar">
+              <div class="SceneMenu" id="homeStageAboutPager">
+              </div>
+            </div>
+            <div class="SceneSet" data-bind="with: spaceHome.homeStageAboutSwiper = new Swiper($element, 
+            { effect: 'slide', loop:true, grabCursor: true, keyboardControl : true, mousewheelControl: false,
+              pagination: sow.Tool.getFirstChild(sow.Tool.getPrevSibling($element)), paginationClickable: true,
+              paginationBulletRender: function (index, className) {
+                switch (index) {
+                  case 0: name='名 片';break;
+                  case 1: name='地 图';break;
+                  case 2: name='账 号';break;
+                  case 3: name='密 码';break;
+                }
+                return '<span class=&quot;NeckTab ' + className + '&quot; style=&quot;margin:0 5%;width:15%&quot;>' + name +'</span>';
+              }
+            })">
+            <div class="swiper-wrapper" data-bind="with:spaceHome">
+
+            <div class="Scene swiper-slide">
+              <div class="ViewPage" data-bind="event: {change: updateAbout }">
+              <div class="ProfileFixedArea">
+                <div class="ProfileHeader"><!-- 为了支持blur:  style="background:#000;overflow:hidden;" -->
+<!-- 为了支持blur:                  <div style="background: transparent repeat scroll center center;background-size: 150% auto; left: 0px; right: 0px; top: -50px; bottom: -50px; width: 862px; position: absolute; filter: blur(100px);" data-bind="style:{backgroundImage:starModel.onlinePerson().icon?('url('+SOFILE+starModel.onlinePerson().icon+')'):undefined}"></div> -->
+                  <div class="ProfilePortrait BgCover Clickable" data-bind="style : {backgroundImage : starModel.onlinePerson().icon ? 'url('+SOFILE+starModel.onlinePerson().icon+')' : undefined}, click: addImage.bind($context,$element)"></div><input type="file" class="UploadButton" data-bind="event: {change: uploadImage.bind($context,$element) }" accept="image/*">
+                  <div class="ProfileText">
+                    <input class="ProfileNick swiper-no-swiping" type="text" placeholder="我的昵称" required="required" maxlength="25" data-bind="value:starModel.onlinePerson().nick">
+                    <div class="ProfileStat">
+<!--                      <div class="ProfileStatItem">时光<span class="ProfileStatCount">210</span></div>
+                      <div class="ProfileStatItem">朋友<span class="ProfileStatCount">10</span></div>
+                      <div class="ProfileStatItem">群组<span class="ProfileStatCount">21</span></div>
+                      <div class="ProfileStatItem">店家<span class="ProfileStatCount">70</span></div>
+-->
+                    </div>
+                  </div>
+                </div>
+<!--                <div class="AboutLine">
+                  <div class="AboutLineLabel">性别</div>
+                  <select class="AboutLineInput swiper-no-swiping" data-bind="value:starModel.onlinePerson().subtype">
+                    <option value="ST_PERSON_UNKNOWN">不 想 说</option>
+                    <option value="ST_PERSON_FEMALE">女 士</option>
+                    <option value="ST_PERSON_MALE">男 士</option>
+                  </select>
+                </div> 
+-->
+              </div>
+              <div class="ProfileVariableArea">
+                <textarea class="ProfileStory swiper-no-swiping" maxlength="500" placeholder="自我介绍。这里是您的公开名片，可以写下任何想说的话，提供任何想提供的信息！" data-bind="value: starModel.onlinePerson().info.intro"></textarea>
+              </div>
+              </div>
+            </div>
+
+            <div class="Scene swiper-slide">
+              <div class="ViewWindow">
+                <div class="MapArea" data-bind="with: aboutMap.setProp('domel', $element).disable('Dragging')"></div>
+                <div class="AddressScene"><div class="AddressArea"><!-- 或者删除AddressAreaWrapper，让MapArea为absolute，而Address Area的style="position:relative;margin:0 auto;width:80%;max-width:800px;height:100%;" -->
+                  <div class="AddressViewer ReadOnly"><!-- 要写在AddressPicker后面，否则会被AddressPicker的border-top挡掉。或者要设置z-index高于AddressPicker. -->
+<!--                    <input class="AddressText swiper-no-swiping" type="text" data-bind="value:homeLocation.computedAddress">-->
+                    <div class="AddressText" data-bind="text:homeLocation.computedAddress"></div>
+                    <button class="ActionButton" data-bind="click:function(){$('#homeAboutAddressPicker').toggle();}">选址</button>
+                  </div>
+                  <div id="homeAboutAddressPicker" class="AddressPicker swiper-no-swiping" data-bind="with:homeLocation"><!-- 发现，swiper的cube效果，导致无法点击下拉选择；换成slide效果就可以点击了，但在桌面firefox上，下拉后仍然无法用鼠标选中某选项，而是要用键盘上下箭头去选；在手机上没有问题。 -->
+<!--                    <select class="TextInput" data-bind="options:nationSet,optionsValue:'pode', optionsText:'name', value:nationPode, optionsCaption:'国家'"></select>-->
+                    <select class="TextInput" data-bind="options:provinceSet, optionsValue:'pode', optionsText:'name', value:provincePode, optionsCaption:'省份'"></select>
+                    <select class="TextInput" data-bind="options:citySet, optionsValue:'pode', optionsText:'name', value:cityPode, optionsCaption:'城市'"></select>
+                    <select class="TextInput" data-bind="options:districtSet, optionsValue:'pode', optionsText:'name', value:districtPode, optionsCaption:'区县'"></select>
+                    <input type="text" class="TextInput" placeholder="道路" data-bind="value: streetName" />
+                    <input type="text" class="TextInput" placeholder="门牌号" data-bind="value: blockNumber"/>
+                    <input type="text" class="TextInput" placeholder="楼房名" data-bind="value: blockName"/>
+                    <input type="text" class="TextInput" placeholder="房间" data-bind="value: roomNumber"/>
+                    <input type="text" class="TextInput" placeholder="其他" data-bind="value: extraName"/>
+                    <button data-bind="click: $parent.updateHomeLocation.bind($parent)" class="SubmitButton">保存地址</button>
+                  </div>
+                </div></div>
+              </div>
+            </div>
+
+            <div class="Scene swiper-slide">
+              <div class="ViewPage" data-bind="event: {change:updateAbout}">
+                <div class="Title">管理您的身份资料</div>
+<!--                <div class="AboutLine">
+                  <div class="AboutLineLabel">远近号</div>
+                  <div class="AboutLineInput" type="text" data-bind="text:starModel.onlinePerson().aiid"></div>
+                </div> -->
+                <div class="AboutLine">
+                  <div class="AboutLineLabel">实名</div>
+                  <input class="AboutLineInput swiper-no-swiping" type="text" placeholder="可用于线下实名认证，万一丢失账户" required="required" maxlength="25" data-bind="value:starModel.onlinePerson().name">
+                </div>
+                <div class="AboutLine PhoneLine swiper-no-swiping">
+                  <div class="AboutLineLabel">手机号码</div>
+                  <input class="AboutLineInput" type="tel" placeholder="可用于在线登录" class="TextInput" required="required" data-bind="value: starModel.onlinePerson().callNumber" pattern="\d{11}">
+                  <select style="background-image:none;" data-bind="options: sow.Locale.NationSet, optionsValue:'itc', optionsText:function(item){return item.name+' '+item.itc;}, value: starModel.onlinePerson().countryCode, optionsCaption:'国际电话区号'"></select><!-- 放在input后面，否则无法点击，因为input占了100%宽 -->
+                </div>
+                <div class="AboutLine">
+                  <div class="AboutLineLabel">电子邮箱</div>
+                  <input class="AboutLineInput swiper-no-swiping" type="email" placeholder="可用于在线登录" pattern="[_\w\-\.]+@[\w\-]+(\.[\w\-]+)*\.[a-zA-Z]{2,4}" class="TextInput" required="required" maxlength="25"
+                  data-bind="value:starModel.onlinePerson().email">
+                </div>
+                <button class="SubmitButton swiper-no-swiping" data-bind="click: confirmLogout">退出登录</button>
+              </div>
+            </div>
+
+            <div class="Scene swiper-slide">
+              <div class="ViewPage">
+                <div class="Title">管理您的登录密码</div>
+                <div class="AboutLine">
+                  <div class="AboutLineLabel">原密码</div>
+                  <input class="AboutLineInput swiper-no-swiping" type="password" placeholder="请输入您现有的密码" pattern="[^ ]{6,}" maxlength="25" data-bind="value:accountModel.loginPerson().pwdUser">
+                </div>
+                <div class="AboutLine">
+                  <div class="AboutLineLabel">新密码</div>
+                  <input class="AboutLineInput swiper-no-swiping" type="password" placeholder="请设置您的新密码" pattern="[^ ]{6,}" maxlength="25" data-bind="value:accountModel.loginPerson().pwdUserNew">
+                </div>
+                <button class="SubmitButton swiper-no-swiping" data-bind="click: accountModel.changePwd">修改密码</button>
+                <div class="FeedbackLine Submitted" data-bind="text: Locale[starModel.userLang()].changePwdFeedback[accountModel.changePwdResult()]"></div>
+              </div>
+            </div>
+
+            </div>
+          </div>
+          </div>
+
+        <div class="Stage" data-bind="css:{ActiveView:stageNow()==='STAGE_MOCUBE'}">
+          <div class="Neckbar">
+            <div class="SceneMenu" id="homeStageMocubePager">
+            </div>
+          </div>
+          <div class="SceneSet" data-bind="with: spaceHome.homeStageMocubeSwiper = new Swiper($element, 
+          { effect: 'slide', loop:true, grabCursor: true, keyboardControl:true, mousewheelControl: false, cube: { slideShadows: false, shadow: false }, 
+            pagination: sow.Tool.getFirstChild(sow.Tool.getPrevSibling($element)), paginationClickable: true,
+            paginationBulletRender: function (index, className) {
+              switch (index) {
+                case 0: name='音 像';break;
+                case 1: name='地 图';break;
+                case 2: name='文 字';break;
+              }
+              return '<span class=&quot;NeckTab  ' + className + '&quot; style=&quot;margin:0 5%;width:23.3%&quot;>' + name +'</span>';
+            },
+            onSlideChangeStart: function(swiper){
+              switch (swiper.activeIndex){
+                case 0: sceneNow('SCENE_TEXT'); break;
+                case space.SCENE_MEDIA_INDEX: sceneNow('SCENE_MEDIA'); break;
+                case space.SCENE_TICE_INDEX: sceneNow('SCENE_TICE'); break;
+                case space.SCENE_TEXT_INDEX: sceneNow('SCENE_TEXT'); break;
+                case 4: sceneNow('SCENE_MEDIA'); break;
+              }
+            }
+          })">
+          <div class="swiper-wrapper" data-bind="with:spaceHome">
+            
+            <div class="Scene swiper-slide">
+                <table class="LayoutCenterTable TextCover" data-bind="visible: !moment().content.image && !moment().content.video && !moment().content.sound"><tr><td>
+                  太匆匆<br>没有留下影子
+                </td></tr></table>
+              <div class="ViewWindow BgContain" data-bind="visible: moment().content.image || moment().content.video || moment().content.sound, style: {backgroundImage:'url('+SOFILE+sow.Tool.readPath('moment().content.image',$data)+')'}">
+                <video class="VideoPlayer" preload="meta" controls data-bind="visible:moment().content.video, attr:{src: moment().content.video ? SOFILE+moment().content.video : undefined}">您的系统不支持播放本视频</video>
+                <div class="Anklebar">
+                  <audio class="AudioPlayer" preload="meta" controls data-bind="visible:sow.Tool.readPath('moment().content.sound',$data) && !moment().content.video, attr:{src: sow.Tool.readPath('moment().content.sound',$data) ? SOFILE+sow.Tool.readPath('moment().content.sound',$data) : undefined}">您的系统不支持播放本音频</audio>
+                </div>               
+              </div>
+            </div>
+
+            <div class="Scene swiper-slide">
+                <table class="LayoutCenterTable TextCover" data-bind="visible: !sow.Locale.Tool.isValidLocation(moment().location)"><tr><td>
+                  有时候<br>我们放空了自己<br>忘了身在何方
+                </td></tr></table>
+              <div class="ViewWindow" data-bind="visible: sow.Locale.Tool.isValidLocation(moment().location)">
+                <div class="MapArea" data-bind="with: mocubeMap.setProp('domel', $element).showPresentCity().disable('Dragging')"></div>
+                <div class="AddressScene"><div class="AddressArea">
+                  <div class="AddressViewer ReadOnly">
+                    <div class="AddressText" data-bind="text:sow.Tool.readPath('moment().location.computedAddress',$data)"></div>
+                  </div>
+                </div></div>
+              </div>
+            </div>
+
+            <div class="Scene swiper-slide">
+            <div class="ViewPage">
+              <div class="ReplySetArea"><!-- 把所有Replies编组在一起，避免干扰下面的ReplyInputArea，否则滚动时会带动ReplyInputArea, 不能使ReplyInputArea静止在底部。 -->
+                <div class="ReplyArea HostReply MyReply">
+                  <img data-bind="attr:{src:SOFILE+starModel.onlinePerson().icon}">
+                  <div data-bind="text: (text=sow.Tool.readPath('moment().content.text',$data))?text:'什么话也没有说'" ></div>
+                </div>
+                <div class="ReplySet" data-bind="foreach: replySet">
+                <div class="ReplyArea" data-bind="css:{ HostReply : starModel.targetPerson().aiid===sow.Tool.readPath('_data.owner.aiid',$data), MyReply: starModel.onlinePerson().aiid===sow.Tool.readPath('_data.owner.aiid',$data) }">
+                  <img data-bind="attr:{src:SOFILE+sow.Tool.readPath('_data.owner.icon',$data)}">
+                  <div data-bind="text:sow.Tool.readPath('content.text',$data)"></div>
+                </div>
+                </div>
+              </div>
+              <div class="ReplyInputArea"><div class="ReplyArea MyReply">
+                <img data-bind="attr:{src:SOFILE+starModel.onlinePerson().icon}">
+                <textarea class="swiper-no-swiping" rows="3" maxlength="1000" placeholder="我有话要说" data-bind="value:reply().content.text"></textarea>
+                <button class="ReplyInputButton" data-bind="click:addReply">发 言</button>
+              </div></div>
+            </div><!-- ViewPage -->
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    <div class="Footer">
+      <div class="StageMenu" data-bind="visible:stageNow()!=='STAGE_MOCUBE'"><!-- , foreach: [{key:'STAGE_MOSET',value:'时 光'},{key:'STAGE_HOBBY',value:'兴 趣'},{key:'STAGE_SERVICE',value:'服 务'},{key:'STAGE_ABOUT',value:'关 于'}]">
+        <nav class="FootTab" style="width:25%" data-bind="style:{backgroundImage:'url(image/'+ key+(($parent.stageNow()==key)?'_active':'') +'.png)'},click: function(stage,event){$parent.stageNow(stage.key); }, css: {Active: $parent.stageNow()==key}, text:value"></nav> -->
+        <nav class="FootTab TabMoset" style="width:50%" data-bind="click: stageNow.bind($context,'STAGE_MOSET'), css: {Active: stageNow()==='STAGE_MOSET'}">时 光</nav>
+<!--      <nav class="FootTab TabCircle" style="width:20%" data-bind="click: stageNow.bind($context,'STAGE_CIRCLE'), css: {Active: stageNow()==='STAGE_CIRCLE'}">朋 友</nav>
+        <nav class="FootTab TabHobby" style="width:20%" data-bind="click: stageNow.bind($context,'STAGE_HOBBY'), css: {Active: stageNow()==='STAGE_HOBBY'}">兴 趣</nav>
+        <nav class="FootTab TabService" style="width:20%" data-bind="click: stageNow.bind($context,'STAGE_SERVICE'), css: {Active: stageNow()==='STAGE_SERVICE'}">服 务</nav>
+-->
+        <nav class="FootTab TabAbout" style="width:50%" data-bind="click: stageNow.bind($context,'STAGE_ABOUT'), css: {Active: stageNow()==='STAGE_ABOUT'}">关 于</nav>
+      </div>
+      <div class="StageMenu" data-bind="visible:stageNow()==='STAGE_MOCUBE' && sceneNow()==='SCENE_MEDIA'">
+        <nav class="FootTab TabLike" style="width:30%;cursor:auto;opacity:1" data-bind="text:moment().voteGood?moment().voteGood:0"></nav>
+        <nav class="FootTab Blank" style="width:40%"></nav>
+        <nav class="FootTab TabHate" style="width:30%;cursor:auto;opacity:1" data-bind="text:moment().voteBad?moment().voteBad:0"></nav>
+      </div>
+      <div class="StageMenu" data-bind="visible:stageNow()==='STAGE_MOCUBE' && sceneNow()==='SCENE_TICE'">
+      </div>
+      <div class="StageMenu" data-bind="visible:stageNow()==='STAGE_MOCUBE' && sceneNow()==='SCENE_TEXT'">
+      </div>
+        <div class="SubmitTab ShareTab" data-bind="visible:stageNow()==='STAGE_MOCUBE',click:shareMoment" data-clipboard-text=''>分 享</div>
+    </div>
+
+  </div>
+
+  <div class="Space" data-bind="with: spaceHost.setProp('domel',$element), css:{ActiveView:starModel.where()==='SPACE_HOST'}">
+      <div class="Header">
+        <div class="HeadIconLogo BgFull Clickable" data-bind="click: function() {starModel.targetPerson(sow.Const.PERSON_ALL); }"></div>
+<!--        <div class="HomeIcon BgFull Clickable" data-bind="click: function() { if (!starModel.isOnline()) { starModel.targetPerson(sow.Const.PERSON_ALL); spaceAll.stageNow('STAGE_LOGIN'); } else { starModel.targetPerson(starModel.onlinePerson());} }, 
+          style: {backgroundImage: 'url('+SOFILE+starModel.onlinePerson().icon+')'}"></div>  -->
+        <div class="HeadIconUser BgCover Active" data-bind="css: {Clickable: stageNow()=='STAGE_MOCUBE'}, style:{ backgroundImage: (starModel.where()==='SPACE_HOST' && starModel.targetPerson().icon)?'url('+SOFILE+starModel.targetPerson().icon+')':undefined},
+          click: function() {if (stageNow()=='STAGE_MOCUBE') stageNow('STAGE_MOSET');}"></div><!-- 注意，从第三方空间切换回广场时，targetPerson变成so.Const.PERSON_ALL，然后本图标转为广场图标并显示片刻，然后才切换到广场空间。为了避免此现象，这里多做个判断并临时清空图标。 -->
+        <div class="HeadIconMoca BgFull Clickable" data-bind="click: switch2Mocast"></div>
+      </div>
+
+        <div class="Stage" data-bind="css:{ActiveView:stageNow()==='STAGE_MOSET'}"><!-- Stage_MOSET -->
+          <div class="Neckbar">
+            <div class="SceneMenu" id="hostStageMosetPager"></div>
+          </div>
+          <div class="SceneSet" data-bind="with: spaceHost.hostStageMosetSwiper = new Swiper($element, 
+            { effect: 'slide', loop:true, grabCursor: true, keyboardControl : true, mousewheelControl: false,
+              pagination: sow.Tool.getFirstChild(sow.Tool.getPrevSibling($element)), paginationClickable: true,
+              paginationBulletRender: function (index, className) {
+                switch (index) {
+                  case 0: name='印 象';break;
+                  case 1: name='岁 月';break;
+                }
+                return '<span class=&quot;NeckTab  ' + className + '&quot;style=&quot;margin:0 5%;width:40%&quot;>' + name +'</span>';
+              },
+              onSlideChangeStart: function(swiper){
+                switch (swiper.activeIndex){
+                  case 0: sceneNow('SCENE_TIMELINE'); break;
+                  case 1: sceneNow('SCENE_IMPRESSION'); break;
+                  case 2: sceneNow('SCENE_TIMELINE'); break;
+                  case 3: sceneNow('SCENE_IMPRESSION'); break;
+                }
+              }
+            })">
+            <div class="swiper-wrapper" data-bind="with: spaceHost">
+
+              <div class="Scene swiper-slide">
+                <table class="LayoutCenterTable TextCover" data-bind="visible:momentSet4Impression().length==0"><tr><td>
+                  我的世界，是一片空白 :( 
+                </td></tr></table>
+                <div class="ViewImpression" data-bind="visible:momentSet4Impression().length>0">
+                  <div class="Waterfall" data-bind="foreach: momentSet4Impression">
+                    <div class="Card" data-bind="click:$parent.showMocube">
+                      <img class="AdaptiveImage" data-bind="visible:content.image&&!content.video, attr: {src: sow.Tool.readPath('content.image',$data)?(SOFILE+content.image):undefined}, style:{maxHeight:$parent.bodyHeight()-32+'px'}" />
+                      <video class="VideoPlayer" preload="meta" data-bind="visible:content.video, attr:{src: content.video ? SOFILE+content.video : undefined}">您的系统不支持播放本视频</video>
+                      <audio class="AudioPlayer" preload="meta" data-bind="visible:content.sound && ! content.video, attr:{src: content.sound ? SOFILE+content.sound : undefined}">您的系统不支持播放本音频</audio>
+                      <div class="CardTitle" data-bind="visible:sow.Tool.readPath('content.text',$data),text: sow.Tool.readPath('content.text',$data).substr(0,100)"></div>
+                      <div class="CardInfo">
+                        <div class="CountTab"><div class="CountNumber" data-bind="text:voteGood?voteGood:0"></div><div class="CountIcon CountVote"></div></div>
+                        <div class="CountTab"><div class="CountNumber" data-bind="text:replyCount?replyCount:0"></div><div class="CountIcon CountReply"></div></div>
+                      </div>
+                    </div>
+                  </div>
+                  <button class="SubmitButton LoadMoreButton" data-bind="click:appendImpression">加载更多&nbsp;<span class="DotLoader" data-bind="css:{Transparent:!busyAppending()}"><div></div><div></div><div></div></span></button>
+                </div>
+              </div>
+
+              <div class="Scene swiper-slide">
+                <table class="LayoutCenterTable TextCover" data-bind="visible:momentSet4Timeline().length==0"><tr><td>
+                  我的岁月，是一片空白 :( 
+                </td></tr></table>
+                <div class="ViewTimeline" data-bind="visible:momentSet4Timeline().length>0">
+                  <div data-bind="foreach: momentSet4Timeline"><!-- momentSet().slice().sort(sort4Timeline) -->
+                    <div class="TimeSegment">
+                      <div class="TimeText" data-bind="html:sow.Tool.readPath('whenInserted',$data).replace(/^(\d+)-(.+)\s+(.+):\d+$/, '$3<br>$2<br>$1')"></div>
+                      <div class="TimePane" data-bind="click: $parent.showMocube">
+                        <div class="TimeIcon"></div>
+                        <img class="AdaptiveImage" data-bind="visible:content.image&&!content.video, attr:{src: sow.Tool.readPath('content.image',$data)?(SOFILE+content.image):undefined}, style:{maxHeight:$parent.bodyHeight()-32+'px'}"/>
+                        <video class="VideoPlayer" preload="meta" data-bind="visible:content.video, attr:{src: content.video ? SOFILE+content.video : undefined}">您的系统不支持播放本视频</video>
+                        <audio class="AudioPlayer" preload="meta" data-bind="visible:content.sound && ! content.video, attr:{src: content.sound ? SOFILE+content.sound : undefined}">您的系统不支持播放本音频</audio>
+                        <div class="CardTitle" data-bind="visible:sow.Tool.readPath('content.text',$data),text:sow.Tool.readPath('content.text',$data).substr(0,100)"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <button class="SubmitButton LoadMoreButton" data-bind="click:appendTimeline">加载更多&nbsp;<span class="DotLoader" data-bind="css:{Transparent:!busyAppending()}"><div></div><div></div><div></div></span></button>
+              </div></div>
+
+<!--              <div class="Scene swiper-slide"><div class="ViewFootmap">
+                <div class="LayoutCenterTable TextCover" data-bind="style:{top:topBodyText($element)}">高级技能解锁中......</div>
+              </div></div>
+-->
+
+            </div>
+          </div>
+        </div><!-- STAGE -->
+
+          <div class="Stage" data-bind="css:{ActiveView:stageNow()==='STAGE_ABOUT'}"><!-- STAGE_ABOUT -->
+
+            <div class="Neckbar">
+              <div class="SceneMenu" id="hostStageAboutPager"></div>
+            </div>
+
+            <div class="SceneSet" data-bind="with: spaceHost.hostStageAboutSwiper = new Swiper($element, 
+            { effect: 'slide', loop:true, grabCursor: true, keyboardControl : true, mousewheelControl: false,
+              pagination: sow.Tool.getFirstChild(sow.Tool.getPrevSibling($element)), paginationClickable: true,
+              paginationBulletRender: function (index, className) {
+                switch (index) {
+                  case 0: name='名 片';break;
+                  case 1: name='地 图';break;
+                }
+                return '<span class=&quot;NeckTab  ' + className + '&quot; style=&quot;margin:0 5%;width:40%&quot;>' + name +'</span>';
+              }
+            })">
+          <div class="swiper-wrapper" data-bind="with: spaceHost">
+
+            <div class="Scene swiper-slide"><div class="ViewPage">
+              <div class="ProfileFixedArea">
+                <div class="ProfileHeader">
+                  <div class="ProfilePortrait BgContain" data-bind="style : {backgroundImage : starModel.targetPerson().icon ? 'url('+SOFILE+starModel.targetPerson().icon+')' : undefined}"></div>
+                  <div class="ProfileText">
+                    <div class="ProfileNick" data-bind="value:starModel.targetPerson().nick"></div>
+                    <div class="ProfileStat">
+<!--                      <div class="ProfileStatItem">时光<span class="ProfileStatCount">210</span></div>
+                      <div class="ProfileStatItem">朋友<span class="ProfileStatCount">10</span></div>
+                      <div class="ProfileStatItem">群组<span class="ProfileStatCount">21</span></div>
+                      <div class="ProfileStatItem">店家<span class="ProfileStatCount">70</span></div> -->
+                    </div>
+                  </div>
+                </div>
+<!--                <div class="AboutLine">
+                  <div class="AboutLineLabel">类型</div>
+                  <div class="AboutLineInput">个 人</div>
+                </div>
+                <div class="AboutLine">
+                  <div class="AboutLineLabel">性别</div>
+                  <div class="AboutLineInput">男 士</div>
+                </div> -->
+              </div>
+              <div class="ProfileVariableArea">
+                <div class="ProfileStory" data-bind="text: intro=sow.Tool.readPath('starModel.targetPerson().info.intro',$data)?intro.substr(0,500):'没有留下只言片语'"></div>
+              </div>
+            </div></div>
+
+            <div class="Scene swiper-slide">
+              <div class="ViewWindow">
+                <div class="MapArea" data-bind="with: aboutMap.setProp('domel', $element).showPresentCity().disable('Dragging')"></div>
+                <div class="AddressScene"><div class="AddressArea">
+                  <div class="AddressViewer ReadOnly">
+                    <div class="AddressText" data-bind="text:sow.Tool.readPath('starModel.targetPerson().location.computedAddress',$data)"></div>
+                  </div>
+                </div></div>
+              </div>
+            </div>
+
+          </div>
+          </div>
+        </div>
+
+        <div class="Stage" data-bind="css:{ActiveView:stageNow()==='STAGE_MOCUBE'}">
+          <div class="Neckbar">
+            <div class="SceneMenu" id="hostStageMocubePager">
+            </div>
+          </div>
+        <div class="SceneSet" data-bind="with: spaceHost.hostStageMocubeSwiper = new Swiper($element, 
+        { effect: 'slide', loop:true, grabCursor: true, keyboardControl : true, mousewheelControl: false, cube: { slideShadows: false, shadow: false }, 
+          pagination: sow.Tool.getFirstChild(sow.Tool.getPrevSibling($element)), paginationClickable: true,
+          paginationBulletRender: function (index, className) {
+            switch (index) {
+              case 0: name='音 像';break;
+              case 1: name='地 图';break;
+              case 2: name='文 字';break;
+            }
+            return '<span class=&quot;NeckTab  ' + className + '&quot; style=&quot;margin:0 5%;width:23.3%&quot;>' + name +'</span>';
+          },
+          onSlideChangeStart: function(swiper){
+            switch (swiper.activeIndex){
+              case 0: sceneNow('SCENE_TEXT'); break;
+              case space.SCENE_MEDIA_INDEX: sceneNow('SCENE_MEDIA'); break;
+              case space.SCENE_TICE_INDEX: sceneNow('SCENE_TICE'); break;
+              case space.SCENE_TEXT_INDEX: sceneNow('SCENE_TEXT'); break;
+              case 4: sceneNow('SCENE_MEDIA'); break;
+            }
+          }
+        })">
+          <div class="swiper-wrapper" data-bind="with: spaceHost">
+
+            <div class="Scene swiper-slide">
+                <table class="LayoutCenterTable TextCover" data-bind="visible: !moment().content.image && !moment().content.video && !moment().content.sound"><tr><td>
+                  太匆匆<br>没有留下影子
+                </td></tr></table>
+              <div class="ViewWindow BgContain" data-bind="visible: moment().content.image || moment().content.video || moment().content.sound, style: {backgroundImage:'url('+SOFILE+sow.Tool.readPath('moment().content.image',$data)+')'}">
+                <video class="VideoPlayer" preload="meta" controls data-bind="visible:moment().content.video, attr:{src: moment().content.video ? SOFILE+moment().content.video : undefined}">您的系统不支持播放本视频</video>
+                <div class="Anklebar">
+                  <audio class="AudioPlayer" preload="meta" controls data-bind="visible:sow.Tool.readPath('moment().content.sound',$data) && ! moment().content.video, attr:{src: sow.Tool.readPath('moment().content.sound',$data) ? SOFILE+sow.Tool.readPath('moment().content.sound',$data) : undefined}">您的系统不支持播放本音频</audio>
+                </div>
+              </div>
+            </div>
+
+            <div class="Scene swiper-slide">
+                <table class="LayoutCenterTable TextCover" data-bind="visible: !sow.Locale.Tool.isValidLocation(moment().location)"><tr><td>
+                  有时候<br>我们放空了自己<br>忘了身在何方
+                </td></tr></table>
+              <div class="ViewWindow" data-bind="visible: sow.Locale.Tool.isValidLocation(moment().location)">
+                <div class="MapArea" data-bind="with: mocubeMap.setProp('domel', $element).showPresentCity().disable('Dragging')"></div>
+                <div class="AddressScene"><div class="AddressArea">
+                  <div class="AddressViewer ReadOnly">
+                    <div class="AddressText" data-bind="text:sow.Tool.readPath('moment().location.computedAddress',$data)"></div>
+                  </div>
+                </div></div>
+              </div>
+            </div>
+
+            <div class="Scene swiper-slide">
+            <div class="ViewPage">
+              <div class="ReplySetArea"><!-- 把所有Replies编组在一起，避免干扰下面的ReplyInputArea，否则滚动时会带动ReplyInputArea, 不能使ReplyInputArea静止在底部。 -->
+                <div class="ReplyArea HostReply">
+                  <img data-bind="attr:{src:SOFILE+starModel.targetPerson().icon}">
+                  <div data-bind="text: (text=sow.Tool.readPath('moment().content.text',$data))?text:'什么话也没有说'" ></div>
+                </div>
+                <div class="ReplySet" data-bind="foreach: replySet">
+                <div class="ReplyArea" data-bind="css:{ HostReply : starModel.targetPerson().aiid===sow.Tool.readPath('_data.owner.aiid',$data), MyReply: starModel.onlinePerson().aiid===sow.Tool.readPath('_data.owner.aiid',$data) }">
+                  <img data-bind="attr:{src:SOFILE+sow.Tool.readPath('_data.owner.icon',$data)}">
+                  <div data-bind="text:sow.Tool.readPath('content.text',$data)"></div>
+                </div>
+                </div>
+              </div>
+              <div class="ReplyInputArea"><div class="ReplyArea MyReply">
+                <img data-bind="attr:{src:SOFILE+starModel.onlinePerson().icon}">
+                <textarea class="swiper-no-swiping" rows="3" maxlength="1000" placeholder="我有话要说" data-bind="value:reply().content.text"></textarea>
+                <button class="ReplyInputButton" data-bind="click:addReply">发 言</button>
+              </div></div>
+            </div><!-- ViewPage -->
+            </div><!-- Scene -->
+
+        </div><!-- swiper-wrapper -->
+      </div><!-- SceneSet -->
+
+      </div><!-- STAGE_MOCUBE of host -->
+
+    <div class="Footer">
+      <div class="StageMenu" data-bind="visible:stageNow()!=='STAGE_MOCUBE'">
+        <nav class="FootTab TabMoset" style="width:50%" data-bind="click: stageNow.bind($context,'STAGE_MOSET'), css: {Active: stageNow()==='STAGE_MOSET'}">时 光</nav>
+<!--        <nav class="FootTab TabChat" style="width:33.3%" data-bind="click: stageNow.bind($context,'STAGE_MOSET'), css: {Active: stageNow()==='STAGE_MOSET'}">交 流</nav> -->
+        <nav class="FootTab TabAbout" style="width:50%" data-bind="click: stageNow.bind($context,'STAGE_ABOUT'), css: {Active: stageNow()==='STAGE_ABOUT'}">关 于</nav>
+      </div>
+      <div class="StageMenu" data-bind="visible:stageNow()==='STAGE_MOCUBE' && sceneNow()==='SCENE_MEDIA'">
+        <nav class="FootTab TabLike" style="width:30%;" data-bind="click: addVote.bind($context,sow.Const.VT_GOOD), css:{Active:vtid()===sow.Const.VT_GOOD}, text:moment().voteGood?moment().voteGood:0"></nav>
+        <nav class="FootTab Blank" style="width:40%"></nav>
+        <nav class="FootTab TabHate" style="width:30%;" data-bind="event:{taphold:spaceHost.showComplain}, click: addVote.bind($context,sow.Const.VT_BAD), css:{Active:vtid()===sow.Const.VT_BAD}, text:moment().voteBad?moment().voteBad:0"></nav> <!-- onmousedown="spaceHost.longtouch2complain=setTimeout(spaceHost.showComplain, 1000)" onmouseup="clearTimeout(spaceHost.longtouch2complain)" onmouseout="clearTimeout(spaceHost.longtouch2complain)" -->
+      </div>
+      <div class="StageMenu" data-bind="visible:stageNow()==='STAGE_MOCUBE' && sceneNow()==='SCENE_TICE'">
+      </div>
+      <div class="StageMenu" data-bind="visible:stageNow()==='STAGE_MOCUBE' && sceneNow()==='SCENE_TEXT'">
+      </div>
+        <div class="SubmitTab ShareTab" data-bind="visible:stageNow()==='STAGE_MOCUBE',click:shareMoment" data-clipboard-text="">分 享</div>
+      
+    </div>
+
+  </div><!-- End of Space -->
+
+<!-- my quick code -->
+
+<!-- // 库文件的搜索顺序：1. 当前应用目录下的soweb目录(也许是用linkd.exe建立的硬链接)，2. sow.faronear.com/。-->
+<!-- 不再用php判断库目录，然后引用时 src="<?php echo $LIBPATH; ?>xxx.js"。因为现在不管混合应用还是Web网页，都直接把库放在同目录下了。-->
+<!--?php if (file_exists('/_sow/')) { $LIBPATH='/_sow/'; }
+else { $LIBPATH='http://sow.faronear.com/'; }  ?-->
+
+<!-- 3rd party libraries -->
+<link type="text/css" rel="stylesheet" href="/_sow/lib/swiper/swiper-3.3.1.min.css"/><!-- 必须在 swiper.js 之前引用。似乎，放在<head></head>里，比放在最后能大幅度减少在 iphone-Safari上初次加载页面停留在swiper最后一页的错误几率。 -->
+<link type="text/css" rel="stylesheet" media="all" href="view.min.css"/><!-- 注意到，必须在 swiper.css 后面，否则slide的标签显示错误 -->
+<!--link type="text/css" rel="stylesheet" media="all" href="/_sow/sow.Loader.css"/-->
+
+<!--[if lt IE 9]><script type="text/javascript" src="/_sow/lib/html5.js"></script><![endif]--><!-- 让老浏览器识别HTML5元素。原版：http://html5shiv.googlecode.com/svn/trunk/html5.js -->
+<script type="text/javascript" src="/_sow/lib/device/device.min.js"></script><!-- https://github.com/matthewhudson/device.js/ -->
+<script type="text/javascript" src="/_sow/lib/jquery/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="/_sow/lib/socket.io/socket.io-1.0.6.min.js"></script><!-- 通用。可从node_modules/socket.io-client/dist/ 目录下获得 -->
+
+<script type="text/javascript" src="/_sow/lib/jquery.mobile/jquery.mobile.custom-1.4.5.min.js"></script>
+<script type="text/javascript" src="/_sow/lib/knockout/knockout-3.4.2.min.js"></script>
+<script type="text/javascript" src="/_sow/lib/swiper/swiper-3.3.1.min.js"></script><!-- http://www.swiper.com.cn/ -->
+<script type="text/javascript" src="/_sow/lib/clipboard/clipboard-1.5.15.min.js"></script><!-- http://clipboardjs.com/ -->
+
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=1.4"></script><!-- 自1.5起，需要密钥才能使用：v=1.5&ak=Wex9GhS75wDU2mXqZUYqW9xP -->
+<!-- own libraries -->
+
+<!-- app libraries -->
+<script type="text/javascript" src="model.full.min.js"></script>
+<script type="text/javascript" src="locale.js"></script>
+
+</body>
+
+</html>

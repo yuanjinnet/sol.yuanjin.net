@@ -1,0 +1,32 @@
+@charset "utf-8";
+
+.flag{
+  display:inline-block;
+  width:18px;
+  height:12px;
+  background-image:url(image/flags.png);
+}
+.flag-cn{
+  background-position: 0 0;
+}
+.flag-en{
+  background-position: 0 -21px;
+}
+.flag-en{
+  background-position: 0 -42px;
+}
+.flag-ru{
+  background-position: 0 -63px;
+}
+.flag-jp{
+  background-position:0 -84px;
+}
+.flag-es{
+  background-position:0 -105px;
+}
+.flag-fr{
+  background-position:0 -126px;
+}
+.flag-de{
+  background-position:0 -147px;
+}

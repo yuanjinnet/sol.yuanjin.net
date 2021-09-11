@@ -1,0 +1,31 @@
+.SelectBox{
+  height:auto;
+  width:auto;
+  display:inline-block;
+  z-index:0;
+  select{
+    height:100%;
+    color:inherit;
+    font-size:inherit;
+    border:0px;
+    padding-right:12px+$SIZE_UNIT_PHONE/2;
+    @include _PC{
+      padding-right:16px+$SIZE_UNIT_PC/2;
+    }
+  }
+  svg, i{
+    position: absolute;
+    top: 0;
+    right: 4px;
+    bottom: 0;
+    margin: auto;
+    line-height: inherit;
+    font-size:16px;
+    cursor:pointer;
+    z-index:-1;
+    @include _PC{
+      font-size:16px;
+      right:6px;
+    }
+  }
+}

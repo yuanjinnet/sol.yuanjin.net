@@ -1,0 +1,160 @@
+#loginDialog .Content{
+  padding: $SIZE_UNIT_PHONE*2 $SIZE_UNIT_PHONE*5;
+  @include _PC{
+    padding: $SIZE_UNIT_PC*2 $SIZE_UNIT_PC*5;
+  }
+
+  .LangPicker{
+    @include _FONT_LABEL;
+    position:absolute;
+    top:$SIZE_UNIT_PHONE;
+    right:$SIZE_UNIT_PHONE;
+    height:40px;
+    line-height: 40px;
+    background-color:$COLOR_PALE;
+    border:1px solid transparent;
+    border-radius: $SIZE_UNIT_PHONE/2;
+    color:$COLOR_TEXT_LIGHT;
+    z-index:1; // 防止被标题挡住！
+    @include _PC{
+      border-radius: $SIZE_UNIT_PC/2;
+    }
+    &:hover{
+      background-color:$COLOR_MAIN;
+      color:white;
+      opacity:$OPACITY_HOVER;
+    }
+  }
+
+  .Title{
+    @include _FONT_SLOGAN;
+  }
+
+  .LoginLine{
+    position: relative;
+    padding-left: 30px; //$HEIGHT_LINE_M_PHONE;
+    padding-right: 56px;  // 避开右侧提示“忘记密码”等等。
+    height: $HEIGHT_LINE_L_PHONE;
+    line-height: $HEIGHT_LINE_L_PHONE;
+    border-bottom: 1px solid $COLOR_BORDER_LIGHT;
+    background: no-repeat scroll left center;
+    background-size: 20px 20px;
+    font-size:20px;
+    @include _PC {
+      padding-left: 38px; //$HEIGHT_LINE_M_PC;
+      padding-right: 64px;
+      height: $HEIGHT_LINE_L_PC; 
+      line-height: $HEIGHT_LINE_L_PC;
+      background-size: 24px 24px; 
+      font-size:24px;
+    }
+    >i,svg{
+      position: absolute;
+      line-height:inherit;
+      color:$COLOR_TEXT_LIGHT;
+      left: 2px;
+    }
+
+/*      &.AccountLine{
+      background-image: url($LoginAccount_png);
+    }
+    &.PasswordLine{
+      background-image: url($LoginPassword_png);
+    }
+    &.PasscodeLine{
+      background-image: url($LoginPasscode_png);
+    }
+*/
+
+    >.LoginLineInput{
+      @include _TEXT_ELLIPSIS;
+      @include _FONT_TITLE;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      line-height: 100%;
+      float: right;
+      background: transparent;
+      border: none;
+
+      >select.Select.ITC{ // 专用于登录手机号的国际区号选项框
+        @include _FONT_TITLE;
+//          appearance: none;  -moz-appearance: none;  -webkit-appearance: none; /* 取消右侧箭头区域 */
+        position:absolute;
+        top:0;
+        left: 0;
+        width: $WIDTH_ITC_SELECT_PHONE;
+        height: 100%;
+        border-color:transparent;
+        @include _PC { 
+          width: $WIDTH_ITC_SELECT_PC;
+        }
+      }
+      >input.Text.Line.CallNumber{ // // 专用于登录手机号的手机号输入框
+        @include _FONT_TITLE;
+        padding-left: $WIDTH_ITC_SELECT_PHONE;
+        padding-right:0;
+        width:100%;
+        height: 100%;
+        border-color: transparent;
+        @include _PC {
+          padding-left: $WIDTH_ITC_SELECT_PC;
+        }
+      }
+
+    }
+
+    .LoginLineAction {
+      @include _FONT_LABEL;
+      position: absolute;
+      right:0;
+      height:100%;
+      border-color: transparent;
+
+      cursor: pointer;
+      padding:0 2px;
+      &:hover{
+        opacity:$OPACITY_HOVER;
+        background-color:$COLOR_MAIN;
+        color:white;
+      }
+      border-radius:2px;
+      @include _PC{
+        border-radius:4px;
+      }
+    }
+  }
+  .FeedbackLine {
+    @include _TEXT_ELLIPSIS;
+    @include _FONT_LABEL;
+    padding-left: $HEIGHT_LINE_M_PHONE;;
+    width: 100%;
+    height:auto;
+    min-height: $HEIGHT_LINE_L_PHONE/2;
+    color: $COLOR_MAIN;
+    @include _PC {
+      padding-left: $HEIGHT_LINE_M_PC;
+      min-height: $HEIGHT_LINE_L_PC/2;
+    }
+    &.Submitted{
+      margin: $SIZE_UNIT_PHONE auto; 
+      text-align: center; 
+      padding: 0;
+      height: auto; 
+      width: 100%;
+      @include _PC { 
+        margin: $SIZE_UNIT_PC auto; 
+      }      
+    }
+  }
+
+  .Text.Line.Agreement{
+    @include _FONT_LABEL;
+    margin: $SIZE_UNIT_PHONE auto;
+    text-align:center;
+    @include _PC{
+      margin: $SIZE_UNIT_PC auto;
+    }
+  }
+
+}

@@ -1,0 +1,310 @@
+.Header {
+  position: fixed;
+//  top: 0px;
+  z-index: index($zIndex, fixedFrame);  // 必须设置z-index，否则Header被Body上滚时覆盖掉，因为HTML里Body定义在Header后面吧。 */
+  border-top: $SIZE_UNIT_PHONE/4 solid $COLOR_MAIN; // rgba($COLOR_MAIN,0.5);
+  width: 100%;  // 用了position: fixed后，本元素从普通流布局中脱离，不受限于其上级的宽度，必须再次定义其宽度等于浏览器窗口/上级Space的宽度。可用Page统一覆盖。 */
+  height: $HEIGHT_HEADER_PHONE;
+  line-height: $HEIGHT_HEADER_PHONE;
+//  background-color: rgba($COLOR_MAIN,0.5);
+//  background-image: url($Header_png);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  box-shadow:#{$SHADOW_LINE_PHONE};
+  @include _PC {
+    height: $HEIGHT_HEADER_PC;
+    line-height: $HEIGHT_HEADER_PC;
+    border-top: $SIZE_UNIT_PC/4 solid $COLOR_MAIN; // rgba($COLOR_MAIN,0.5);
+    box-shadow: #{$SHADOW_LINE_PC};
+  }
+
+  .Avatar {
+    cursor:pointer;
+    border-radius: 100%;
+    border:1px solid transparent;
+    opacity: $OPACITY_SLEEP;
+    position: absolute;
+    top: 0;
+    margin: $SIZE_UNIT_PHONE/2; // ($HEIGHT_HEADER_PHONE - $SIZE_ICON_L_PHONE)/2;
+    width: $HEIGHT_HEADER_PHONE - $SIZE_UNIT_PHONE;
+    height: $HEIGHT_HEADER_PHONE - $SIZE_UNIT_PHONE;
+    @include _BG_COVER;
+    @include _PC { 
+      margin: $SIZE_UNIT_PC/2; // ($HEIGHT_HEADER_PC - $SIZE_ICON_L_PC)/2;
+      width: $HEIGHT_HEADER_PC - $SIZE_UNIT_PC;
+      height: $HEIGHT_HEADER_PC - $SIZE_UNIT_PC;
+    }
+
+    &.Logo{
+      background-image: url($Logo_png);
+      left: 0;
+      &:hover{
+        opacity: $OPACITY_HOVER;
+        background-image: url($LogoActive_png);
+      };
+      &.Active{
+        background-image: url($LogoActive_png);
+        opacity: $OPACITY_SLEEP;
+        &.About{
+          opacity: $OPACITY_ACTIVE;
+          cursor:unset;
+        }
+      }
+    }
+
+    &.User{
+      background-image: url($SpaceLogin_png);
+      right: 0;
+      &:hover{
+//        border-color:$COLOR_MAIN;
+        opacity: $OPACITY_HOVER;
+      }
+      &.Active{
+//        background-image: url($SpaceLoginActive_png);
+        opacity: $OPACITY_SLEEP;
+        border-color: $COLOR_MAIN;
+        &.About{
+          opacity: $OPACITY_ACTIVE;
+          cursor:unset;
+        }
+      }
+    }
+  }
+
+  .Text.Line{
+    @include _FONT_TITLE;
+    position: absolute;
+    top: 0; //- $SIZE_UNIT_PHONE/4;
+    border: 0;
+    padding: 0 $HEIGHT_HEADER_PHONE;
+    width: 100%;
+    height: 100%;
+    line-height: $HEIGHT_HEADER_PHONE; // 为了给工具栏留白，可以 36px
+    text-align: center;
+    background-color: transparent;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    @include _PC {
+      top: 0; //- $SIZE_UNIT_PC/4;
+      padding: 0 $HEIGHT_HEADER_PC;
+      line-height: $HEIGHT_HEADER_PC; // 为了给工具栏留白，可以64px
+    }
+    &.Slogan{
+      @include _FONT_LABEL;
+    }
+    &.Subject{
+      font-weight: bold;
+    }
+    &.Nick{
+      color:$COLOR_MAIN; // $COLOR_TEXT_DARK;
+      .PortraitNick{
+        padding-left: $SIZE_ICON_S_PHONE + $SIZE_UNIT_PHONE/2;
+        display: inline-block;
+        position: relative;
+        cursor:pointer;
+        @include _PC{
+          padding-left: $SIZE_ICON_S_PC + $SIZE_UNIT_PHONE/2;
+        }
+        &:hover{
+          opacity: $OPACITY_HOVER;
+        }
+        &.About{
+          cursor:unset;
+          font-weight: bold;
+          &:hover{
+            opacity:unset;
+          }
+        }
+        .Portrait{
+          background-position: center center;
+          background-repeat: no-repeat;
+          background-size: cover;
+          border-radius: 100%;
+          width: $SIZE_ICON_S_PHONE;
+          height: $SIZE_ICON_S_PHONE;
+          position: absolute;
+          margin: auto;
+          left: 0;
+          top: 0;
+          bottom:0;
+          @include _PC{
+            width: $SIZE_ICON_S_PC;
+            height: $SIZE_ICON_S_PC;
+          }
+        }
+      }
+    }
+    .SearchInput{
+      @include _LAYOUT_CENTER_SELF;
+      width: 60%;
+      height: $HEIGHT_LINE_S_PHONE;
+      border-radius:$SIZE_UNIT_PHONE;
+      max-width:$WIDTH_PAGE_MAX;
+      overflow:hidden;
+//      background-image: url($IconSearch_png);
+//      background-repeat: no-repeat;
+//      background-position: right center;
+//      background-size: contain;
+      @include _PC{
+        height: $HEIGHT_LINE_S_PC;
+        border-radius: $SIZE_UNIT_PC;
+      }
+      input{
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        padding:0 $HEIGHT_LINE_S_PHONE*1.4+$SIZE_UNIT_PHONE 0 $SIZE_UNIT_PHONE;
+        border-radius:$SIZE_UNIT_PHONE;
+        @include _PC{
+          padding:0 $HEIGHT_LINE_S_PC*1.4+$SIZE_UNIT_PC 0 $SIZE_UNIT_PC;
+          border-radius: $SIZE_UNIT_PC;
+        }
+      }
+      button{
+        position: absolute;
+        right: 0;
+        margin: auto;
+        top: 0;
+        bottom: 0;
+        width: $HEIGHT_LINE_S_PHONE*1.4;
+        color:$COLOR_BORDER_DARK;
+        font-size:20px;
+        line-height:100%;
+        border-radius: unset;
+        @include _PC{
+          width: $HEIGHT_LINE_S_PC*1.4;
+        }
+        &:hover{
+          border:transparent;
+          color:$COLOR_MAIN;
+        }
+      }
+    }
+  }
+
+  .HeadButton{
+    @include _LAYOUT_CENTER_SELF;
+    @include _FONT_TITLE;
+  //  top: - $SIZE_UNIT_PHONE/4;
+    border: 1px solid $COLOR_MAIN;
+    max-width:60%; // 在 iphone safari 上，没有max-width会展开到全屏宽。
+    width:180px;
+    height: $HEIGHT_LINE_S_PHONE;
+    padding: 0 $SIZE_UNIT_PHONE*2;
+    text-align: center;
+    color: $COLOR_MAIN;
+    @include _PC {
+  //    top: - $SIZE_UNIT_PC/4;
+      padding: 0 $SIZE_UNIT_PC*2;
+      height: $HEIGHT_LINE_S_PC;
+    } 
+  }
+
+  .ActionButton{
+    background-color: rgb(255, 255, 255);
+//    background-image: url($IconForward_png);
+//    background-position: center center;
+//    background-repeat: no-repeat;
+//    background-size: 16px 16px;
+    border-radius: 50%;
+    bottom: -22px;
+    border:1px solid transparent;
+    box-shadow: 0 1px 1px 0px rgba($COLOR_MAIN, 0.5);
+    height: 28px;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    width: 28px;
+    @include _PC{
+      height:38px;
+      width:38px;
+//      bottom: -20px;
+//      background-size: 20px 20px;
+    }
+    &:hover{
+//      background-image: url($IconForward_Active_png); // 2017-04-22 由于不再使用RingButton，取消了这一句
+      opacity: unset; // 取消 button:hover; 定义的默认的 opacity，否则，会透出底下的 ringbuttons. // 2017-04-22 由于不再使用RingButton，取消了这一句
+      border-color: $COLOR_MAIN;
+    }
+    &.Care{
+      &.Active{
+        color:$COLOR_MAIN;
+      }
+    }
+    &.Left{
+      right:64px;
+      @include _PC{
+        right:80px;
+      }
+    }
+    &.Right{
+      left:64px;
+      @include _PC{
+        left:80px;
+      }
+    }
+  }
+  .RingMenu{
+    .RingButton{
+      @include _BG_CONTAIN;
+      border-radius: 100%;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+      position:absolute;
+      background-color:$COLOR_WHITE;
+      box-shadow: 0 2px 1px 0px rgba($COLOR_MAIN, 0.5);
+
+      background-size: 16px 16px;
+      @include _PC{
+        background-size: 20px 20px;
+      }
+
+      &.Forward{ 
+        background-image: url($IconForward_png);
+      }
+      &.Care{ 
+        background-image: url($IconCare_png);
+        &.Active{
+          background-image: url($IconCare_Active_png);
+        }
+      }
+      &.Complain{
+        background-image:url($IconComplain_png);
+        &.Active{
+          background-image: url($IconComplain_Active_png);
+        }
+      }
+    }
+
+    &.OnRingMenu .RingButton{
+      $sin45:0.707; $cos45:0.707; // sqrt(3)/2;
+      $sin30:1/2; $cos60:1/2;
+      $sin60:0.866; $cos30:0.866; // sqrt(3)/2;
+
+      $l:65px;
+      &:nth-child(1){transform:translate(- $l*$sin45, $l*$cos45);}
+      &:nth-child(2){transform:translate(0px, $l);}
+      &:nth-child(3){transform:translate($l*$sin45, $l*$cos45);}
+
+      @include _PC{
+        $l:100px;
+        &:nth-child(1){transform:translate(- $l*$sin45, $l*$cos45);}
+        &:nth-child(2){transform:translate(0px, $l);}
+        &:nth-child(3){transform:translate($l*$sin45, $l*$cos45);}
+      }
+
+      &:hover{
+        opacity: unset; // $OPACITY_HOVER;
+        border-color: $COLOR_MAIN;
+//        background-color: rgba($COLOR_MAIN, $OPACITY_HOVER);
+      }
+    }
+  }
+
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="cn">
+
+<head>
+<!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7; IE=9" />-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+<!--script type="text/javascript" src="/_sow/sow.Postpay.min.js"></script-->
+<script type="text/javascript">
+  /// <!--代码里用到 document.body，因此需要等body建立后才能执行，因此定义在window.onload里（或者写在 <body onload='...'> -->
+  window.onload=function(){
+//  	sow.Postpay.goback({});
+  	location.href=localStorage['postpayUrl'] || './';
+  }
+</script>
+
+<title>云才，释放超凡潜力</title>
+
+</head>
+
+<body>
+
+</body>
+
+</html>
