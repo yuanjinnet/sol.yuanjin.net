@@ -10,7 +10,7 @@ module.exports= function(options) {
   this.starName='Faronear Star';
   this.starCode=options.starCode || 'star';
   this.starId='com.faronear.'+this.starCode; // 默认应用ID。
-  this.starUrl='http://faronear.com/'+this.starCode+'/';
+  this.starUrl='http://sol.faronear.com/'+this.starCode+'/';
   this.starEmail='team-'+this.starCode+'@faronear.org';
 
 // 暂不使用
@@ -37,11 +37,11 @@ module.exports= function(options) {
 //      SOLET= window.location.protocol + '//' + 'solet.faronear.com' + (/^https:$/.test(window.location.protocol)?':6327/':':6327/');
       SOLET = 'https://solet.faronear.com:6327/';
     }
-    SOFILE='/_sow/file/';
+    SOFILE='/static/_sow/file/';
   }else{
     /*** 作为手机应用时的后台地址 ***/
     SOLET = 'https://solet.faronear.com:6327/'; // 或者 https://solet.faronear.com:6327/
-    SOFILE = this.starUrl+'/_sow/file/';
+    SOFILE = this.starUrl+'/static/_sow/file/';
   }
 
   self.sioUrl=SOLET+self.starId; // starId 作为 sockets 的 namespace。

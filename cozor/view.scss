@@ -1,7 +1,7 @@
 @charset "utf-8";
 
-// @import '../_sow/css/sow.scss';
-// @import '../_sow/css/sow.Math.scss';
+// @import '../static/_sow/css/sow.scss';
+// @import '../static/_sow/css/sow.Math.scss';
 
 ///////////////////////////// SCSS variables //////////////////////////////////
 
@@ -829,7 +829,7 @@ select:hover, select:focus{
   }
 
 }
-@import '../_sow/css/loginDialog.scss';
+@import '../static/_sow/css/loginDialog.scss';
 
 .Cover {
   @include _LAYOUT_CENTER_TABLE;
@@ -902,9 +902,9 @@ select:hover, select:focus{
   }
 }
 
-@import '../_sow/css/Header.scss';
+@import '../static/_sow/css/Header.scss';
 
-@import '../_sow/css/Footer.scss';
+@import '../static/_sow/css/Footer.scss';
 
 //*** 主区元素 ***/
 .SceneHeader{
@@ -2485,7 +2485,7 @@ $colorMale: #b3e2e0; // 青色 b3e2e0; 浅蓝 55c1e7; 深蓝：77AEDE;
   }
 }
 
-@import '../_sow/css/PersonAbout.scss';
+@import '../static/_sow/css/PersonAbout.scss';
 
 ///////////////////////////// Space: #urHost //////////////////////////////////
 
@@ -3581,4 +3581,4 @@ $color: #fed48a; //#edba11; 橘黄 f5b090
   }
 }
 
-@import '../_sow/css/SelectBox.scss';
+@import '../static/_sow/css/SelectBox.scss';

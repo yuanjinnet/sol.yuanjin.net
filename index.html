@@ -7,7 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 <script type="text/javascript">
-	location.href="https://www.faronear.com"
+  if (/\.cn$/.test(location.hostname)){
+    location.href="https://www.faronear.cn"
+  }else {
+    location.href="https://www.faronear.com"
+  }
 </script>
 </head>
 <body>

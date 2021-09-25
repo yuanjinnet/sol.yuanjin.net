@@ -2287,52 +2287,52 @@
 
 <!-- // 库文件的搜索顺序：1. 当前应用目录下的soweb目录(也许是用linkd.exe建立的硬链接)，2. sow.faronear.com/。-->
 <!-- 不再用php判断库目录，然后引用时 src="<?php echo $LIBPATH; ?>xxx.js"。因为现在不管混合应用还是Web网页，都直接把库放在同目录下了。-->
-<!--?php if (file_exists('/_sow/')) { $LIBPATH='/_sow/'; }
+<!--?php if (file_exists('/static/_sow/')) { $LIBPATH='/static/_sow/'; }
 else { $LIBPATH='http://sow.faronear.com/'; }  ?-->
 
 <!-- 3rd party libraries -->
-<!--link type="text/css" rel="stylesheet" href="/_sow/lib/swiper/swiper-3.3.1.min.css" /--><!-- 必须在 swiper.js 之前引用。似乎，放在<head></head>里，比放在最后能大幅度减少在 iphone-Safari上初次加载页面停留在swiper最后一页的错误几率。 -->
-<!-- <link rel="stylesheet" href="/_sow/lib/mui/css/mui.min.css">
-<link rel="stylesheet" type="text/css" href="/_sow/lib/mui/css/mui.picker.min.css" /> -->
+<!--link type="text/css" rel="stylesheet" href="/static/_sow/lib/swiper/swiper-3.3.1.min.css" /--><!-- 必须在 swiper.js 之前引用。似乎，放在<head></head>里，比放在最后能大幅度减少在 iphone-Safari上初次加载页面停留在swiper最后一页的错误几率。 -->
+<!-- <link rel="stylesheet" href="/static/_sow/lib/mui/css/mui.min.css">
+<link rel="stylesheet" type="text/css" href="/static/_sow/lib/mui/css/mui.picker.min.css" /> -->
 <link type="text/css" rel="stylesheet" media="all" href="view.min.css" /><!-- 注意到，必须在 swiper.css 后面，否则slide的标签显示错误 -->
 
-<!--[if lt IE 9]><script type="text/javascript" src="/_sow/lib/html5.js"></script><![endif]--><!-- 让老浏览器识别HTML5元素。原版：http://html5shiv.googlecode.com/svn/trunk/html5.js -->
-<script type="text/javascript" src="/_sow/lib/device/device.min.js"></script><!-- https://github.com/matthewhudson/device.js/ -->
-<script type="text/javascript" src="/_sow/lib/jquery/jquery-1.8.3.min.js"></script>
+<!--[if lt IE 9]><script type="text/javascript" src="/static/_sow/lib/html5.js"></script><![endif]--><!-- 让老浏览器识别HTML5元素。原版：http://html5shiv.googlecode.com/svn/trunk/html5.js -->
+<script type="text/javascript" src="/static/_sow/lib/device/device.min.js"></script><!-- https://github.com/matthewhudson/device.js/ -->
+<script type="text/javascript" src="/static/_sow/lib/jquery/jquery-1.8.3.min.js"></script>
 
-<script type="text/javascript" src="/_sow/lib/socket.io/socket.io-1.0.6.min.js"></script><!-- 通用。可从node_modules/socket.io-client/dist/ 目录下获得 -->
+<script type="text/javascript" src="/static/_sow/lib/socket.io/socket.io-1.0.6.min.js"></script><!-- 通用。可从node_modules/socket.io-client/dist/ 目录下获得 -->
 <!--script type="text/javascript" src="http://localhost:6327/socket.io/socket.io.js"></script--><!-- 本地测试 -->
 <!--script type="text/javascript" src="http://solet.faronear.com:6327/socket.io/socket.io.js"></script--><!-- 手机应用。web通用。 -->
 
-<script type="text/javascript" src="/_sow/lib/jquery.mobile/jquery.mobile.custom-1.4.5.min.js"></script>
-<script type="text/javascript" src="/_sow/lib/knockout/knockout-3.4.2.min.js"></script>
-<!--script type="text/javascript" src="/_sow/lib/swiper/swiper-3.3.1.min.js"></script--><!-- http://www.swiper.com.cn/ -->
-<script type="text/javascript" src="/_sow/lib/clipboard/clipboard-1.5.15.min.js"></script><!-- http://clipboardjs.com/ -->
-<!--script type="text/javascript" src="/_sow/lib/jquery.qrcode/jquery.qrcode.min.js"></script-->
-<script type="text/javascript" src="/_sow/lib/qrcodejs/v0.0.1/qrcode.min.js"></script>
-<script type="text/javascript" src="/_sow/lib/radialIndicator/v1.3.1/radialIndicator.min.js"></script>
-<!--script type="text/javascript" src="/_sow/lib/jquery.knob/jquery.knob-1.2.13.min.js"></script-->
-<script type="text/javascript" src="/_sow/lib/Sortable/Sortable.min.js"></script>
+<script type="text/javascript" src="/static/_sow/lib/jquery.mobile/jquery.mobile.custom-1.4.5.min.js"></script>
+<script type="text/javascript" src="/static/_sow/lib/knockout/knockout-3.4.2.min.js"></script>
+<!--script type="text/javascript" src="/static/_sow/lib/swiper/swiper-3.3.1.min.js"></script--><!-- http://www.swiper.com.cn/ -->
+<script type="text/javascript" src="/static/_sow/lib/clipboard/clipboard-1.5.15.min.js"></script><!-- http://clipboardjs.com/ -->
+<!--script type="text/javascript" src="/static/_sow/lib/jquery.qrcode/jquery.qrcode.min.js"></script-->
+<script type="text/javascript" src="/static/_sow/lib/qrcodejs/v0.0.1/qrcode.min.js"></script>
+<script type="text/javascript" src="/static/_sow/lib/radialIndicator/v1.3.1/radialIndicator.min.js"></script>
+<!--script type="text/javascript" src="/static/_sow/lib/jquery.knob/jquery.knob-1.2.13.min.js"></script-->
+<script type="text/javascript" src="/static/_sow/lib/Sortable/Sortable.min.js"></script>
 
-<!--script type="text/javascript" src="/_sow/lib/datejs/v1.0.0/build/date.js"></script-->
-<!--script type="text/javascript" src="/_sow/lib/moment/moment-with-locales.min.js"></script-->
+<!--script type="text/javascript" src="/static/_sow/lib/datejs/v1.0.0/build/date.js"></script-->
+<!--script type="text/javascript" src="/static/_sow/lib/moment/moment-with-locales.min.js"></script-->
 <!-- kalendae
-<link type="text/css" rel="stylesheet" href="/_sow/lib/kalendae/v0.6.1/kalendae.css" charset="utf-8" />
-<script type="text/javascript" src="/_sow/lib/kalendae/v0.6.1/kalendae.standalone.min.js" charset="utf-8"></script>
+<link type="text/css" rel="stylesheet" href="/static/_sow/lib/kalendae/v0.6.1/kalendae.css" charset="utf-8" />
+<script type="text/javascript" src="/static/_sow/lib/kalendae/v0.6.1/kalendae.standalone.min.js" charset="utf-8"></script>
 -->
 <!-- jQuery UI datepicker: with:$($element).datepicker({changeMonth:true,changeYear:true,defaultDate: new Date(new Date().setDate(new Date().getDate()+90)) })
-<link type="text/css" rel="stylesheet" href="/_sow/lib/jquery.ui/jquery-ui.min.css" />
-<script type="text/javascript" src="/_sow/lib/jquery.ui/jquery-ui.min.js"></script>
-<script type="text/javascript" src="/_sow/lib/jquery.ui/datepicker-zh-CN.min.js"></script>
+<link type="text/css" rel="stylesheet" href="/static/_sow/lib/jquery.ui/jquery-ui.min.css" />
+<script type="text/javascript" src="/static/_sow/lib/jquery.ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/static/_sow/lib/jquery.ui/datepicker-zh-CN.min.js"></script>
 -->
 <!-- jQuery datetimepicker: 
-<link type="text/css" rel="stylesheet" href="/_sow/lib/jquery.datetimepicker/jquery.datetimepicker-2.5.4.min.css" />
-<script type="text/javascript" src="/_sow/lib/jquery.datetimepicker/jquery.datetimepicker.full-2.5.4.min.js"></script>
+<link type="text/css" rel="stylesheet" href="/static/_sow/lib/jquery.datetimepicker/jquery.datetimepicker-2.5.4.min.css" />
+<script type="text/javascript" src="/static/_sow/lib/jquery.datetimepicker/jquery.datetimepicker.full-2.5.4.min.js"></script>
 -->
-<link type="text/css" rel="stylesheet" href="/_sow/lib/datedropper/v3.0.0/datedropper.min.css" />
-<script type="text/javascript" src="/_sow/lib/datedropper/v3.0.0/datedropper.min.js"></script>
-<!-- <script src="/_sow/lib/mui/js/mui.min.js"></script>
-<script src="/_sow/lib/mui/js/mui.picker.min.js"></script> -->
+<link type="text/css" rel="stylesheet" href="/static/_sow/lib/datedropper/v3.0.0/datedropper.min.css" />
+<script type="text/javascript" src="/static/_sow/lib/datedropper/v3.0.0/datedropper.min.js"></script>
+<!-- <script src="/static/_sow/lib/mui/js/mui.min.js"></script>
+<script src="/static/_sow/lib/mui/js/mui.picker.min.js"></script> -->
 
 <!--script type="text/javascript" src="https://api.map.baidu.com/api?v=1.4"></script--><!-- 自1.5起，需要密钥才能使用：v=1.5&ak=Wex9GhS75wDU2mXqZUYqW9xP -->
 
