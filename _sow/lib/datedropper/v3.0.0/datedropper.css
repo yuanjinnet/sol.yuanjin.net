@@ -2,8 +2,8 @@
   font-family: "datedropper";
   src: url("src/datedropper.eot");
   src: url("src/datedropper.eot?#iefix") format("embedded-opentype"), url("src/datedropper.woff") format("woff"), url("src/datedropper.ttf") format("truetype"), url("src/datedropper.svg#datedropper") format("svg");
-  src: url("/static/_sow/lib/datedropper/v3.0.0/src/datedropper.eot"); /* [luk.lu] 为了在手机上使用 boot.html 访问 cache 时，也能获得字体 */
-  src: url("/static/_sow/lib/datedropper/v3.0.0/src/datedropper.eot?#iefix") format("embedded-opentype"), url("/static/_sow/lib/datedropper/v3.0.0/src/datedropper.woff") format("woff"), url("src/datedropper.ttf") format("truetype"), url("/static/_sow/lib/datedropper/v3.0.0/src/datedropper.svg#datedropper") format("svg");
+  src: url("/_sow/lib/datedropper/v3.0.0/src/datedropper.eot"); /* [luk.lu] 为了在手机上使用 boot.html 访问 cache 时，也能获得字体 */
+  src: url("/_sow/lib/datedropper/v3.0.0/src/datedropper.eot?#iefix") format("embedded-opentype"), url("/_sow/lib/datedropper/v3.0.0/src/datedropper.woff") format("woff"), url("src/datedropper.ttf") format("truetype"), url("/_sow/lib/datedropper/v3.0.0/src/datedropper.svg#datedropper") format("svg");
   font-weight: normal;
   font-style: normal;
 }
