@@ -1,6 +1,6 @@
-Logo: http://faronear.com/qument (¼Æ»®ÖÐ£¬ÉÐÎ´Ê¹ÓÃ)
+Logo: http://yuanjin.net/qument (ï¿½Æ»ï¿½ï¿½Ð£ï¿½ï¿½ï¿½Î´Ê¹ï¿½ï¿½)
 
-Web: http://moment.faronear.com
+Web: http://moment.yuanjin.net
 Apple: https://itunes.apple.com/app/id1117743257
-Android: http://moment.faronear.com/app/moment.apk
-Wechat: qument (´ý¶¨µÄÎ¢ÐÅºÅ)
+Android: http://moment.yuanjin.net/app/moment.apk
+Wechat: qument (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¢ï¿½Åºï¿½)

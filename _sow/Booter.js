@@ -2,18 +2,18 @@ window.sow=window.sow||{}
 
 sow.Booter={
 
-  // nativeApp 应当包含 starId: 'com.faronear.???', starUrl: 'http://???.faronear.com', starVersion: 'yyyymmddnn'
+  // nativeApp 应当包含 starId: 'com.faronear.???', starUrl: 'http://???.yuanjin.net', starVersion: 'yyyymmddnn'
   // 其中，starVersion 应当和本地 model.js, .project 以及服务器 api_App.php 里设置的appVersion一致。也许放到model.js去设置？不放在model.js，目前是出于这个考虑：远端的model.js是直接存入cacheScript的，执行后就覆盖了原来的native的version，就错了。-->
   boot: function(nativeApp){ 
 
     if (/^https?:\/\/.+$/.test(window.location.href)) { // 是浏览器访问。测试protocol + host + pathname是否有效. 对cordova或html5+的打包应用，href=file:///android_assets/www/... 或 file:///var/mobile/Containers/Data/Application/... (host=空), 不要交给urlExists。
       if (/^localhost|127.0.0.1|192\.168\.\d+\.\d+$/.test(window.location.hostname))
-        SOLET = 'http://'+window.location.hostname+':6327/'
+        SOLET = 'http://'+window.location.hostname+':8765/'
       else
-        SOLET = 'https://solet.faronear.com:6327/'
+        SOLET = 'https://solet.yuanjin.net:8765/'
     }else{
       /*** 作为手机应用时的后台地址 ***/
-      SOLET = 'https://solet.faronear.com:6327/'
+      SOLET = 'https://solet.yuanjin.net:8765/'
     }
 
 try{

@@ -342,7 +342,7 @@
               <a class="Url QRC Wechat" title="关注微信公众号: ziyose" onclick="space.remind({text:'扫描二维码，关注微信公众号 ziyose'})">微信号 ziyose</a>
               <a class="Url QRC QQ" title="加QQ群: 639494467" onclick="sow.Tool.openUrl('http://qm.qq.com/cgi-bin/qm/qr?k=jb4jN4qdaJx2aunqxdOssVwZkU7KC_rh#')">QQ群 639494467</a>
             </fieldset><br>
-            <div class="FaronearSign"><div class="Line"></div><button class="Faronear" data-bind="click:sow.Tool.openUrl.bind($data,'http://www.faronear.com')">Faronear Group</button></div>
+            <div class="FaronearSign"><div class="Line"></div><button class="Faronear" data-bind="click:sow.Tool.openUrl.bind($data,'http://www.yuanjin.net')">Faronear Group</button></div>
             <!--br>
             创作社，<br>自由职业者的分享经济社区。<br>
             <br>
@@ -1251,10 +1251,10 @@
 
 <!-- my quick code -->
 
-<!-- // 库文件的搜索顺序：1. 当前应用目录下的soweb目录(也许是用linkd.exe建立的硬链接)，2. sow.faronear.com/。-->
+<!-- // 库文件的搜索顺序：1. 当前应用目录下的soweb目录(也许是用linkd.exe建立的硬链接)，2. sow.yuanjin.net/。-->
 <!-- 不再用php判断库目录，然后引用时 src="<?php echo $LIBPATH; ?>xxx.js"。因为现在不管混合应用还是Web网页，都直接把库放在同目录下了。-->
 <!--?php if (file_exists('/_sow/')) { $LIBPATH='/_sow/'; }
-else { $LIBPATH='http://sow.faronear.com/'; }  ?-->
+else { $LIBPATH='http://sow.yuanjin.net/'; }  ?-->
 
 <!-- 3rd party libraries -->
 <!--link type="text/css" rel="stylesheet" href="/_sow/lib/swiper/swiper-3.3.1.min.css" /--><!-- 必须在 swiper.js 之前引用。似乎，放在<head></head>里，比放在最后能大幅度减少在 iphone-Safari上初次加载页面停留在swiper最后一页的错误几率。 -->
@@ -1268,8 +1268,8 @@ else { $LIBPATH='http://sow.faronear.com/'; }  ?-->
 <script type="text/javascript" src="/_sow/lib/jquery/jquery-1.8.3.min.js"></script>
 
 <script type="text/javascript" src="/_sow/lib/socket.io/socket.io-1.0.6.min.js"></script><!-- 通用。可从node_modules/socket.io-client/dist/ 目录下获得 -->
-<!--script type="text/javascript" src="http://localhost:6327/socket.io/socket.io.js"></script--><!-- 本地测试 -->
-<!--script type="text/javascript" src="http://solet.faronear.com:6327/socket.io/socket.io.js"></script--><!-- 手机应用。web通用。 -->
+<!--script type="text/javascript" src="http://localhost:8765/socket.io/socket.io.js"></script--><!-- 本地测试 -->
+<!--script type="text/javascript" src="http://solet.yuanjin.net:8765/socket.io/socket.io.js"></script--><!-- 手机应用。web通用。 -->
 
 <script type="text/javascript" src="/_sow/lib/jquery.mobile/jquery.mobile.custom-1.4.5.min.js"></script>
 <script type="text/javascript" src="/_sow/lib/knockout/knockout-3.4.2.min.js"></script>

@@ -18,7 +18,7 @@
 	"developer": {
 		"name": "Team cozor",/*开发者名称*/
 		"email": "team-cozor@faronear.org",/*开发者邮箱地址*/
-		"url": "http://www.cozor.com"
+		"url": "http://sol.yuanjin.net/cozor/"
 	},
 	"permissions": {
 		"Cache": {

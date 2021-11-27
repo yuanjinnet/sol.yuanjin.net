@@ -1,8 +1,8 @@
 //'use strict'; // 严格模式应当仅限用于开发环境。在运维环境下请删除该模式。
 
 /**
- ** Copyright: Faronear Co. Ltd. (http://www.faronear.com)
- ** Web: http://moment.faronear.com
+ ** Copyright: Faronear Co. Ltd. (http://www.yuanjin.net)
+ ** Web: http://sol.yuanjin.net/moment/
  ** Team: Luk.Lu@faronear.org, Jojo.Wu@faronear.org, Fan.Fan@faronear.org
  ** Thanks list: Wei Wu, Jiadan Li, Weiquan Liu, Cathy Huang, Lei Xu, Andy Wu
  **/

@@ -439,7 +439,7 @@ module.exports=
   ,
   urlExists : function fileExists(url) 
   {
-    // [todo] 缺陷：当url含有异域的目录或文件，例如从http://www.yuanjin.net去检测http://www.faronear.com/solet/，
+    // [todo] 缺陷：当url含有异域的目录或文件，例如从http://www.yuanjin.net去检测http://www.yuanjin.net/solet/，
     // 或者从file:///android_assets/www/... 去检测http:///android_assets/www/...，
     // 则除非该url确实存在，否则本方法将导致异常：Cross-Origin Request Blocked，不能返回true或false，从而导致外层调用静悄悄失败。
 //    if (url.match(window.location.origin)) // 目前暂且只检测同域的文件

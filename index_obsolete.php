@@ -17,7 +17,7 @@
       header("status: 404 Not Found");
       echo "<h2>Site under construction!  网站备案中！</h2>";    
   }else{
-	  header('Location:http://zcreator.faronear.com/index.html');
+	  header('Location:http://zcreator.yuanjin.net/index.html');
 	}
 
 ?>

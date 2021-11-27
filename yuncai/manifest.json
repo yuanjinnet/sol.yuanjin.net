@@ -18,7 +18,7 @@
 	"developer": {
 		"name": "Team yuncai",/*开发者名称*/
 		"email": "team-yuncai@faronear.org",/*开发者邮箱地址*/
-		"url": "http://yuncai.faronear.com"
+		"url": "http://sol.yuanjin.net/yuncai/"
 	},
 	"permissions": {
 		"Cache": {

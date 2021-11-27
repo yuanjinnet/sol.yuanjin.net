@@ -436,11 +436,11 @@
                   <a href="tel:00864001006327"> (+86) 400 100 6327</a><br>
                   <a data-bind="attr:{href:'mai'+'lto:'+starModel.starEmail},text:' '+starModel.starEmail"></a><br>
                   <fieldset class="Block Center">
-                    <a class="Url QRC" style="background-image:url(image/QRC_Web.png);" href="http://moment.faronear.com" title="访问网站"></a>
+                    <a class="Url QRC" style="background-image:url(image/QRC_Web.png);" href="http://moment.yuanjin.net" title="访问网站"></a>
                     <a class="Url QRC" style="background-image:url(image/QRC_Apple.png)" href="https://itunes.apple.com/app/id1117743257" title="下载iOS版"></a>
-                    <a class="Url QRC" style="background-image:url(image/QRC_Android.png)" href="http://moment.faronear.com/app/Moment.apk" data-bind="visible:sow.Tool.deviceInfo().appmode==='web'||sow.Tool.deviceInfo().software!=='ios'" title="下载安卓版"></a>
+                    <a class="Url QRC" style="background-image:url(image/QRC_Android.png)" href="http://moment.yuanjin.net/app/Moment.apk" data-bind="visible:sow.Tool.deviceInfo().appmode==='web'||sow.Tool.deviceInfo().software!=='ios'" title="下载安卓版"></a>
                   </fieldset><br>
-            <div class="FaronearSign"><div class="Line"></div><button class="Faronear" data-bind="click:sow.Tool.openUrl.bind($data,'http://www.faronear.com')">Faronear Group</button></div>
+            <div class="FaronearSign"><div class="Line"></div><button class="Faronear" data-bind="click:sow.Tool.openUrl.bind($data,'http://www.yuanjin.net')">Faronear Group</button></div>
                   <br>
                   </div>
                 </div></div>
@@ -1078,10 +1078,10 @@
 
 <!-- my quick code -->
 
-<!-- // 库文件的搜索顺序：1. 当前应用目录下的soweb目录(也许是用linkd.exe建立的硬链接)，2. sow.faronear.com/。-->
+<!-- // 库文件的搜索顺序：1. 当前应用目录下的soweb目录(也许是用linkd.exe建立的硬链接)，2. sow.yuanjin.net/。-->
 <!-- 不再用php判断库目录，然后引用时 src="<?php echo $LIBPATH; ?>xxx.js"。因为现在不管混合应用还是Web网页，都直接把库放在同目录下了。-->
 <!--?php if (file_exists('/_sow/')) { $LIBPATH='/_sow/'; }
-else { $LIBPATH='http://sow.faronear.com/'; }  ?-->
+else { $LIBPATH='http://sow.yuanjin.net/'; }  ?-->
 
 <!-- 3rd party libraries -->
 <link type="text/css" rel="stylesheet" href="/_sow/lib/swiper/swiper-3.3.1.min.css"/><!-- 必须在 swiper.js 之前引用。似乎，放在<head></head>里，比放在最后能大幅度减少在 iphone-Safari上初次加载页面停留在swiper最后一页的错误几率。 -->
