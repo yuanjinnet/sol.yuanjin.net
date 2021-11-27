@@ -10,7 +10,7 @@ module.exports = function (options) {
   this.starVersion = '2016010100' // 默认值: yyyy mm dd nn (最后两位数字是为了在一天内，也能提交多个不同版本)
   this.starName = 'Faronear Star'
   this.starCode = options.starCode || 'star'
-  this.starId = 'com.faronear.' + this.starCode // 默认应用ID。
+  this.starId = 'net.yuanjin.' + this.starCode // 默认应用ID。
   this.starUrl = 'http://sol.yuanjin.net/' + this.starCode + '/'
   this.starEmail = 'team-' + this.starCode + '@faronear.org'
 

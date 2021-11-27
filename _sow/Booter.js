@@ -2,7 +2,7 @@ window.sow=window.sow||{}
 
 sow.Booter={
 
-  // nativeApp 应当包含 starId: 'com.faronear.???', starUrl: 'http://???.yuanjin.net', starVersion: 'yyyymmddnn'
+  // nativeApp 应当包含 starId: 'net.yuanjin.???', starUrl: 'http://???.yuanjin.net', starVersion: 'yyyymmddnn'
   // 其中，starVersion 应当和本地 model.js, .project 以及服务器 api_App.php 里设置的appVersion一致。也许放到model.js去设置？不放在model.js，目前是出于这个考虑：远端的model.js是直接存入cacheScript的，执行后就覆盖了原来的native的version，就错了。-->
   boot: function(nativeApp){ 
 
